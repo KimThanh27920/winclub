@@ -18,6 +18,6 @@ class Winery(models.Model):
     is_active = models.BooleanField(default=False)
 
 
-class Menbership(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="menbership")
-    winery = models.ForeignKey(Winery, on_delete=CASCADE, related_name="menbership")
+class Membership(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="membership_account")
+    winery = models.ForeignKey(Winery, on_delete=models.CASCADE, related_name="membership_winery")
