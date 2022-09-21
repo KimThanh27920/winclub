@@ -12,7 +12,7 @@ class Coupon(models.Model):
     type = models.CharField(max_length=8)
     is_refund_coin = models.BooleanField(default=False)
     amount_off = models.FloatField()
-    currency = models.CharField(max_length=255)
+    currency = models.CharField(max_length=255,default="usd")
     percent_off = models.FloatField()
     image = models.CharField(max_length=255)
     descriptions = models.TextField()
