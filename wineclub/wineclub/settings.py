@@ -53,17 +53,18 @@ INSTALLED_APPS = [
     'coupons',
     'memberships',
     'notifications',
-    'orders',
-    'payments',
-    'programs',
-    'reviews',
-    'service',
-    'shipping',
+    'shipping',    
     'statistical',
     'subscriptions',
     'transactions',
     'wineries',
     'wines',
+    'payments',
+    'programs',
+    'reviews',
+    'orders',
+    # 'service',
+    
 ]
 
 MIDDLEWARE = [

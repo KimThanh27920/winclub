@@ -63,5 +63,4 @@ class UploadImageAPIView(generics.UpdateAPIView):
 
     def get_object(self, queryset=None):
         obj = get_object_or_404(User,id=self.request.user.id)
-        print(obj)
         return obj    
