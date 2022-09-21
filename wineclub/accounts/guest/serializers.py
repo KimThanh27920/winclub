@@ -57,6 +57,26 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+class BusinessRegisterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = [
+            "phone",
+            "email",
+            "password",
+        ]
+        extra_kwargs = {
+            "password": {"write_only": True}
+        }
+
+    def validate_email(self, attrs):
+        return attrs.lower()
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+
 class PinSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Pin
@@ -67,3 +87,6 @@ class ChangePasswordWithPinSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     pin = serializers.IntegerField(required=True)
     new_password = serializers.CharField(required=True)
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
