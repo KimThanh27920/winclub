@@ -23,3 +23,9 @@ class Transaction(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name="money_sender")
     reciever = models.ForeignKey(User, on_delete=models.CASCADE, related_name="money_reciever")
 
+    def __str__(self) -> str:
+        return self.timestamp
+    
+
+    class Meta:
+        db_table = "transactions"
