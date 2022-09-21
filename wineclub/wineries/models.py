@@ -1,14 +1,13 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from wineclub.addresses.models import Address
+from addresses.models import Address
 
 # Create your models here.
 
 Account = get_user_model()
 
 class Winery(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="winery")
     address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="winery")
     name = models.CharField(max_length=255)
     rating_average = models.FloatField(default=0.0)
@@ -20,7 +19,13 @@ class Winery(models.Model):
     founded_date = models.CharField(max_length=255)
     is_active = models.BooleanField(default=False)
 
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+    deleted_at = models.DateField()
 
-class Membership(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="membership_account")
-    winery = models.ForeignKey(Winery, on_delete=models.CASCADE, related_name="membership_winery")
+    created_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="winery_created")
+    updated_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="winery_updated")
+    deleted_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="winery_deleted")
+
+    def __str__(self):
+        return self.name

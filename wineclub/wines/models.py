@@ -10,9 +10,10 @@ User = get_user_model()
 
 
 # Style model class
-class Style(models.Model):
+class Wine(models.Model):
     wine = models.CharField(max_length=255, unique=True)
-    price = models.FloatField(),
+    price = models.FloatField()
+    sale = models.FloatField(null=True, blank=True, default=0)
     winery = models.ForeignKey(Winery, on_delete=models.CASCADE, related_name="origin")
     type = models.ForeignKey(Type, on_delete=models.CASCADE, related_name="type_wine")
     style = models.ForeignKey(Style, on_delete=models.CASCADE, related_name="style_wine")
@@ -39,13 +40,13 @@ class Style(models.Model):
     average_rating = models.FloatField()
     reviewers = models.IntegerField
     
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(default= False)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
-    deleted_at = models.DateField()
+    deleted_at = models.DateField(default=None, blank=True, null=True,)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="wine_created")
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="wine_updated")
-    deleted_by = models.ForeignKey(User, on_delete= models.CASCADE, related_name="wine_deleted")
+    deleted_by = models.ForeignKey(User, on_delete= models.CASCADE,default=None, blank=True, null=True, related_name="wine_deleted")
 
 
     
