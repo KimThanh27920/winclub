@@ -1,13 +1,14 @@
-from rest_framework import generics, permissions, response, status
-
 from rest_framework_simplejwt.views import TokenBlacklistView, TokenRefreshView
-from rest_framework_simplejwt import tokens, authentication
+from rest_framework_simplejwt import authentication
+
+from rest_framework import generics, permissions, response, status
 
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 
 from . import serializers
 User = get_user_model()
+
 
 
 class ChangePasswordView(generics.UpdateAPIView):
@@ -50,9 +51,17 @@ class ProfileUpdateRetrieveAPIView(generics.RetrieveUpdateAPIView):
             self.serializer_class = serializers.ProfileSerializer          
         return super().get_serializer_class()
     
-    # def get_object(self, queryset=None):
-    #     obj = get_object_or_404(User,id=self.request.user.id)
-    #     return obj    
-    
-    # def perform_update(self, serializer):
-    #     serializer.save(updated_by=self.request.user.id)
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(User,id=self.request.user.id)
+        return obj    
+
+
+class UploadImageAPIView(generics.UpdateAPIView):
+    authentication_classes = [authentication.JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.ImageSerializer
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(User,id=self.request.user.id)
+        print(obj)
+        return obj    
