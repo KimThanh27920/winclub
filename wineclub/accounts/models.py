@@ -36,6 +36,7 @@ class Account(AbstractBaseUser):
     birtday = models.CharField(max_length=255)
     gender = models.BooleanField(default=True)
     points = models.IntegerField(default=0)
+    image = models.ImageField(null=True, upload_to = "images/profile/")
     stripe_account = models.CharField(max_length=255)
 
     last_login = models.DateTimeField(auto_now=True, blank=True, null=True)
