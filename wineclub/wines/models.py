@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 
 # App import
 from categories.models import Style, Type, Grape, Food, Region, Country 
+from wineries.models import Winery
 
 User = get_user_model()
 
@@ -12,15 +13,13 @@ User = get_user_model()
 class Style(models.Model):
     wine = models.CharField(max_length=255, unique=True)
     price = models.FloatField(),
-
-    #winery = models.ForeignKey(Winery, on_delete=models.CASCADE, related_name="origin")
+    winery = models.ForeignKey(Winery, on_delete=models.CASCADE, related_name="origin")
     type = models.ForeignKey(Type, on_delete=models.CASCADE, related_name="type_wine")
     style = models.ForeignKey(Style, on_delete=models.CASCADE, related_name="style_wine")
     grape = models.ForeignKey(Grape, on_delete= models.CASCADE, related_name="grape_wine")
     food = models.ForeignKey(Food, on_delete=models.CASCADE, related_name="food_pairing")
     region = models.ForeignKey(Region,on_delete=models.CASCADE, related_name="region_wine")
     country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name="country_wine")
-    
     thumbnail = models.CharField(max_length=255)
     year = models.IntegerField()
     descriptions = models.TextField()
@@ -30,15 +29,17 @@ class Style(models.Model):
     serving_temprature = models.FloatField()
     in_stock = models.IntegerField()
     
+    #taste of wine
     light_bold = models.FloatField()
     smooth_tannic = models.FloatField()
     dry_sweet = models.FloatField()
     soft_acidic = models.FloatField()
 
+    #rating of wine
     average_rating = models.FloatField()
     reviewers = models.IntegerField
+    
     is_active = models.BooleanField()
-
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     deleted_at = models.DateField()
