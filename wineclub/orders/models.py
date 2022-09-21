@@ -1,10 +1,13 @@
 #django import
+from hashlib import md5
+from pyexpat import model
 from django.db import models
 from django.contrib.auth import get_user_model
 
 #app import
 from addresses.models import Delivery
 from shipping.models import ShippingUnit
+from wines.models import Wine
 from wineries.models import Winery
 from coupons.models import Coupon
 
@@ -40,5 +43,26 @@ class Order( models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="order_updated")
     deleted_by = models.ForeignKey(User, on_delete= models.CASCADE, default=None, blank=True, null=True, related_name="order_deleted")
 
+    def __str__(self) -> str:
+        return self.id
+    
 
+    class Meta:
+        db_table = "orders"
+
+
+#Order detail models class
+class OrderDetail(models.Model):
+    quatity = models.IntegerField()
+    price = models.FloatField()
+    sale = models.FloatField(null=True, blank = True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_id")
+    wine = models.ForeignKey(Wine, on_delete=models.CASCADE, related_name="wine_order")
+
+    def __str__(self) -> str:
+        return self.wine
+    
+
+    class Meta:
+        db_table = "order_detail"
 

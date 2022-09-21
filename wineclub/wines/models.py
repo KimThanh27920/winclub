@@ -12,7 +12,8 @@ User = get_user_model()
 # Style model class
 class Wine(models.Model):
     wine = models.CharField(max_length=255, unique=True)
-    price = models.FloatField(),
+    price = models.FloatField()
+    sale = models.FloatField(null=True, blank=True, default=0)
     winery = models.ForeignKey(Winery, on_delete=models.CASCADE, related_name="origin")
     type = models.ForeignKey(Type, on_delete=models.CASCADE, related_name="type_wine")
     style = models.ForeignKey(Style, on_delete=models.CASCADE, related_name="style_wine")
