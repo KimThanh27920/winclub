@@ -5,8 +5,8 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 DELIVERY_CHOICES = [
-    ("home", "home")
-    ("office", "office")
+    ("home", "home"),
+    ("office", "office"),
 ]
 
 class Address(models.Model):
