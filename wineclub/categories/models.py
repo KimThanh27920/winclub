@@ -14,6 +14,13 @@ class Type(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="type_created")
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="type_updated")
     deleted_by = models.ForeignKey(User, on_delete= models.CASCADE, related_name="type_deleted")
+    
+    def __str__(self):
+        return self.type
+
+    
+    class Meta:
+        db_table="types"
 
 
 # Style model class
@@ -26,6 +33,13 @@ class Style(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="style_updated")
     deleted_by = models.ForeignKey(User, on_delete= models.CASCADE, related_name="style_deleted")
 
+    def __str__(self) -> str:
+        return self.style
+
+    
+    class Meta:
+        db_table="styles"
+
 
 # Grape model class
 class Grape(models.Model):
@@ -36,6 +50,13 @@ class Grape(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="grape_created")
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="grape_updated")
     deleted_by = models.ForeignKey(User, on_delete= models.CASCADE, related_name="grape_deleted")
+
+    def __str__(self) -> str:
+        return self.grape
+
+    
+    class Meta:
+        db_table="grapes"
 
 
 # Food model class
@@ -48,6 +69,13 @@ class Food(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="food_updated")
     deleted_by = models.ForeignKey(User, on_delete= models.CASCADE,related_name="food_deleted")
 
+    def __str__(self) -> str:
+        return self.food
+
+    
+    class Meta:
+        db_table="foods"
+
 
 # Region model class
 class Region(models.Model):
@@ -59,6 +87,13 @@ class Region(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="region_updated")
     deleted_by = models.ForeignKey(User, on_delete= models.CASCADE,related_name="region_deleted")
 
+    def __str__(self) -> str:
+        return self.region
+
+    
+    class Meta:
+        db_table="region"
+
 
 # Country model class
 class Country(models.Model):
@@ -69,3 +104,10 @@ class Country(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="country_created")
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="country_updated")
     deleted_by = models.ForeignKey(User, on_delete= models.CASCADE,related_name="country_deleted")
+
+    def __str__(self) -> str:
+        return self.country
+    
+    
+    class Meta:
+        db_table="countries"
