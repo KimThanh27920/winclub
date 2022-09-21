@@ -60,13 +60,12 @@ class ForgotPasswordApiView(APIView):
         return pin
 
     def post(self, request):
+        serializer = ForgotPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         user = get_object_or_404(User, email=request.data["email"].lower())
         pin_code = self.create_pin(user)
         html_content = render_to_string(
             "index.html", {'fullname': "USER", 'pin': pin_code})
-        
-        print(html_content)
-
         send_mail(
             subject='WineClub - Forgot Password',
             message='PIN',
@@ -83,7 +82,6 @@ class ChangePasswordWithPINApiView(APIView):
         self.pin.delete()
 
     def post(self, request):
-
         serializers = ChangePasswordWithPinSerializer(data=request.data)
         serializers.is_valid(raise_exception=True)
         self.user = get_object_or_404(

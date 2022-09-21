@@ -82,7 +82,7 @@ ROOT_URLCONF = 'wineclub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [ BASE_DIR / 'bases' / 'templates'] , #specify the path to the template directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
