@@ -18,6 +18,10 @@ class Address(models.Model):
     latitude = models.CharField(max_length=255)
     longtitude = models.CharField(max_length=255)
 
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+    deleted_at = models.DateField()
+
 
 class Delivery(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
@@ -25,6 +29,12 @@ class Delivery(models.Model):
     type = models.CharField(max_length=255, default="home", choices=DELIVERY_CHOICES)
     full_name = models.CharField(max_length=255)
     is_default = models.BooleanField(default=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+    deleted_at = models.DateField()
     
+    # def __str__(self):
+    #     return self.address
