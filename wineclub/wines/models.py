@@ -47,3 +47,10 @@ class Style(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="wine_updated")
     deleted_by = models.ForeignKey(User, on_delete= models.CASCADE, related_name="wine_deleted")
 
+
+    
+    class Meta:
+        db_table="wines"
+
+    def __str__(self) -> str:
+        return self.wine
