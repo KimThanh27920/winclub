@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+from datetime import timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -46,6 +47,14 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
     'accounts',
+    'addresses',
+    'categories',
+    'wineries',
+    'wines',
+    'subscriptions',
+    'coupons',
+    'programs',
+    'shipping',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +158,9 @@ REST_FRAMEWORK = {
 
 # get user model
 AUTH_USER_MODEL = 'accounts.Account'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+}
