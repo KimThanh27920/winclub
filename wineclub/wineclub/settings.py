@@ -146,3 +146,5 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 }
 
+
+AUTH_USER_MODEL = 'accounts.Account'
