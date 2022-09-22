@@ -1,47 +1,43 @@
 import random
-from rest_framework.views import APIView
-from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework_simplejwt.views import TokenObtainPairView
+
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
-from django.conf import settings
-from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
-from .serializers import MyTokenObtainPairSerializer, RegisterSerializer
-from .serializers import ChangePasswordWithPinSerializer
+from django.template.loader import render_to_string
+
+from rest_framework import status
+from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from .serializers import PinSerializer
+from .serializers import RegisterSerializer
 from .serializers import ForgotPasswordSerializer
 from .serializers import BusinessRegisterSerializer
+from .serializers import MyTokenObtainPairSerializer
+from .serializers import ChangePasswordWithPinSerializer
 from ..models import Pin
-# Create your views here.
+
 User = get_user_model()
 
 
 class LoginApiView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-
 
 class RegisterAPI(generics.CreateAPIView):
     serializer_class = RegisterSerializer
-
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
 
 
 class BusinessRegisterAPI(generics.CreateAPIView):
     serializer_class = BusinessRegisterSerializer
 
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
-
     def perform_create(self, serializer):
         print("per")
-        return serializer.save(is_business = True)
+        return serializer.save(is_business=True)
+
 
 class ForgotPasswordApiView(APIView):
     def create_pin(self, user):
@@ -73,7 +69,6 @@ class ForgotPasswordApiView(APIView):
             recipient_list=[request.data["email"]],
             html_message=html_content
         )
-        print(html_content)
         return Response({"message": "Send email completed"}, status=status.HTTP_200_OK)
 
 

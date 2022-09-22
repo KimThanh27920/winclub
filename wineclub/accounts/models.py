@@ -50,7 +50,7 @@ class Account(AbstractBaseUser):
     is_business = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone', 'full_name']
+    REQUIRED_FIELDS = ['phone']
 
     objects = AccountManager()
 

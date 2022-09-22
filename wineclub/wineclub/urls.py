@@ -26,5 +26,9 @@ urlpatterns = [
     # Categories
     # path('categories/', include('categories.guest.urls')),
     path('admin/categories/', include('categories.administrator.urls')),
+    # Accounts
+    path('', include('wineries.guest.urls')),
+    path('business/wineries/', include('wineries.business.urls')),
+    
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
