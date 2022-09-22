@@ -117,3 +117,232 @@ class StyleSerializer(serializers.ModelSerializer):
                 fields = ["style"]
             )
         ]
+
+
+
+#Grape Read Serializer 
+class GrapeReadSerializer(serializers.ModelSerializer):
+    created_by = serializers.StringRelatedField(read_only = True)
+    updated_by = serializers.StringRelatedField(read_only = True)
+    
+    
+    class Meta:
+        model = Grape
+        fields =[
+            'id',
+            'grape',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+            
+        ] 
+        read_only_fields =[
+            'grape',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by'
+        ] 
+
+
+#Grape Serializer 
+class GrapeSerializer(serializers.ModelSerializer):
+    created_by = serializers.StringRelatedField(read_only = True)
+    updated_by = serializers.StringRelatedField(read_only = True)
+    
+    
+    class Meta:
+        model = Grape
+        fields =[
+            'id',
+            'grape',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+
+        ] 
+        read_only_fields =['created_by','updated_by' ]
+   
+    # Allow create a category instance again with name value which was removed
+        validators = [
+            UniqueTogetherValidator(
+                queryset = Grape.objects.filter(deleted_by = None),
+                fields = ["grape"]
+            )
+        ]
+
+
+# Food Read Serializer
+class FoodReadSerializer(serializers.ModelSerializer):
+    created_by = serializers.StringRelatedField(read_only = True)
+    updated_by = serializers.StringRelatedField(read_only = True)
+    
+    
+    class Meta:
+        model = Food
+        fields =[
+            'id',
+            'food',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+            
+        ] 
+        read_only_fields =[
+            'food',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by'
+        ] 
+
+
+# Food Serializer
+class FoodSerializer(serializers.ModelSerializer):
+    created_by = serializers.StringRelatedField(read_only = True)
+    updated_by = serializers.StringRelatedField(read_only = True)
+    
+    
+    class Meta:
+        model = Food
+        fields =[
+            'id',
+            'food',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+
+        ] 
+        read_only_fields =['created_by','updated_by' ]
+   
+    # Allow create a category instance again with name value which was removed
+        validators = [
+            UniqueTogetherValidator(
+                queryset = Food.objects.filter(deleted_by = None),
+                fields = ["food"]
+            )
+        ]
+
+
+#Region Read Serializer
+class RegionReadSerializer(serializers.ModelSerializer):
+    created_by = serializers.StringRelatedField(read_only = True)
+    updated_by = serializers.StringRelatedField(read_only = True)
+    
+    
+    class Meta:
+        model = Region
+        fields =[
+            'id',
+            'region',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+            
+        ] 
+        read_only_fields =[
+            'region',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by'
+        ] 
+
+
+#Region Serializer
+class RegionSerializer(serializers.ModelSerializer):
+    created_by = serializers.StringRelatedField(read_only = True)
+    updated_by = serializers.StringRelatedField(read_only = True)
+    
+    
+    class Meta:
+        model = Region
+        fields =[
+            'id',
+            'region',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+
+        ] 
+        read_only_fields =['created_by','updated_by' ]
+   
+    # Allow create a category instance again with name value which was removed
+        validators = [
+            UniqueTogetherValidator(
+                queryset = Region.objects.filter(deleted_by = None),
+                fields = ["region"]
+            )
+        ]
+
+
+#Country Read Serializer
+class CountryReadSerializer(serializers.ModelSerializer):
+    created_by = serializers.StringRelatedField(read_only = True)
+    updated_by = serializers.StringRelatedField(read_only = True)
+    
+    
+    class Meta:
+        model = Country
+        fields =[
+            'id',
+            'country',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+            
+        ] 
+        read_only_fields =[
+            'country',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by'
+        ] 
+
+
+#Country Serializer
+class CountrySerializer(serializers.ModelSerializer):
+    created_by = serializers.StringRelatedField(read_only = True)
+    updated_by = serializers.StringRelatedField(read_only = True)
+    
+    
+    class Meta:
+        model = Country
+        fields =[
+            'id',
+            'country',
+            'is_active',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+
+        ] 
+        read_only_fields =['created_by','updated_by' ]
+   
+    # Allow create a category instance again with name value which was removed
+        validators = [
+            UniqueTogetherValidator(
+                queryset = Country.objects.filter(deleted_by = None),
+                fields = ["country"]
+            )
+        ]

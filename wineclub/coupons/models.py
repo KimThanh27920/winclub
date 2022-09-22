@@ -1,12 +1,15 @@
 #django import
 from django.db import models
 from django.contrib.auth import get_user_model
+#App imports
+from bases.models import BasicLogModel
+
 
 User = get_user_model()
 
 
 # Coupons model class
-class Coupon(models.Model):
+class Coupon(BasicLogModel):
     code = models.CharField(max_length=32, unique=True)
     coupon = models.CharField(max_length=255)
     type = models.CharField(max_length=8)
@@ -24,12 +27,7 @@ class Coupon(models.Model):
     end = models.DateTimeField()
     is_public = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(default=None, blank=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="coupon_created")
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="coupon_updated")
-    deleted_by = models.ForeignKey(User, on_delete= models.CASCADE,default=None, blank=True, null=True, related_name="coupon_deleted")
+    
 
     def  __str__(self) -> str:
         return self.coupon

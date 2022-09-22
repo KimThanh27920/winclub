@@ -1,21 +1,22 @@
 # rest framework import
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import filters,status
+from rest_framework import status
 from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAdminUser
-from django_filters.rest_framework import DjangoFilterBackend
 
 #App import
 from categories.models import Type, Style, Grape, Region, Food, Country
-from .serializers import TypeSerializer,TypeReadSerializer, StyleSerializer, StyleReadSerializer
+from .serializers import (TypeSerializer,TypeReadSerializer,
+                            StyleSerializer, StyleReadSerializer,
+                             GrapeReadSerializer, GrapeSerializer,
+                              FoodReadSerializer, FoodSerializer,
+                               RegionReadSerializer, RegionSerializer,
+                                CountryReadSerializer, CountrySerializer)
 from wines.models import Wine
-# Python imports
-from datetime import datetime
+from bases.administrator.views import BaseAdminViewset
 
 
 #Type Admin Viewset
-class TypeAdminAPIView(ModelViewSet):
+class TypeAdminAPIView(BaseAdminViewset):
 
     serializer_class = {
         "list": TypeReadSerializer,
@@ -25,40 +26,9 @@ class TypeAdminAPIView(ModelViewSet):
         "delete": TypeSerializer
     }
     
-    queryset = Type.objects.exclude(deleted_at__isnull=False).select_related('created_by','updated_by').order_by('updated_at')
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdminUser]
-
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    queryset = Type.objects.select_related('created_by','updated_by')
     search_fields = ['type']
     filterset_fields = ['is_active']
-
-    def get_serializer_class(self):
-        return self.serializer_class[self.action]
-
-    def get_queryset(self):
-        return super().get_queryset()
-
-    def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user,updated_by=self.request.user)
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', True)
-        instance = self.get_object()
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
-
-    def perform_update(self, serializer):
-        serializer.save(updated_by=self.request.user)
 
     def perform_destroy(self, instance):
         if Wine.objects.filter(type=instance).exists() :
@@ -67,9 +37,7 @@ class TypeAdminAPIView(ModelViewSet):
             }
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
-        instance.deleted_by = self.request.user
-        instance.deleted_at = datetime.now()
-        instance.save()
+        return super().perform_destroy()
        
 
 #Style Admin Viewset
@@ -82,50 +50,116 @@ class StyleAdminAPIView(ModelViewSet):
         "update": StyleSerializer,
         "delete": StyleSerializer
     }
-    
-    queryset = Style.objects.exclude(deleted_at__isnull=False).select_related('created_by','updated_by').order_by('updated_at')
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdminUser]
-
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    queryset = Style.objects.select_related('created_by','updated_by')
     search_fields = ['style']
     filterset_fields = ['is_active']
 
-    def get_serializer_class(self):
-        return self.serializer_class[self.action]
-
-    def get_queryset(self):
-        return super().get_queryset()
-
-    def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user,updated_by=self.request.user)
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', True)
-        instance = self.get_object()
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
-
-    def perform_update(self, serializer):
-        serializer.save(updated_by=self.request.user)
-
     def perform_destroy(self, instance):
-        if Wine.objects.filter(style=instance).exists() :
+        if Wine.objects.filter(type=instance).exists() :
             data = {
                 "message": "Type has subdata, cannot be deleted! "
             }
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
-        instance.deleted_by = self.request.user
-        instance.deleted_at = datetime.now()
-        instance.save()
-       
+        return super().perform_destroy()     
+
+
+#Grape Admin Viewset
+class GrapeAdminAPIView(ModelViewSet):
+
+    serializer_class = {
+        "list": GrapeReadSerializer,
+        "retrieve": GrapeReadSerializer,
+        "create": GrapeSerializer,
+        "update": GrapeSerializer,
+        "delete": GrapeSerializer
+    }
+    
+    queryset = Grape.objects.select_related('created_by','updated_by')
+
+    search_fields = ['grape']
+    filterset_fields = ['is_active']
+
+    def perform_destroy(self, instance):
+        if Wine.objects.filter(type=instance).exists() :
+            data = {
+                "message": "Type has subdata, cannot be deleted! "
+            }
+            return Response(data,status= status.HTTP_400_BAD_REQUEST)
+
+        return super().perform_destroy()     
+
+
+# Food Admin Viewset
+class FoodAdminAPIView(ModelViewSet):
+
+    serializer_class = {
+        "list": FoodReadSerializer,
+        "retrieve": FoodReadSerializer,
+        "create": FoodSerializer,
+        "update": FoodSerializer,
+        "delete": FoodSerializer
+    }
+    
+    queryset = Food.objects.select_related('created_by','updated_by')
+    search_fields = ['food']
+    filterset_fields = ['is_active']
+
+    def perform_destroy(self, instance):
+        if Wine.objects.filter(type=instance).exists() :
+            data = {
+                "message": "Type has subdata, cannot be deleted! "
+            }
+            return Response(data,status= status.HTTP_400_BAD_REQUEST)
+
+        return super().perform_destroy()  
+
+
+# Region Admin Viewset
+class RegionAdminAPIView(ModelViewSet):
+
+    serializer_class = {
+        "list": RegionReadSerializer,
+        "retrieve": RegionReadSerializer,
+        "create": RegionSerializer,
+        "update": RegionSerializer,
+        "delete": RegionSerializer
+    }
+    
+    queryset = Region.objects.select_related('created_by','updated_by')
+    search_fields = ['region']
+    filterset_fields = ['is_active']
+
+    def perform_destroy(self, instance):
+        if Wine.objects.filter(type=instance).exists() :
+            data = {
+                "message": "Type has subdata, cannot be deleted! "
+            }
+            return Response(data,status= status.HTTP_400_BAD_REQUEST)
+
+        return super().perform_destroy()  
+
+
+# Countries Admin Viewset
+class CountryAdminAPIView(ModelViewSet):
+
+    serializer_class = {
+        "list": CountryReadSerializer,
+        "retrieve": CountryReadSerializer,
+        "create": CountrySerializer,
+        "update": CountrySerializer,
+        "delete": CountrySerializer
+    }
+    
+    queryset = Country.objects.select_related('created_by','updated_by')
+    search_fields = ['country']
+    filterset_fields = ['is_active']
+
+    def perform_destroy(self, instance):
+        if Wine.objects.filter(type=instance).exists() :
+            data = {
+                "message": "Type has subdata, cannot be deleted! "
+            }
+            return Response(data,status= status.HTTP_400_BAD_REQUEST)
+
+        return super().perform_destroy()  

@@ -2,12 +2,13 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from addresses.models import Address
+from bases.models import BasicLogModel
 
 # Create your models here.
 
 Account = get_user_model()
 
-class Winery(models.Model):
+class Winery(BasicLogModel):
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="winery", null=True)
     name = models.CharField(max_length=255)
@@ -19,14 +20,6 @@ class Winery(models.Model):
     phone_winery = models.CharField(max_length=255)
     founded_date = models.CharField(max_length=255)
     is_active = models.BooleanField(default=False)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
-
-    created_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="winery_created")
-    updated_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="winery_updated")
-    deleted_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="winery_deleted")
 
     def __str__(self):
         return self.name

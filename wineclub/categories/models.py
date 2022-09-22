@@ -10,7 +10,8 @@ User = get_user_model()
 # Type model class
 class Type(BasicLogModel):
     type = models.CharField(max_length=255, unique=True)
-   
+    is_active = models.BooleanField(default=False)
+
     def __str__(self):
         return self.type
 
@@ -22,6 +23,7 @@ class Type(BasicLogModel):
 # Style model class
 class Style(BasicLogModel):
     style = models.CharField(max_length=255, unique=True)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.style
@@ -34,7 +36,8 @@ class Style(BasicLogModel):
 # Grape model class
 class Grape(BasicLogModel):
     grape = models.CharField(max_length=255, unique=True)
-    
+    is_active = models.BooleanField(default=False)
+
     def __str__(self) -> str:
         return self.grape
 
@@ -46,6 +49,7 @@ class Grape(BasicLogModel):
 # Food model class
 class Food(BasicLogModel):
     food = models.CharField(max_length=255, unique=True)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.food
@@ -58,6 +62,7 @@ class Food(BasicLogModel):
 # Region model class
 class Region(BasicLogModel):
     region = models.CharField(max_length=255, unique=True)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.region
@@ -70,7 +75,8 @@ class Region(BasicLogModel):
 # Country model class
 class Country(BasicLogModel):
     country = models.CharField(max_length=255, unique=True)
-
+    is_active = models.BooleanField(default=False)
+    
     def __str__(self) -> str:
         return self.country
     
