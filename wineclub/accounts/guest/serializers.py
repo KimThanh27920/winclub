@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from wineries.models import Winery
 from .. import models
 
 User = get_user_model()
@@ -54,7 +55,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs.lower()
 
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)        
         return user
 
 class BusinessRegisterSerializer(serializers.ModelSerializer):
@@ -75,6 +76,8 @@ class BusinessRegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
+        Winery.objects.create(account=user)             #Toan cus
+        
         return user
 
 class PinSerializer(serializers.ModelSerializer):
