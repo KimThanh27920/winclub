@@ -34,9 +34,9 @@ class ShippingUnit(models.Model):
 class ShippingBusinessService(models.Model):
     winery = models.ForeignKey(Winery, on_delete= models.CASCADE, related_name="winery_shipping")
     shipping_services= models.ManyToManyField(ShippingUnit, related_name="shipping_service_list")
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
-    deleted_at = models.DateField(default=None, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(default=None, blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="shipping_service_created")
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="shipping_service_updated")
     deleted_by = models.ForeignKey(User, on_delete= models.CASCADE,default=None, blank=True, null=True, related_name="shipping_service_deleted")

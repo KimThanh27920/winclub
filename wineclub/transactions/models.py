@@ -13,7 +13,7 @@ TYPE_TRANS = [
 
 # Transaction model class
 class Transaction(models.Model):
-    timestamp = models.DateField(auto_now_add=True),
+    timestamp = models.DateTimeField(auto_now_add=True),
     type = models.CharField(max_length=255,default="charge", choices=TYPE_TRANS)
     amount = models.FloatField()
     currency = models.CharField(max_length=255, default="usd")
