@@ -1,4 +1,5 @@
 from django.contrib import admin
-from . import models
+from .models import SubscriptionPackage
 # Register your models here.
-admin.site.register(models.SubscriptionPackage)
+
+admin.site.register(SubscriptionPackage)
