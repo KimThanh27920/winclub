@@ -35,7 +35,6 @@ class BusinessRegisterAPI(generics.CreateAPIView):
     serializer_class = BusinessRegisterSerializer
 
     def perform_create(self, serializer):
-        print("per")
         return serializer.save(is_business=True)
 
 
