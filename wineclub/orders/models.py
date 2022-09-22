@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 #app import
-from addresses.models import Delivery
+from addresses.models import Address
 from shipping.models import ShippingUnit
 from wines.models import Wine
 from wineries.models import Winery
