@@ -24,6 +24,7 @@ class TypeReadSerializer(serializers.ModelSerializer):
             
         ] 
         read_only_fields =[
+            'id',
             'type',
             'is_active',
             'created_at',
@@ -81,6 +82,7 @@ class StyleReadSerializer(serializers.ModelSerializer):
             
         ] 
         read_only_fields =[
+            'id',
             'style',
             'is_active',
             'created_at',
@@ -139,6 +141,7 @@ class GrapeReadSerializer(serializers.ModelSerializer):
             
         ] 
         read_only_fields =[
+            'id',
             'grape',
             'is_active',
             'created_at',
@@ -196,6 +199,7 @@ class FoodReadSerializer(serializers.ModelSerializer):
             
         ] 
         read_only_fields =[
+            'id',
             'food',
             'is_active',
             'created_at',
@@ -253,6 +257,7 @@ class RegionReadSerializer(serializers.ModelSerializer):
             
         ] 
         read_only_fields =[
+            'id',
             'region',
             'is_active',
             'created_at',
@@ -310,6 +315,7 @@ class CountryReadSerializer(serializers.ModelSerializer):
             
         ] 
         read_only_fields =[
+            'id',
             'country',
             'is_active',
             'created_at',
