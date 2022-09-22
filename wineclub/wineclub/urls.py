@@ -27,6 +27,8 @@ urlpatterns = [
     
     path('', include('wineries.guest.urls')),
     path('business/wineries/', include('wineries.business.urls')),
+
+    path('customer/addresses/', include('addresses.customer.urls'))
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
