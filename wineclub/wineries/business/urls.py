@@ -2,7 +2,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-
-    # path('login/', views.LoginApiView.as_view(), name='login'),
+    path('profile/', views.BusinessProfileView.as_view(), name='business_profile'),
+    path('profile/image-cover/', views.UploadImageCover.as_view(), name='upload_image_cover'),
     
 ]
