@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'reviews',
     'orders',
     # 'service',
+    'bases',
     
 ]
 
