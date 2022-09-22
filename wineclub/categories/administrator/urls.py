@@ -7,22 +7,22 @@ from .views import (TypeAdminAPIView, StyleAdminAPIView,
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register("", TypeAdminAPIView, basename="types")
+router.register("", TypeAdminAPIView, basename="types_admin")
 
 router1 = DefaultRouter()
-router1.register("", StyleAdminAPIView, basename="styles")
+router1.register("", StyleAdminAPIView, basename="styles_admin")
 
 router2 = DefaultRouter()
-router2.register("", GrapeAdminAPIView, basename="grapes")
+router2.register("", GrapeAdminAPIView, basename="grapes_admin")
 
 router3 = DefaultRouter()
-router3.register("", FoodAdminAPIView, basename="foods")
+router3.register("", FoodAdminAPIView, basename="foods_admin")
 
 router4 = DefaultRouter()
-router4.register("", RegionAdminAPIView, basename="region")
+router4.register("", RegionAdminAPIView, basename="region_admin")
 
 router5 = DefaultRouter()
-router5.register("", CountryAdminAPIView, basename="countries")
+router5.register("", CountryAdminAPIView, basename="countries_admin")
 
 urlpatterns = [
     path("types/", include(router.urls) ),

@@ -24,13 +24,16 @@ urlpatterns = [
     path('', include('accounts.guest.urls')),
     path('customer/accounts/', include('accounts.customer.urls')),
     # Categories
-    # path('categories/', include('categories.guest.urls')),
+    path('categories/', include('categories.guest.urls')),
     path('admin/categories/', include('categories.administrator.urls')),
     # Accounts
     path('', include('wineries.guest.urls')),
     path('business/wineries/', include('wineries.business.urls')),
 
-    path('customer/addresses/', include('addresses.customer.urls'))
+    path('customer/addresses/', include('addresses.customer.urls')),
+
+    #Wine
+    path('wineries/wines/', include('wines.business.urls'))
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
