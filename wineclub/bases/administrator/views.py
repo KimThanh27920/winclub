@@ -45,5 +45,6 @@ class BaseAdminViewset(ModelViewSet):
     def perform_destroy(self, instance):
         instance.deleted_by = self.request.user
         instance.deleted_at = datetime.now()
+        instance.is_active = False
         instance.save()
   
