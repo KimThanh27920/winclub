@@ -23,6 +23,8 @@ urlpatterns = [
     # Accounts
     path('', include('accounts.guest.urls')),
     path('customer/accounts/', include('accounts.customer.urls')),
-    # Accounts
+    # Categories
+    # path('categories/', include('categories.guest.urls')),
+    path('admin/categories/', include('categories.administrator.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
