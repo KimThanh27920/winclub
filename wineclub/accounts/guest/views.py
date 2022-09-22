@@ -73,7 +73,6 @@ class ForgotPasswordApiView(APIView):
             recipient_list=[request.data["email"]],
             html_message=html_content
         )
-        print(html_content)
         return Response({"message": "Send email completed"}, status=status.HTTP_200_OK)
 
 
