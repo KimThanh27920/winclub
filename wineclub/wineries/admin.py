@@ -1,4 +1,4 @@
 from django.contrib import admin
-from . import models
-# Register your models here.
-admin.site.register(models.Winery)
+from .models import Winery
+
+admin.site.register(Winery)

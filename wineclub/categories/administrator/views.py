@@ -1,5 +1,4 @@
 # rest framework import
-from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -37,11 +36,11 @@ class TypeAdminAPIView(BaseAdminViewset):
             }
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
-        return super().perform_destroy()
+        return super().perform_destroy(instance)
        
 
 #Style Admin Viewset
-class StyleAdminAPIView(ModelViewSet):
+class StyleAdminAPIView(BaseAdminViewset):
 
     serializer_class = {
         "list": StyleReadSerializer,
@@ -50,22 +49,23 @@ class StyleAdminAPIView(ModelViewSet):
         "update": StyleSerializer,
         "delete": StyleSerializer
     }
+
     queryset = Style.objects.select_related('created_by','updated_by')
     search_fields = ['style']
     filterset_fields = ['is_active']
 
     def perform_destroy(self, instance):
-        if Wine.objects.filter(type=instance).exists() :
+        if Wine.objects.filter(style=instance).exists() :
             data = {
                 "message": "Type has subdata, cannot be deleted! "
             }
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
-        return super().perform_destroy()     
+        return super().perform_destroy(instance)     
 
 
 #Grape Admin Viewset
-class GrapeAdminAPIView(ModelViewSet):
+class GrapeAdminAPIView(BaseAdminViewset):
 
     serializer_class = {
         "list": GrapeReadSerializer,
@@ -81,17 +81,17 @@ class GrapeAdminAPIView(ModelViewSet):
     filterset_fields = ['is_active']
 
     def perform_destroy(self, instance):
-        if Wine.objects.filter(type=instance).exists() :
+        if Wine.objects.filter(grape=instance).exists() :
             data = {
                 "message": "Type has subdata, cannot be deleted! "
             }
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
-        return super().perform_destroy()     
+        return super().perform_destroy(instance)     
 
 
 # Food Admin Viewset
-class FoodAdminAPIView(ModelViewSet):
+class FoodAdminAPIView(BaseAdminViewset):
 
     serializer_class = {
         "list": FoodReadSerializer,
@@ -106,17 +106,17 @@ class FoodAdminAPIView(ModelViewSet):
     filterset_fields = ['is_active']
 
     def perform_destroy(self, instance):
-        if Wine.objects.filter(type=instance).exists() :
+        if Wine.objects.filter(food=instance).exists() :
             data = {
                 "message": "Type has subdata, cannot be deleted! "
             }
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
-        return super().perform_destroy()  
+        return super().perform_destroy(instance)  
 
 
 # Region Admin Viewset
-class RegionAdminAPIView(ModelViewSet):
+class RegionAdminAPIView(BaseAdminViewset):
 
     serializer_class = {
         "list": RegionReadSerializer,
@@ -131,17 +131,17 @@ class RegionAdminAPIView(ModelViewSet):
     filterset_fields = ['is_active']
 
     def perform_destroy(self, instance):
-        if Wine.objects.filter(type=instance).exists() :
+        if Wine.objects.filter(region=instance).exists() :
             data = {
                 "message": "Type has subdata, cannot be deleted! "
             }
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
-        return super().perform_destroy()  
+        return super().perform_destroy(instance)  
 
 
 # Countries Admin Viewset
-class CountryAdminAPIView(ModelViewSet):
+class CountryAdminAPIView(BaseAdminViewset):
 
     serializer_class = {
         "list": CountryReadSerializer,
@@ -156,10 +156,10 @@ class CountryAdminAPIView(ModelViewSet):
     filterset_fields = ['is_active']
 
     def perform_destroy(self, instance):
-        if Wine.objects.filter(type=instance).exists() :
+        if Wine.objects.filter(country=instance).exists() :
             data = {
                 "message": "Type has subdata, cannot be deleted! "
             }
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
-        return super().perform_destroy()  
+        return super().perform_destroy(instance)  
