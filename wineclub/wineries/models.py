@@ -20,9 +20,9 @@ class Winery(models.Model):
     founded_date = models.CharField(max_length=255)
     is_active = models.BooleanField(default=False)
 
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
-    deleted_at = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()
 
     created_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="winery_created")
     updated_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="winery_updated")

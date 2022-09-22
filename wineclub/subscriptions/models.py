@@ -15,9 +15,9 @@ class SubscriptionPackage(models.Model):
     interval_count = models.IntegerField()
     
     is_active = models.BooleanField(default=True)
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
-    deleted_at = models.DateField(default=None, blank=True, null=True,)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(default=None, blank=True, null=True,)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscription_package_created")
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscription_package_updated")
     deleted_by = models.ForeignKey(User, on_delete= models.CASCADE,default=None, blank=True, null=True, related_name="subscription_package_deleted")
