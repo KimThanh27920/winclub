@@ -13,7 +13,7 @@ class ShippingUnit(models.Model):
     name = models.CharField(max_length=255, unique=True)
     fee = models.FloatField()
     type = models.CharField(max_length=255)
-    expected_date = models.IntegerField()
+    expected_date = models.IntegerField(null=True)
     is_active = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
