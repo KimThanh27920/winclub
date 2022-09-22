@@ -24,5 +24,9 @@ urlpatterns = [
     path('', include('accounts.guest.urls')),
     path('customer/accounts/', include('accounts.customer.urls')),
     # Accounts
+    
+    path('', include('wineries.guest.urls')),
+    path('business/wineries/', include('wineries.business.urls')),
+    
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

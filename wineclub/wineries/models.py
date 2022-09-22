@@ -9,7 +9,7 @@ Account = get_user_model()
 
 class Winery(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="winery")
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="winery", null=True)
     name = models.CharField(max_length=255)
     rating_average = models.FloatField(default=0.0)
     reviewer = models.IntegerField(default=0)
