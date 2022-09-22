@@ -32,7 +32,7 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser):
-    email = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255, unique=True)
     phone = models.CharField(max_length=255, unique=True)
     full_name = models.CharField(max_length=255, null=True)
     birtday = models.CharField(max_length=255)

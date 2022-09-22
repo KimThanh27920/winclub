@@ -51,7 +51,12 @@ class RegisterSerializer(serializers.ModelSerializer):
             "password": {"write_only": True}
         }
 
-    
+    def validate_phone(self, value):
+        try:
+            int(value)
+            return value
+        except:
+            raise serializers.ValidationError("phone number is not available")
     def validate_email(self, attrs):
         return attrs.lower()
 
@@ -71,7 +76,12 @@ class BusinessRegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "password": {"write_only": True}
         }
-
+    def validate_phone(self, value):
+        try:
+            int(value)
+            return value
+        except:
+            raise serializers.ValidationError("phone number is not available")
     def validate_email(self, attrs):
         return attrs.lower()
 
