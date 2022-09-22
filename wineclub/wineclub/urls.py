@@ -26,6 +26,8 @@ urlpatterns = [
     # Categories
     path('categories/', include('categories.guest.urls')),
     path('admin/categories/', include('categories.administrator.urls')),
+    #Subscription Packages
+    path('admin/subscription-package/', include('subscriptions.administrator.urls')),
     # Accounts
     path('', include('wineries.guest.urls')),
     path('business/wineries/', include('wineries.business.urls')),
