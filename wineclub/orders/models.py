@@ -10,6 +10,7 @@ from shipping.models import ShippingUnit
 from wines.models import Wine
 from wineries.models import Winery
 from coupons.models import Coupon
+from bases.models import BasicLogModel
 
 User = get_user_model()
 STATUS_CHOICES = [
@@ -25,7 +26,7 @@ PAYMENT_CHOICES = [
     (None, None)
 ]
 # Order model class
-class Order( models.Model):
+class Order(BasicLogModel):
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="buyer")
     winery = models.ForeignKey(Winery, on_delete=models.CASCADE, related_name="winery")
     delivery = models.ForeignKey(Delivery, on_delete=models.CASCADE, related_name="delivery_address")
@@ -36,12 +37,7 @@ class Order( models.Model):
     total = models.FloatField(default=0)
     status = models.CharField(max_length= 255, default="processing", choices=STATUS_CHOICES)
     payment = models.CharField(default=None,max_length=255,choices=PAYMENT_CHOICES)
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
-    deleted_at = models.DateField(default=None, blank=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="order_created")
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="order_updated")
-    deleted_by = models.ForeignKey(User, on_delete= models.CASCADE, default=None, blank=True, null=True, related_name="order_deleted")
+    
 
     def __str__(self) -> str:
         return self.id

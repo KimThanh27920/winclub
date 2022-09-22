@@ -4,12 +4,13 @@ from django.contrib.auth import get_user_model
 
 #app import
 from coupons.models import Coupon
+from bases.models import BasicLogModel
 
 User = get_user_model()
 
 
 # Reward Program model class
-class RewardProgram(models.Model):
+class RewardProgram(BasicLogModel):
     name = models.CharField(max_length=255)
     members = models.ManyToManyField(User, related_name="membership_list" )
     require_sending = models.BooleanField(default=False)
@@ -17,12 +18,7 @@ class RewardProgram(models.Model):
     descriptions= models.TextField()
     start = models.DateTimeField()
     end = models.DateTimeField()
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
-    deleted_at = models.DateField(default=None, blank=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="program_created")
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="program_updated")
-    deleted_by = models.ForeignKey(User, on_delete= models.CASCADE, default=None, blank=True, null=True,related_name="program_deleted")
+    
 
     def __str__(self) -> str:
         return self.name

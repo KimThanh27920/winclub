@@ -5,12 +5,13 @@ from django.contrib.auth import get_user_model
 # App import
 from categories.models import Style, Type, Grape, Food, Region, Country 
 from wineries.models import Winery
+from bases.models import BasicLogModel
 
 User = get_user_model()
 
 
 # Style model class
-class Wine(models.Model):
+class Wine(BasicLogModel):
     wine = models.CharField(max_length=255, unique=True)
     price = models.FloatField()
     sale = models.FloatField(null=True, blank=True, default=0)
@@ -41,13 +42,6 @@ class Wine(models.Model):
     reviewers = models.IntegerField
     
     is_active = models.BooleanField(default= False)
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
-    deleted_at = models.DateField(default=None, blank=True, null=True,)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="wine_created")
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="wine_updated")
-    deleted_by = models.ForeignKey(User, on_delete= models.CASCADE,default=None, blank=True, null=True, related_name="wine_deleted")
-
 
     
     class Meta:

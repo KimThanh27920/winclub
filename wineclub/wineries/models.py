@@ -2,12 +2,13 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from addresses.models import Address
+from bases.models import BasicLogModel
 
 # Create your models here.
 
 Account = get_user_model()
 
-class Winery(models.Model):
+class Winery(BasicLogModel):
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="winery", null=True)
     name = models.CharField(max_length=255)
