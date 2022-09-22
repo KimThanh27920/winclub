@@ -50,6 +50,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "password": {"write_only": True}
         }
 
+    
     def validate_email(self, attrs):
         return attrs.lower()
 
