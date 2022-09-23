@@ -26,18 +26,19 @@ PAYMENT_CHOICES = [
     (None, None)
 ]
 # Order model class
-class Order(BasicLogModel):
-    
+class Order(BasicLogModel):    
     winery = models.ForeignKey(Winery, on_delete=models.CASCADE, related_name="winery")
     shipping_service = models.ForeignKey(ShippingUnit, on_delete=models.CASCADE, related_name="shipping_service")
     coupons = models.ManyToManyField(Coupon, related_name="coupons_apply")
     note = models.TextField(null=True, blank=True)
-    used_points = models.FloatField()
+    used_points = models.IntegerField(default=0)
     total = models.FloatField(default=0)
     status = models.CharField(max_length= 255, default="processing", choices=STATUS_CHOICES)
     payment = models.CharField(default=None,max_length=255,choices=PAYMENT_CHOICES)
+    address = models.TextField()
+    full_name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
     
-
     def __str__(self) -> str:
         return self.id
     
@@ -48,16 +49,15 @@ class Order(BasicLogModel):
 
 #Order detail models class
 class OrderDetail(models.Model):
-    quatity = models.IntegerField()
-    price = models.FloatField()
-    sale = models.FloatField(null=True, blank = True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_id")
+    price = models.FloatField()
+    sale = models.FloatField(default = 0, blank = True)    
     wine = models.ForeignKey(Wine, on_delete=models.CASCADE, related_name="wine_order")
+    quatity = models.IntegerField(default=1)
 
     def __str__(self) -> str:
         return self.wine
     
-
     class Meta:
         db_table = "order_detail"
 
