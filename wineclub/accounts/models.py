@@ -35,7 +35,7 @@ class Account(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True)
     phone = models.CharField(max_length=255, unique=True)
     full_name = models.CharField(max_length=255, null=True)
-    birtday = models.CharField(max_length=255)
+    birthday = models.DateField(max_length=255)
     gender = models.BooleanField(default=True)
     points = models.IntegerField(default=0)
     image = models.ImageField(null=True, upload_to = "images/profile/")
@@ -66,3 +66,4 @@ class Account(AbstractBaseUser):
 class Pin(models.Model):
     user = models.OneToOneField(Account, on_delete=models.CASCADE, primary_key=True)
     pin = models.IntegerField()
+    expired = models.CharField(null=True, max_length=255)

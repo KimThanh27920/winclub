@@ -29,4 +29,6 @@ class Address(BasicLogModel):
     updated_by = None
     deleted_by = None
 
+class Delivery(BasicLogModel):
+    pass
 
