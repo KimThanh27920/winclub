@@ -5,6 +5,7 @@ from bases.models import BasicLogModel
 Account = get_user_model()
 
 class Notification(BasicLogModel):
+    account = models.ForeignKey(Account, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
     is_check = models.BooleanField(default=False)
