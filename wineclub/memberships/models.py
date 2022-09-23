@@ -1,3 +1,4 @@
+from pyexpat import model
 from django.db import models
 
 from wineries.models import Winery
@@ -7,10 +8,9 @@ from bases.models import BasicLogModel
 
 Account = get_user_model()
 
-class Membership(BasicLogModel):
-    winery = models.ForeignKey(Winery, on_delete=models.CASCADE, related_name="menbership")
-
-    joined_at = models.DateField(auto_now_add=True)
+class Membership(models.Model):
+    winery = models.ForeignKey(Winery, on_delete=models.CASCADE, related_name="membership")
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="membership_user")
 
     # def __str__(self):
     #     return self.winery.name
