@@ -13,7 +13,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "email",
             "phone",
             "full_name",
-            "birtday",
+            "birthday",
             "gender",
             "points",
             "stripe_account",
