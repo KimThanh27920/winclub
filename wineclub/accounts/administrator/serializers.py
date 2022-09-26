@@ -70,8 +70,8 @@ class BusinessSerializer(serializers.ModelSerializer):
             'founded_date',
             'image_cover',
             'is_active',
-            'create_at',
-            'update_at'
+            'created_at',
+            'updated_at'
          ]
         extra_kwargs = {
             'id': {'read_only': True},
@@ -84,8 +84,8 @@ class BusinessSerializer(serializers.ModelSerializer):
             'phone_winery': {'read_only': True},
             'image_cover': {'read_only': True},
             'is_active': {'read_only': True},
-            'create_at': {'read_only': True},
-            'update_at': {'read_only': True},
+            'created_at': {'read_only': True},
+            'updated_at': {'read_only': True},
         }
 
 
@@ -108,8 +108,8 @@ class BusinessRetrieveSerializer(serializers.ModelSerializer):
             'founded_date',
             'image_cover',
             'is_active',
-            'create_at',
-            'update_at'
+            'created_at',
+            'updated_at'
          ]
         extra_kwargs = {
             'id': {'read_only': True},
@@ -123,8 +123,8 @@ class BusinessRetrieveSerializer(serializers.ModelSerializer):
             'phone_winery': {'read_only': True},
             'image_cover': {'read_only': True},
             'is_active': {'read_only': True},
-            'create_at': {'read_only': True},
-            'update_at': {'read_only': True},
+            'created_at': {'read_only': True},
+            'updated_at': {'read_only': True},
         }
 
 
