@@ -17,7 +17,7 @@ class BaseAdminViewset(ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-
+    
     def get_serializer_class(self):
         return self.serializer_class[self.action]
 
@@ -28,13 +28,13 @@ class BaseAdminViewset(ModelViewSet):
         serializer.save(updated_by=self.request.user,
                         created_by=self.request.user)
 
-    def list(self, request, *args, **kwargs):
-        is_paginate = bool(request.query_params.get("paginate",False) == 'true')
-        if is_paginate:
-            return super().list(request, *args, **kwargs)
-        instances = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(instances, many=True)
-        return Response(serializer.data)
+    # def list(self, request, *args, **kwargs):
+    #     is_paginate = bool(request.query_params.get("paginate",False) == 'true')
+    #     if is_paginate:
+    #         return super().list(request, *args, **kwargs)
+    #     instances = self.filter_queryset(self.get_queryset())
+    #     serializer = self.get_serializer(instances, many=True)
+    #     return Response(serializer.data)
 
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
