@@ -32,7 +32,8 @@ urlpatterns = [
     path('', include('wineries.guest.urls')),
     path('business/wineries/', include('wineries.business.urls')),
 
-    # path('customer/addresses/', include('addresses.customer.urls')),
+    #Addresses
+    path('customer/addresses/', include('addresses.customer.urls')),
 
     #Wine
     # path('wineries/wines/', include('wines.business.urls'))
