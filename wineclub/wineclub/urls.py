@@ -38,5 +38,8 @@ urlpatterns = [
     #Wine
     # path('wineries/wines/', include('wines.business.urls'))
     
+    #Shipping Unit
+    path('administrator/shipping/', include('shipping.administrator.urls')),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
