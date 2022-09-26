@@ -13,7 +13,7 @@ TYPE_TRANS = [
 
 # Transaction model class
 class Transaction(models.Model):
-    # timestamp = models.DateTimeField(auto_now_add=True),
+
     timestamp = models.CharField(max_length=20)
     type = models.CharField(max_length=255,default="charge", choices=TYPE_TRANS)
     amount = models.BigIntegerField()
@@ -22,7 +22,6 @@ class Transaction(models.Model):
     fee = models.BigIntegerField()
     unit = models.IntegerField(default=100)
     sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name="money_sender")
-    # reciever = models.ForeignKey(User, on_delete=models.CASCADE, related_name="money_reciever") Ba Thanh ghi sai chinh ta ne
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="money_receiver")
     
     def __str__(self) -> str:
