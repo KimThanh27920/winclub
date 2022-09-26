@@ -23,17 +23,30 @@ urlpatterns = [
     # Accounts
     path('', include('accounts.guest.urls')),
     path('customer/accounts/', include('accounts.customer.urls')),
+    # Accounts
+    
     # Categories
     path('categories/', include('categories.guest.urls')),
     path('admin/categories/', include('categories.administrator.urls')),
     #Subscription Packages
     path('admin/subscription-package/', include('subscriptions.administrator.urls')),
-    # Accounts
+    
+    # winery
     path('', include('wineries.guest.urls')),
     path('business/wineries/', include('wineries.business.urls')),
+<<<<<<< HEAD
+    # winery
+    
+    # cart
+    path('customer/carts/', include('carts.customer.urls')),
+    # cart
+    
+    # path('customer/addresses/', include('addresses.customer.urls')),
+=======
 
     #Addresses
     path('customer/addresses/', include('addresses.customer.urls')),
+>>>>>>> 8874e71e12b6a52a460ee8a4556b151298e49cf0
 
     #Wine
     # path('wineries/wines/', include('wines.business.urls'))
