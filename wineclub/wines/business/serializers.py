@@ -43,5 +43,10 @@ class WineDetailSerializer(serializers.ModelSerializer):
             "light_bold",
             "smooth_tannic",
             "dry_sweet",
-            "soft_acidic"
+            "soft_acidic",
+            "is_active"
         ]
+
+        extra_kwargs = {
+            "is_active": {'write_only': True}
+        }

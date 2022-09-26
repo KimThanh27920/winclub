@@ -39,12 +39,13 @@ urlpatterns = [
     path('customer/addresses/', include('addresses.customer.urls')),
 
     #Wine
+    path('wines/', include('wines.guest.urls')),
     path('business/wines/', include('wines.business.urls')),
     
     #Shipping Unit
     path('administrator/shipping/', include('shipping.administrator.urls')),
-    path('shippings/', include('shipping.guest.urls')),
-    path('wineries/shippings/', include('shipping.business.urls')),
+    # path('shippings/', include('shipping.guest.urls')),
+    # path('wineries/shippings/', include('shipping.business.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
