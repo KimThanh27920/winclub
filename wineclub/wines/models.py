@@ -28,7 +28,7 @@ class Wine(BasicLogModel):
     alcohol = models.FloatField()
     bottle_per_case = models.IntegerField()
     net = models.IntegerField()
-    serving_temprature = models.FloatField()
+    serving_temperature = models.IntegerField()
     in_stock = models.IntegerField()
     
     #taste of wine

@@ -23,8 +23,8 @@ urlpatterns = [
     # Accounts
     path('', include('accounts.guest.urls')),
     path('customer/accounts/', include('accounts.customer.urls')),
-    # Accounts
-    
+    # Manage Accounts
+    path('administrator/', include('accounts.administrator.urls')),
     # Categories
     path('categories/', include('categories.guest.urls')),
     path('admin/categories/', include('categories.administrator.urls')),
@@ -34,19 +34,12 @@ urlpatterns = [
     # winery
     path('', include('wineries.guest.urls')),
     path('business/wineries/', include('wineries.business.urls')),
-    # winery
-    
-    # cart
-    path('customer/carts/', include('carts.customer.urls')),
-    # cart
-    
-    # path('customer/addresses/', include('addresses.customer.urls')),
 
     #Addresses
     path('customer/addresses/', include('addresses.customer.urls')),
 
     #Wine
-    # path('wineries/wines/', include('wines.business.urls'))
+    path('business/wines/', include('wines.business.urls')),
     
     #Shipping Unit
     path('administrator/shipping/', include('shipping.administrator.urls')),
