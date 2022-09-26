@@ -3,16 +3,18 @@ from ..models import Wine
 
 
 class WineShortSerializer(serializers.ModelSerializer):
-    winery = serializers.StringRelatedField()
+    type = serializers.StringRelatedField()
     class Meta:
         model = Wine
         fields = [
             "id",
             "wine",
-            "winery",
+            "type",
             "price",
             "sale",
             "average_rating",
+            "is_active",
+            "status",
             "thumbnail",
         ]
     

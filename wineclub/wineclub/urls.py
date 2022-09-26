@@ -41,6 +41,7 @@ urlpatterns = [
     #Wine
     path('wines/', include('wines.guest.urls')),
     path('business/wines/', include('wines.business.urls')),
+    path('admin/wines/', include('wines.administrator.urls')),
     
     #Shipping Unit
     path('administrator/shipping/', include('shipping.administrator.urls')),
