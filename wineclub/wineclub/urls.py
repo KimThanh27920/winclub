@@ -43,6 +43,8 @@ urlpatterns = [
     
     #Shipping Unit
     path('administrator/shipping/', include('shipping.administrator.urls')),
+    path('shippings/', include('shipping.guest.urls')),
+    path('wineries/shippings/', include('shipping.business.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
