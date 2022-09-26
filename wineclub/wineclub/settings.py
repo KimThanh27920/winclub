@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'categories',
     'coupons',
     'memberships',
-    'notifications',
+    # 'notifications',
     'shipping',    
     'statistical',
     'subscriptions',

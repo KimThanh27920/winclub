@@ -5,7 +5,7 @@ from ..models import Winery
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from geopy.distance import geodesic
+# from geopy.distance import geodesic
 
 
 class ListWineryView(generics.ListAPIView):
@@ -18,7 +18,7 @@ class ListWineryView(generics.ListAPIView):
     def get_queryset(self):
         coords_1 = (52.2296756, 21.0122287)
         coords_2 = (52.406374, 16.9251681)
-        print(geodesic(coords_1, coords_2).km)
+        # print(geodesic(coords_1, coords_2).km) 
         return super().get_queryset()
 
     
