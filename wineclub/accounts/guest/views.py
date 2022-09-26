@@ -44,9 +44,6 @@ class ForgotPasswordApiView(APIView):
         dt = datetime.now()
         ts = int(datetime.timestamp(dt))
         expired = ts + (60 * 10)
-        print(ts)
-        print(expired)
-        print(expired > ts)
         data = {
             'user': user.id,
             'pin': pin,

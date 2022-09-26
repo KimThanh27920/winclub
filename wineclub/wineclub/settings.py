@@ -53,10 +53,10 @@ INSTALLED_APPS = [
     'coupons',
     'memberships',
     # 'notifications',
-    'shipping',    
+    'shipping',
     'statistical',
     'subscriptions',
-    'transactions',
+    # 'transactions',
     'wineries',
     'wines',
     'payments',
@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     'orders',
     # 'service',
     'bases',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -84,7 +84,8 @@ ROOT_URLCONF = 'wineclub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / 'bases' / 'templates'] , #specify the path to the template directory
+        # specify the path to the template directory
+        'DIRS': [BASE_DIR / 'bases' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -114,6 +115,11 @@ DATABASES = {
     }
 }
 
+# rest-framework
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -155,11 +161,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-REST_FRAMEWORK = {
-    
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-}
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',

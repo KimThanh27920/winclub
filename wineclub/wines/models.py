@@ -28,7 +28,7 @@ class Wine(BasicLogModel):
     alcohol = models.FloatField()
     bottle_per_case = models.IntegerField()
     net = models.IntegerField()
-    serving_temprature = models.FloatField()
+    serving_temperature = models.IntegerField()
     in_stock = models.IntegerField()
     
     #taste of wine
@@ -38,7 +38,7 @@ class Wine(BasicLogModel):
     soft_acidic = models.FloatField()
 
     #rating of wine
-    average_rating = models.FloatField()
+    average_rating = models.FloatField(default=1)
     reviewers = models.IntegerField
     
     is_active = models.BooleanField(default= False)

@@ -36,7 +36,7 @@ urlpatterns = [
     path('customer/addresses/', include('addresses.customer.urls')),
 
     #Wine
-    # path('wineries/wines/', include('wines.business.urls'))
+    path('business/wines/', include('wines.business.urls')),
     
     #Shipping Unit
     path('administrator/shipping/', include('shipping.administrator.urls')),
