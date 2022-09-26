@@ -1,12 +1,11 @@
-from ast import Delete
-from tabnanny import check
-from turtle import update
+
 from rest_framework import status
 from rest_framework import filters
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import pagination
 from rest_framework.response import Response
+from django.utils import timezone
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -50,4 +49,12 @@ class RetrieveUpdateDestroyWineAPI(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return models.Wine.objects.filter(
             deleted_by=None, winery__account=self.request.user)
-        
+    
+    def perform_destroy(self, instance):
+        instance.deleted_by = self.request.user
+        instance.wine = str(instance.wine) + str(timezone.now())
+        instance.is_active = False
+        instance.deleted_at = timezone.now()
+        instance.save()
+
+    
