@@ -9,11 +9,13 @@ User = get_user_model()
 
 
 class AccountSerializer(serializers.ModelSerializer):
+    addresses = serializers.StringRelatedField()
     class Meta:
         model = User
         fields = [
             "image",
-            "email"    
+            "email",
+            "addresses"    
         ]
         
 
@@ -30,7 +32,6 @@ class WinerySerializer(serializers.ModelSerializer):
             "phone_winery",
             "founded_date",
             "image_cover",
-            "address",
         ]
         read_only_fields = [
             "rating_average",
@@ -53,7 +54,6 @@ class WineryProfileSerializer(serializers.ModelSerializer):
             "phone_winery",
             "founded_date",
             "image_cover",
-            "address",
         ]
         read_only_fields = [
             "rating_average",

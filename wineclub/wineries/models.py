@@ -8,7 +8,7 @@ from bases.models import BasicLogModel
 
 Account = get_user_model()
 
-class Winery(BasicLogModel):
+class Winery(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     rating_average = models.FloatField(default=0.0)
