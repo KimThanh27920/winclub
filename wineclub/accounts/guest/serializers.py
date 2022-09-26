@@ -94,7 +94,7 @@ class BusinessRegisterSerializer(serializers.ModelSerializer):
 class PinSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Pin
-        fields = ['user', 'pin']
+        fields = ['user', 'pin', 'expired']
 
 
 class ChangePasswordWithPinSerializer(serializers.Serializer):

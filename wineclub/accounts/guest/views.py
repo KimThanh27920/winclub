@@ -1,5 +1,5 @@
 import random
-
+from datetime import datetime
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
@@ -41,9 +41,16 @@ class BusinessRegisterAPI(generics.CreateAPIView):
 class ForgotPasswordApiView(APIView):
     def create_pin(self, user):
         pin = random.randint(100000, 999999)
+        dt = datetime.now()
+        ts = int(datetime.timestamp(dt))
+        expired = ts + (60 * 10)
+        print(ts)
+        print(expired)
+        print(expired > ts)
         data = {
             'user': user.id,
-            'pin': pin
+            'pin': pin,
+            'expired': expired
         }
         pin_user = Pin.objects.filter(user=user.id)
         if(pin_user.exists()):
@@ -83,10 +90,18 @@ class ChangePasswordWithPINApiView(APIView):
             User, email=request.data['email'].lower())
         self.pin = get_object_or_404(Pin, user=self.user.id)
 
-        if int(request.data['pin']) == int(self.pin.pin):
+        """
+        check if the user's PIN code input pin is correct
+        and check expired PIN code
+        """
+
+        dt = datetime.now()
+        ts = int(datetime.timestamp(dt))
+
+        if (int(request.data['pin']) == int(self.pin.pin) and int(self.pin.expired) > ts):
             self.user.set_password(request.data['new_password'])
             self.user.save()
             self.disable_pin()
-            return Response(data={"message": "Change password is success"}, status=status.HTTP_200_OK)
+            return Response(data={"detail": "Change password is success"}, status=status.HTTP_200_OK)
         else:
-            return Response(data={"message": "Is valid PIN code"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"detail": "Is valid PIN code or expired"}, status=status.HTTP_400_BAD_REQUEST)
