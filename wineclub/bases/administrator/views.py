@@ -1,13 +1,14 @@
 # rest framework import
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import filters
+from rest_framework import filters, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAdminUser
 from django_filters.rest_framework import DjangoFilterBackend
 
 # Python imports
-from datetime import datetime
+# from datetime import datetime
+from django.utils import timezone
 
 
 #Base Admin Viewset
@@ -44,7 +45,6 @@ class BaseAdminViewset(ModelViewSet):
 
     def perform_destroy(self, instance):
         instance.deleted_by = self.request.user
-        instance.deleted_at = datetime.now()
         instance.is_active = False
+        instance.deleted_at = timezone.now()
         instance.save()
-  
