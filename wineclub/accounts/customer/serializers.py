@@ -7,6 +7,7 @@ User = get_user_model()
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    addresses = serializers.StringRelatedField()
     class Meta:
         model = User
         fields = [
@@ -17,7 +18,8 @@ class ProfileSerializer(serializers.ModelSerializer):
             "gender",
             "points",
             "stripe_account",
-            "image"
+            "image",
+            "addresses"
         ]
         read_only_fields = [
             "points",
