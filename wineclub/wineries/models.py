@@ -26,4 +26,4 @@ class Winery(BasicLogModel):
     created_by = None 
 
     def __str__(self):
-        return str(self.account) + self.name
+        return self.name
