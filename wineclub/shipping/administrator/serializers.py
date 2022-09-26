@@ -14,6 +14,7 @@ class ShippingUnitSerializer(serializers.ModelSerializer):
                 "fee", 
                 "type", 
                 "expected_date",
+                "is_active",
                 'created_by',
                 'updated_by',
                 ]

@@ -17,6 +17,11 @@ class ShippingUnitViewSet(viewsets.ViewSet, generics.ListCreateAPIView, generics
 
     def get_queryset(self):
         shipping_unit = ShippingUnit.objects.all().order_by("-id")
+
+        search = self.request.query_params.get('search')
+        
+        if search:
+            shipping_unit = ShippingUnit.objects.filter(name__icontains=search)
         return shipping_unit
 
     def create(self, request, *args, **kwargs):
