@@ -9,6 +9,7 @@ User = get_user_model()
 
        
 class WineryDetailSerializer(serializers.ModelSerializer):
+    addresses = serializers.StringRelatedField()
     class Meta:
         model = Winery
         fields = [
@@ -21,7 +22,7 @@ class WineryDetailSerializer(serializers.ModelSerializer):
             "phone_winery",
             "founded_date",
             "image_cover",
-            "address",
+            "addresses",
         ]
         read_only_fields = [
             "name",
@@ -33,11 +34,12 @@ class WineryDetailSerializer(serializers.ModelSerializer):
             "phone_winery",
             "founded_date",
             "image_cover",
-            "address",
+            "addresses",
         ]
         
         
 class WineryListSerializer(serializers.ModelSerializer):
+    addresses = serializers.StringRelatedField()
     class Meta:
         model = Winery
         fields = [
@@ -47,7 +49,7 @@ class WineryListSerializer(serializers.ModelSerializer):
             "reviewer",
             "description",
             "founded_date",
-            "address",
+            "addresses",
         ]
         read_only_fields = [
             "name",
@@ -55,7 +57,7 @@ class WineryListSerializer(serializers.ModelSerializer):
             "reviewer",
             "description",
             "founded_date",
-            "address",
+            "addresses",
         ]
     
     def to_representation(self, instance):

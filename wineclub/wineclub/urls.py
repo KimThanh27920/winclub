@@ -23,12 +23,15 @@ urlpatterns = [
     # Accounts
     path('', include('accounts.guest.urls')),
     path('customer/accounts/', include('accounts.customer.urls')),
+    # Manage Accounts
+    path('administrator/', include('accounts.administrator.urls')),
     # Categories
     path('categories/', include('categories.guest.urls')),
     path('admin/categories/', include('categories.administrator.urls')),
     #Subscription Packages
     path('admin/subscription-package/', include('subscriptions.administrator.urls')),
-    # Accounts
+    
+    # winery
     path('', include('wineries.guest.urls')),
     path('business/wineries/', include('wineries.business.urls')),
 

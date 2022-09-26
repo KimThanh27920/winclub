@@ -1,4 +1,5 @@
 #django import
+from enum import unique
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -9,20 +10,22 @@ User = get_user_model()
 
 # Type model class
 class Type(BasicLogModel):
-    type = models.CharField(max_length=255, unique=True)
+    type = models.CharField(max_length=255)
     is_active = models.BooleanField(default=False)
 
+    
     def __str__(self):
         return self.type
 
     
     class Meta:
         db_table="types"
+        unique_together = ['type','deleted_at']
 
 
 # Style model class
 class Style(BasicLogModel):
-    style = models.CharField(max_length=255, unique=True)
+    style = models.CharField(max_length=255)
     is_active = models.BooleanField(default=False)
 
     def __str__(self) -> str:
@@ -31,11 +34,11 @@ class Style(BasicLogModel):
     
     class Meta:
         db_table="styles"
-
+        unique_together = ['style','deleted_at']
 
 # Grape model class
 class Grape(BasicLogModel):
-    grape = models.CharField(max_length=255, unique=True)
+    grape = models.CharField(max_length=255)
     is_active = models.BooleanField(default=False)
 
     def __str__(self) -> str:
@@ -44,11 +47,11 @@ class Grape(BasicLogModel):
     
     class Meta:
         db_table="grapes"
-
+        unique_together = ['grape','deleted_at']
 
 # Food model class
 class Food(BasicLogModel):
-    food = models.CharField(max_length=255, unique=True)
+    food = models.CharField(max_length=255)
     is_active = models.BooleanField(default=False)
 
     def __str__(self) -> str:
@@ -57,11 +60,11 @@ class Food(BasicLogModel):
     
     class Meta:
         db_table="foods"
-
+        unique_together = ['food','deleted_at']
 
 # Region model class
 class Region(BasicLogModel):
-    region = models.CharField(max_length=255, unique=True)
+    region = models.CharField(max_length=255)
     is_active = models.BooleanField(default=False)
 
     def __str__(self) -> str:
@@ -70,11 +73,11 @@ class Region(BasicLogModel):
     
     class Meta:
         db_table="region"
-
+        unique_together = ['region','deleted_at']
 
 # Country model class
 class Country(BasicLogModel):
-    country = models.CharField(max_length=255, unique=True)
+    country = models.CharField(max_length=255)
     is_active = models.BooleanField(default=False)
     
     def __str__(self) -> str:
@@ -83,3 +86,4 @@ class Country(BasicLogModel):
     
     class Meta:
         db_table="countries"
+        unique_together = ['country','deleted_at']

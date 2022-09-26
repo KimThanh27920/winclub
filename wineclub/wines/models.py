@@ -38,7 +38,7 @@ class Wine(BasicLogModel):
     soft_acidic = models.FloatField()
 
     #rating of wine
-    average_rating = models.FloatField(default=1)
+    average_rating = models.FloatField(default=0)
     reviewers = models.IntegerField
     
     is_active = models.BooleanField(default= False)
