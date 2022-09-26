@@ -34,7 +34,6 @@ urlpatterns = [
     # winery
     path('', include('wineries.guest.urls')),
     path('business/wineries/', include('wineries.business.urls')),
-<<<<<<< HEAD
     # winery
     
     # cart
@@ -42,17 +41,17 @@ urlpatterns = [
     # cart
     
     # path('customer/addresses/', include('addresses.customer.urls')),
-=======
 
     #Addresses
     path('customer/addresses/', include('addresses.customer.urls')),
->>>>>>> 8874e71e12b6a52a460ee8a4556b151298e49cf0
 
     #Wine
     # path('wineries/wines/', include('wines.business.urls'))
     
     #Shipping Unit
     path('administrator/shipping/', include('shipping.administrator.urls')),
+    path('shippings/', include('shipping.guest.urls')),
+    path('wineries/shippings/', include('shipping.business.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
