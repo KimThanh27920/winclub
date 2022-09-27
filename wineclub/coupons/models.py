@@ -32,14 +32,14 @@ class Coupon(BasicLogModel):
     image = models.ImageField(null=True, upload_to = "images/coupons/")
     title = models.CharField(max_length=255)
     description = models.TextField()     
-    coupon_amount = models.IntegerField()
+    coupon_amount = models.IntegerField(null=True)
     time_start = models.DateTimeField()
     time_end = models.DateTimeField()
     is_public = models.BooleanField(default=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     
     def  __str__(self) -> str:
-        return self.coupon
+        return self.code
     
     class Meta:
         db_table = "coupons"

@@ -8,7 +8,7 @@ User = get_user_model()
 #     return user.is_business
 
 
-class IsOwner(permissions.BasePermission):
+class IsOwnerOrAdmin(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.
     """
@@ -16,6 +16,27 @@ class IsOwner(permissions.BasePermission):
     #     print(request.user and request.user.is_authenticated())
     #     return request.user and request.user.is_authenticated()
 
+    # def has_object_permission(self, request, view, obj):
+    #     print(obj.user == request.user)
+    #     return (obj.user == request.user) or (obj.created_by == request.user)
+    
     def has_object_permission(self, request, view, obj):
-        print(obj.user == request.user)
-        return obj.user == request.user
+        # if request.method in permissions.SAFE_METHODS:
+        #     return True
+        print(obj.created_by)
+        return obj.created_by == request.user or request.user.is_staff
+    
+    
+# class IsBusinessAndOwnerOrAdmin(permissions.BasePermission):
+#     def has_permission(self, request, view):
+#         return bool(request.user and (request.user.is_business or request.user.is_staff))
+    
+#     def has_object_permission(self, request, view, obj):
+#         # print(obj.created_by)
+#         # return True
+#         # return (obj.user == request.user) or (obj.created_by == request.user)
+#         if request.method in permissions.SAFE_METHODS:
+#             return True
+#         print(obj.owner)
+#         print(obj.user.is_admin)
+#         return obj.owner == request.user or request.user.is_admin
