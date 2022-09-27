@@ -5,8 +5,9 @@ from accounts.models import Account
 from .serializers import ListPaymentMethodSerializer
 
 import stripe
+from django.conf import settings
 
-stripe.api_key = "sk_test_51LXILOJvtSsB9DmY807yqCiAQ3EzpKLd62eSU2G9AmbYiSTnGv8MN7Eb368nRPmD3sw2SEkJdYZZZ7mImkgn3I5T00Br7ykapJ"
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class PaymentMethodAPIView(generics.ListCreateAPIView):
     authentication_classes = [authentication.JWTAuthentication]
