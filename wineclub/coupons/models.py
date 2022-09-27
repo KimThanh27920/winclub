@@ -25,7 +25,7 @@ class Coupon(BasicLogModel):
     coupon_value = models.FloatField()
     max_value = models.FloatField()
     min_order_value = models.FloatField()    
-    individual = models.BooleanField(default=False)    
+    individual = models.BooleanField(default=True)    
     # amount_off = models.FloatField()
     # percent_off = models.FloatField()
     currency = models.CharField(max_length=10,default="usd")    

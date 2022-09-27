@@ -56,5 +56,13 @@ urlpatterns = [
     path('shippings/', include('shipping.guest.urls')),
     # path('wineries/shippings/', include('shipping.business.urls')),
 
+    #device FCM
+    path('customer/notifications/', include('notifications.customer.urls')),
+    #Payments
+    path('customer/payments/', include('payments.customer.urls')),
+
+    #Webhook Stripe
+    path('webhook/', include('payments.urls'))
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
