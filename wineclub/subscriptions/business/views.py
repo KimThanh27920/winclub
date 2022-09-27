@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 #app import
-from bases.permisions.business import IsBusiness
+from bases.permissions.business import IsBusiness
 from rest_framework.permissions import IsAuthenticated
 from bases.errors.errors import SubscriptionPackageErrors
 from subscriptions.models import SubscriptionPackage
