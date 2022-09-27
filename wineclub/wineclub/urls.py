@@ -55,5 +55,8 @@ urlpatterns = [
     path('shippings/', include('shipping.guest.urls')),
     # path('wineries/shippings/', include('shipping.business.urls')),
 
+    #Payments
+    path('customer/payments/', include('payments.customer.urls'))
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
