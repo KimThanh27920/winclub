@@ -15,6 +15,7 @@ class SubscriptionPackage(BasicLogModel):
     currency = models.CharField(max_length=255)
     interval = models.CharField(max_length=255)
     interval_count = models.IntegerField()
+    price_id  = models.CharField(max_length=255, null=True)
     
     is_active = models.BooleanField(default=False)
 

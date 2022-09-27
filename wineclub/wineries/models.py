@@ -1,3 +1,4 @@
+from pyexpat import model
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -20,6 +21,7 @@ class Winery(BasicLogModel):
     founded_date = models.CharField(max_length=255)
     image_cover = models.ImageField(null=True, upload_to = "images/profile/")
     is_active = models.BooleanField(default=False)
+    account_connect = models.CharField(max_length=255, null= True)
 
     deleted_by = None
     updated_by = None
