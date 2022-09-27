@@ -1,16 +1,17 @@
 from rest_framework_simplejwt import authentication
 from rest_framework import permissions, status, generics
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from accounts.models import Account
+from .serializers import ListPaymentMethodSerializer
 
 import stripe
 
 stripe.api_key = "sk_test_51LXILOJvtSsB9DmY807yqCiAQ3EzpKLd62eSU2G9AmbYiSTnGv8MN7Eb368nRPmD3sw2SEkJdYZZZ7mImkgn3I5T00Br7ykapJ"
 
-class PaymentMethodAPIView(APIView):
+class PaymentMethodAPIView(generics.ListCreateAPIView):
     authentication_classes = [authentication.JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ListPaymentMethodSerializer
 
     def get(self, request):
         customer = Account.objects.get(email=self.request.user)
@@ -19,7 +20,21 @@ class PaymentMethodAPIView(APIView):
             customer.stripe_account,
             type="card",
         )
-        return Response({"Info_Card": list_pm_customer["data"]},
+        data = []
+        for pm in list_pm_customer["data"]:
+            pm_list = {
+                "id": pm["id"],
+                "brand": pm["card"]["brand"],
+                "exp_month": pm["card"]["exp_month"],
+                "exp_year": pm["card"]["exp_year"],
+                "last4": pm["card"]["last4"]
+            }
+            data.append(pm_list)
+            
+        serializer = ListPaymentMethodSerializer(data=data, many=True)
+        serializer.is_valid()
+
+        return Response(serializer.data,
                         status=status.HTTP_200_OK)
 
     def post(self, request):
