@@ -24,7 +24,6 @@ from bases.services.stripe.stripe import stripe_customer_create
 User = get_user_model()
 
 
-
 class LoginApiView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
@@ -34,13 +33,14 @@ class RegisterAPI(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         instance = serializer.save()
-        
+
         """
         create stripe customer when user register
         will put this function on the task in celery
         """
-        stripe_customer_create(instance)
-
+        customer_stripe = stripe_customer_create(instance)
+        instance.stripe_account = customer_stripe
+        instance.save()
 
 
 class BusinessRegisterAPI(generics.CreateAPIView):
@@ -51,9 +51,11 @@ class BusinessRegisterAPI(generics.CreateAPIView):
 
         """
         create stripe customer when user register
-        will put this function on the task in celery
+        maybe put this function on the task in celery
         """
-        stripe_customer_create(instance)
+        customer_stripe = stripe_customer_create(instance)
+        instance.stripe_account = customer_stripe
+        instance.save()
 
 
 class ForgotPasswordApiView(APIView):
