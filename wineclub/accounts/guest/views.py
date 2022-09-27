@@ -47,7 +47,13 @@ class BusinessRegisterAPI(generics.CreateAPIView):
     serializer_class = BusinessRegisterSerializer
 
     def perform_create(self, serializer):
-        return serializer.save(is_business=True)
+        instance = serializer.save(is_business=True)
+
+        """
+        create stripe customer when user register
+        will put this function on the task in celery
+        """
+        stripe_customer_create(instance)
 
 
 class ForgotPasswordApiView(APIView):
