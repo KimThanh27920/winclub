@@ -1,5 +1,6 @@
 import random
 from datetime import datetime
+from venv import create
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
@@ -19,8 +20,9 @@ from .serializers import BusinessRegisterSerializer
 from .serializers import MyTokenObtainPairSerializer
 from .serializers import ChangePasswordWithPinSerializer
 from ..models import Pin
-
+from bases.services.stripe.stripe import stripe_customer_create
 User = get_user_model()
+
 
 
 class LoginApiView(TokenObtainPairView):
@@ -30,12 +32,28 @@ class LoginApiView(TokenObtainPairView):
 class RegisterAPI(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        
+        """
+        create stripe customer when user register
+        will put this function on the task in celery
+        """
+        stripe_customer_create(instance)
+
+
 
 class BusinessRegisterAPI(generics.CreateAPIView):
     serializer_class = BusinessRegisterSerializer
 
     def perform_create(self, serializer):
-        return serializer.save(is_business=True)
+        instance = serializer.save(is_business=True)
+
+        """
+        create stripe customer when user register
+        will put this function on the task in celery
+        """
+        stripe_customer_create(instance)
 
 
 class ForgotPasswordApiView(APIView):

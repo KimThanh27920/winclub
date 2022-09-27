@@ -12,3 +12,4 @@ class Notification(BasicLogModel):
 
     def __str__(self):
         return self.title
+
