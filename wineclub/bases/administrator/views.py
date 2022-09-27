@@ -27,15 +27,7 @@ class BaseAdminViewset(ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(updated_by=self.request.user,
                         created_by=self.request.user)
-
-    # def list(self, request, *args, **kwargs):
-    #     is_paginate = bool(request.query_params.get("paginate",False) == 'true')
-    #     if is_paginate:
-    #         return super().list(request, *args, **kwargs)
-    #     instances = self.filter_queryset(self.get_queryset())
-    #     serializer = self.get_serializer(instances, many=True)
-    #     return Response(serializer.data)
-
+                        
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
 
