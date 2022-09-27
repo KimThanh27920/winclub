@@ -23,6 +23,7 @@ class SubscriptionPackageReadSerializer(serializers.ModelSerializer):
             'currency',
             'interval',
             'interval_count',
+            'price_id',
             'is_active',
             'created_at',
             'created_by',
@@ -38,6 +39,7 @@ class SubscriptionPackageReadSerializer(serializers.ModelSerializer):
             'currency',
             'interval',
             'interval_count',
+            'price_id',
             'is_active',
             'created_at',
             'created_by',
@@ -48,9 +50,6 @@ class SubscriptionPackageReadSerializer(serializers.ModelSerializer):
 
 #Subscriptions Package Serializer
 class SubscriptionPackageSerializer(serializers.ModelSerializer):
-    created_by = serializers.StringRelatedField(read_only = True)
-    updated_by = serializers.StringRelatedField(read_only = True)
-
     class Meta:
         model = SubscriptionPackage
         fields =[
@@ -61,6 +60,7 @@ class SubscriptionPackageSerializer(serializers.ModelSerializer):
             'currency',
             'interval',
             'interval_count',
+            'price_id',
             'is_active',
             'created_at',
             'created_by',

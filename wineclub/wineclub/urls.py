@@ -34,6 +34,13 @@ urlpatterns = [
     # winery
     path('', include('wineries.guest.urls')),
     path('business/wineries/', include('wineries.business.urls')),
+    # winery
+    
+    # cart
+    path('customer/carts/', include('carts.customer.urls')),
+    # cart
+    
+    # path('customer/addresses/', include('addresses.customer.urls')),
 
     #Addresses
     path('customer/addresses/', include('addresses.customer.urls')),
@@ -45,11 +52,13 @@ urlpatterns = [
     
     #Shipping Unit
     path('administrator/shipping/', include('shipping.administrator.urls')),
-    # path('shippings/', include('shipping.guest.urls')),
+    path('shippings/', include('shipping.guest.urls')),
     # path('wineries/shippings/', include('shipping.business.urls')),
 
     #device FCM
     path('customer/notifications/', include('notifications.customer.urls')),
+    #Payments
+    path('customer/payments/', include('payments.customer.urls'))
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

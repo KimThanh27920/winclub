@@ -21,4 +21,7 @@ class CartDetail(models.Model):
     wine = models.ForeignKey(Wine, on_delete=models.CASCADE, related_name="cart_wine_list")
     
     class Meta:
-        unique_together = (("cart", "wine"),)
+        unique_together = ("cart", "wine")
+        
+    def __str__(self) -> str:
+        return str(self.cart) + " " + str(self.wine)
