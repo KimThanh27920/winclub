@@ -1,4 +1,5 @@
 #django import
+from turtle import title
 from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -20,8 +21,7 @@ TYPE_REDUCTIONS = [
 ]
 # Coupons model class
 class Coupon(BasicLogModel):
-    code = models.CharField(max_length=32, unique=True)
-    coupon = models.CharField(max_length=255)
+    code = models.CharField(max_length=32, unique=True)    
     type = models.CharField(max_length=9, choices=TYPE_COUPONS)
     type_reduce = models.CharField(max_length=9, choices=TYPE_REDUCTIONS)
     coupon_value = models.FloatField()
@@ -32,6 +32,7 @@ class Coupon(BasicLogModel):
     # percent_off = models.FloatField()
     currency = models.CharField(max_length=10,default="usd")    
     image = models.ImageField(null=True, upload_to = "images/coupons/")
+    title = models.CharField(max_length=255)
     descriptions = models.TextField()     
     coupon_amount = models.IntegerField()
     time_start = models.DateTimeField()
