@@ -34,6 +34,11 @@ class RegisterAPI(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         instance = serializer.save()
+        
+        """
+        create stripe customer when user register
+        will put this function on the task in celery
+        """
         stripe_customer_create(instance)
 
 

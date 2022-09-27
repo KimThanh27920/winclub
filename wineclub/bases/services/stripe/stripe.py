@@ -1,13 +1,13 @@
-import os
+
 import stripe
+from django.conf import settings
 from dotenv import load_dotenv
 from rest_framework.response import Response
 from bases.exception.exceptions import response_exception
 
 load_dotenv()
 
-stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
-print(os.getenv('STRIPE_SECRET_KEY'))
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def stripe_customer_create(user):  # function created stripe customer
     try:
@@ -15,7 +15,6 @@ def stripe_customer_create(user):  # function created stripe customer
             email=user.email,
             name=user.full_name
         )
-        print(customer)
     except Exception as e:
         return None
     return customer.id
@@ -75,10 +74,10 @@ def stripe_payment_intent_confirm(payment_intent, payment_method):
 
 # Function listen event from Stripe
 def stripe_webhook(request):
-    endpoint_secret = os.getenv('ENDPOINT_SECRET')
+    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET_KEY
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
-    # Check valid payload with signature
+    #Check valid payload with signature
     try:
         event = stripe.Webhook.construct_event(
             payload=payload,

@@ -58,7 +58,10 @@ urlpatterns = [
     #device FCM
     path('customer/notifications/', include('notifications.customer.urls')),
     #Payments
-    path('customer/payments/', include('payments.customer.urls'))
+    path('customer/payments/', include('payments.customer.urls')),
+
+    #Webhook Stripe
+    path('webhook/', include('payments.urls'))
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
