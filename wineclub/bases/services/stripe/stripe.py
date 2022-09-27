@@ -5,8 +5,9 @@ from rest_framework.response import Response
 from bases.exception.exceptions import response_exception
 
 load_dotenv()
-stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+print(os.getenv('STRIPE_SECRET_KEY'))
 
 def stripe_customer_create(user):  # function created stripe customer
     try:
@@ -14,6 +15,7 @@ def stripe_customer_create(user):  # function created stripe customer
             email=user.email,
             name=user.full_name
         )
+        print(customer)
     except Exception as e:
         return None
     return customer.id

@@ -1,5 +1,6 @@
 import random
 from datetime import datetime
+from venv import create
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
@@ -19,8 +20,9 @@ from .serializers import BusinessRegisterSerializer
 from .serializers import MyTokenObtainPairSerializer
 from .serializers import ChangePasswordWithPinSerializer
 from ..models import Pin
-
+from bases.services.stripe.stripe import stripe_customer_create
 User = get_user_model()
+
 
 
 class LoginApiView(TokenObtainPairView):
@@ -32,7 +34,7 @@ class RegisterAPI(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         instance = serializer.save()
-        
+        stripe_customer_create(instance)
 
 
 
