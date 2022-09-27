@@ -10,7 +10,7 @@ from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework_simplejwt import authentication
-from bases.permisions.business import IsBusiness
+from bases.permissions.business import IsBusiness
 from . import serializers
 from .. import models
 

@@ -30,6 +30,11 @@ class LoginApiView(TokenObtainPairView):
 class RegisterAPI(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        
+
+
 
 class BusinessRegisterAPI(generics.CreateAPIView):
     serializer_class = BusinessRegisterSerializer
