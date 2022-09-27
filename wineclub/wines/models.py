@@ -28,7 +28,7 @@ class Wine(BasicLogModel):
     alcohol = models.FloatField()
     bottle_per_case = models.IntegerField()
     net = models.IntegerField()
-    serving_temprature = models.FloatField()
+    serving_temperature = models.IntegerField()
     in_stock = models.IntegerField()
     
     #taste of wine
@@ -43,6 +43,7 @@ class Wine(BasicLogModel):
     
     is_active = models.BooleanField(default= False)
 
+    status = models.CharField(max_length=255, null=True)
     
     class Meta:
         db_table="wines"

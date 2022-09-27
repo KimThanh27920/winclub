@@ -31,9 +31,7 @@ class TypeAdminAPIView(BaseAdminViewset):
 
     def perform_destroy(self, instance):
         if Wine.objects.filter(type=instance).exists() :
-            data = {
-                "message": "Type has subdata, cannot be deleted! "
-            }
+            data={"success":False}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
         return super().perform_destroy(instance)
@@ -56,9 +54,7 @@ class StyleAdminAPIView(BaseAdminViewset):
 
     def perform_destroy(self, instance):
         if Wine.objects.filter(style=instance).exists() :
-            data = {
-                "message": "Type has subdata, cannot be deleted! "
-            }
+            data={"success":False}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
         return super().perform_destroy(instance)     
@@ -82,9 +78,7 @@ class GrapeAdminAPIView(BaseAdminViewset):
 
     def perform_destroy(self, instance):
         if Wine.objects.filter(grape=instance).exists() :
-            data = {
-                "message": "Type has subdata, cannot be deleted! "
-            }
+            data={"success":False}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
         return super().perform_destroy(instance)     
@@ -107,9 +101,7 @@ class FoodAdminAPIView(BaseAdminViewset):
 
     def perform_destroy(self, instance):
         if Wine.objects.filter(food=instance).exists() :
-            data = {
-                "message": "Type has subdata, cannot be deleted! "
-            }
+            data={"success":False}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
         return super().perform_destroy(instance)  
@@ -132,9 +124,7 @@ class RegionAdminAPIView(BaseAdminViewset):
 
     def perform_destroy(self, instance):
         if Wine.objects.filter(region=instance).exists() :
-            data = {
-                "message": "Type has subdata, cannot be deleted! "
-            }
+            data={"success":False}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
         return super().perform_destroy(instance)  
@@ -157,9 +147,7 @@ class CountryAdminAPIView(BaseAdminViewset):
 
     def perform_destroy(self, instance):
         if Wine.objects.filter(country=instance).exists() :
-            data = {
-                "message": "Type has subdata, cannot be deleted! "
-            }
+            data={"success":False}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
         return super().perform_destroy(instance)  

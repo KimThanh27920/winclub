@@ -23,8 +23,8 @@ urlpatterns = [
     # Accounts
     path('', include('accounts.guest.urls')),
     path('customer/accounts/', include('accounts.customer.urls')),
-    # Accounts
-    
+    # Manage Accounts
+    path('administrator/', include('accounts.administrator.urls')),
     # Categories
     path('categories/', include('categories.guest.urls')),
     path('admin/categories/', include('categories.administrator.urls')),
@@ -46,10 +46,14 @@ urlpatterns = [
     path('customer/addresses/', include('addresses.customer.urls')),
 
     #Wine
-    # path('wineries/wines/', include('wines.business.urls'))
+    path('wines/', include('wines.guest.urls')),
+    path('business/wines/', include('wines.business.urls')),
+    path('admin/wines/', include('wines.administrator.urls')),
     
     #Shipping Unit
     path('administrator/shipping/', include('shipping.administrator.urls')),
+    path('shippings/', include('shipping.guest.urls')),
+    # path('wineries/shippings/', include('shipping.business.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

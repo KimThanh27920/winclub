@@ -8,7 +8,7 @@ from bases.models import BasicLogModel
 
 Account = get_user_model()
 
-class Winery(models.Model):
+class Winery(BasicLogModel):
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     rating_average = models.FloatField(default=0.0)
@@ -21,5 +21,9 @@ class Winery(models.Model):
     image_cover = models.ImageField(null=True, upload_to = "images/profile/")
     is_active = models.BooleanField(default=False)
 
+    deleted_by = None
+    updated_by = None
+    created_by = None 
+
     def __str__(self):
-        return str(self.account) + self.name
+        return self.name
