@@ -2,7 +2,7 @@
 from bases.administrator.views import BaseAdminViewset
 from .serializers import SubscriptionPackageReadSerializer, SubscriptionPackageSerializer
 from subscriptions.models import SubscriptionPackage
-
+from service.stripe.stripe_api import StripeAPI
 
 #Type Admin Viewset
 class SubscriptionsPackageAdminAPIView(BaseAdminViewset):
@@ -19,6 +19,18 @@ class SubscriptionsPackageAdminAPIView(BaseAdminViewset):
     search_fields = ['name','interval']
     filterset_fields = ['is_active','interval_count']
 
-    def perform_destroy(self, instance):
-        return super().perform_destroy(instance)
+    def perform_create(self, serializer):
+        data = self.request.data
+        
+        price = int(data["price"]*100)
+        price_id = StripeAPI.create_price(
+            name = data["name"],
+            price=price,
+            currency=data["currency"],
+            interval=data["interval"],
+            interval_count=data["interval_count"])
+
+        serializer.save(price_id=price_id,
+                     updated_by=self.request.user,
+                        created_by=self.request.user)
  
