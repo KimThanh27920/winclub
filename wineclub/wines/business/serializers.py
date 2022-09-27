@@ -3,16 +3,18 @@ from ..models import Wine
 
 
 class WineShortSerializer(serializers.ModelSerializer):
-    winery = serializers.StringRelatedField()
+    type = serializers.StringRelatedField()
     class Meta:
         model = Wine
         fields = [
             "id",
             "wine",
-            "winery",
+            "type",
             "price",
             "sale",
             "average_rating",
+            "is_active",
+            "status",
             "thumbnail",
         ]
     
@@ -43,5 +45,10 @@ class WineDetailSerializer(serializers.ModelSerializer):
             "light_bold",
             "smooth_tannic",
             "dry_sweet",
-            "soft_acidic"
+            "soft_acidic",
+            "is_active"
         ]
+
+        extra_kwargs = {
+            "is_active": {'write_only': True}
+        }

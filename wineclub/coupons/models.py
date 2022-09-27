@@ -4,34 +4,42 @@ from django.contrib.auth import get_user_model
 #App imports
 from bases.models import BasicLogModel
 
-
 User = get_user_model()
 
 
+
+TYPE_COUPONS = [
+    ("business","business"),
+    ("platform","platform")
+]
+
+TYPE_REDUCTIONS = [
+    ("cash","cash"),
+    ("percent","percent")
+]
 # Coupons model class
 class Coupon(BasicLogModel):
-    code = models.CharField(max_length=32, unique=True)
-    coupon = models.CharField(max_length=255)
-    type = models.CharField(max_length=8)
-    is_refund_coin = models.BooleanField(default=False)
-    amount_off = models.FloatField()
-    currency = models.CharField(max_length=255,default="usd")
-    percent_off = models.FloatField()
-    image = models.CharField(max_length=255)
-    descriptions = models.TextField()
-    times = models.IntegerField()
-    min_order_value = models.FloatField()
+    code = models.CharField(max_length=32, unique=True)    
+    type = models.CharField(max_length=9, choices=TYPE_COUPONS)
+    type_reduce = models.CharField(max_length=9, choices=TYPE_REDUCTIONS)
+    coupon_value = models.FloatField()
     max_value = models.FloatField()
-    used = models.IntegerField()
-    start = models.DateTimeField()
-    end = models.DateTimeField()
-    is_public = models.BooleanField(default=False)
+    min_order_value = models.FloatField()    
+    individual = models.BooleanField(default=False)    
+    # amount_off = models.FloatField()
+    # percent_off = models.FloatField()
+    currency = models.CharField(max_length=10,default="usd")    
+    image = models.ImageField(null=True, upload_to = "images/coupons/")
+    title = models.CharField(max_length=255)
+    description = models.TextField()     
+    coupon_amount = models.IntegerField()
+    time_start = models.DateTimeField()
+    time_end = models.DateTimeField()
+    is_public = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     
-
     def  __str__(self) -> str:
         return self.coupon
-
     
     class Meta:
         db_table = "coupons"
@@ -44,7 +52,6 @@ class CouponOwner(models.Model):
 
     def  __str__(self) -> str:
         return self.user
-
     
     class Meta:
         db_table = "owner_coupons"
