@@ -30,6 +30,7 @@ urlpatterns = [
     path('admin/categories/', include('categories.administrator.urls')),
     #Subscription Packages
     path('admin/subscription-package/', include('subscriptions.administrator.urls')),
+    path('business/subscriptions/', include('subscriptions.business.urls')),
     
     # winery
     path('', include('wineries.guest.urls')),
