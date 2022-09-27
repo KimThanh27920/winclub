@@ -48,5 +48,8 @@ urlpatterns = [
     # path('shippings/', include('shipping.guest.urls')),
     # path('wineries/shippings/', include('shipping.business.urls')),
 
+    #device FCM
+    path('customer/notifications/', include('notifications.customer.urls')),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
