@@ -12,6 +12,7 @@ from .serializers import (TypeSerializer,TypeReadSerializer,
                                 CountryReadSerializer, CountrySerializer)
 from wines.models import Wine
 from bases.administrator.views import BaseAdminViewset
+from bases.errors.errors import CategoriesErrors
 
 
 #Type Admin Viewset
@@ -30,10 +31,10 @@ class TypeAdminAPIView(BaseAdminViewset):
     filterset_fields = ['is_active']
 
     def perform_destroy(self, instance):
-        if Wine.objects.filter(type=instance).exists() :
-            data={"success":False}
-            return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
+        error = CategoriesErrors.type_has_child(instance)
+        if error is not None:
+            return error
         return super().perform_destroy(instance)
        
 
@@ -53,9 +54,9 @@ class StyleAdminAPIView(BaseAdminViewset):
     filterset_fields = ['is_active']
 
     def perform_destroy(self, instance):
-        if Wine.objects.filter(style=instance).exists() :
-            data={"success":False}
-            return Response(data,status= status.HTTP_400_BAD_REQUEST)
+        error = CategoriesErrors.style_has_child(instance)
+        if error is not None:
+            return error
 
         return super().perform_destroy(instance)     
 
@@ -77,9 +78,9 @@ class GrapeAdminAPIView(BaseAdminViewset):
     filterset_fields = ['is_active']
 
     def perform_destroy(self, instance):
-        if Wine.objects.filter(grape=instance).exists() :
-            data={"success":False}
-            return Response(data,status= status.HTTP_400_BAD_REQUEST)
+        error = CategoriesErrors.grape_has_child(instance)
+        if error is not None:
+            return error
 
         return super().perform_destroy(instance)     
 
@@ -100,9 +101,9 @@ class FoodAdminAPIView(BaseAdminViewset):
     filterset_fields = ['is_active']
 
     def perform_destroy(self, instance):
-        if Wine.objects.filter(food=instance).exists() :
-            data={"success":False}
-            return Response(data,status= status.HTTP_400_BAD_REQUEST)
+        error = CategoriesErrors.food_has_child(instance)
+        if error is not None:
+            return error
 
         return super().perform_destroy(instance)  
 
@@ -123,9 +124,9 @@ class RegionAdminAPIView(BaseAdminViewset):
     filterset_fields = ['is_active']
 
     def perform_destroy(self, instance):
-        if Wine.objects.filter(region=instance).exists() :
-            data={"success":False}
-            return Response(data,status= status.HTTP_400_BAD_REQUEST)
+        error = CategoriesErrors.region_has_child(instance)
+        if error is not None:
+            return error
 
         return super().perform_destroy(instance)  
 
@@ -146,8 +147,8 @@ class CountryAdminAPIView(BaseAdminViewset):
     filterset_fields = ['is_active']
 
     def perform_destroy(self, instance):
-        if Wine.objects.filter(country=instance).exists() :
-            data={"success":False}
-            return Response(data,status= status.HTTP_400_BAD_REQUEST)
+        error = CategoriesErrors.country_has_child(instance)
+        if error is not None:
+            return error
 
         return super().perform_destroy(instance)  

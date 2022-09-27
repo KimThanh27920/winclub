@@ -21,8 +21,8 @@ class SubscriptionsPackageAdminAPIView(BaseAdminViewset):
 
     def perform_create(self, serializer):
         data = self.request.data
-        
         price = int(data["price"]*100)
+       
         price_id = StripeAPI.create_price(
             name = data["name"],
             price=price,
@@ -33,4 +33,3 @@ class SubscriptionsPackageAdminAPIView(BaseAdminViewset):
         serializer.save(price_id=price_id,
                      updated_by=self.request.user,
                         created_by=self.request.user)
- 
