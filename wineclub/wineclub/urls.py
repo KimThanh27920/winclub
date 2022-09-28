@@ -75,5 +75,8 @@ urlpatterns = [
     #transaction
     path('admin/transactions/', include('transactions.administrator.urls')),
 
+    #business connect account
+    path('business/connect-account/', include('accounts.business.urls')),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

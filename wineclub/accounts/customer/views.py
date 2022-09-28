@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.views import TokenBlacklistView, TokenRefreshView
 from rest_framework_simplejwt import authentication
 
-from rest_framework import generics, permissions, response, status
+from rest_framework import generics, permissions, response, status, views
 
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
@@ -72,3 +72,5 @@ class UploadImageAPIView(generics.UpdateAPIView):
     def get_object(self, queryset=None):
         obj = get_object_or_404(User,id=self.request.user.id)
         return obj    
+
+
