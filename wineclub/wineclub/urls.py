@@ -75,5 +75,9 @@ urlpatterns = [
     #transaction
     path('admin/transactions/', include('transactions.administrator.urls')),
 
+    #statistical
+    path('wineries/statistical/', include('statistical.business.urls')),
+    path('admin/statistical/', include('statistical.administrator.urls')),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

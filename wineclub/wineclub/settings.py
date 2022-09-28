@@ -62,14 +62,14 @@ INSTALLED_APPS = [
     'shipping',
     'statistical',
     'subscriptions',
-    # 'transactions',
+    'transactions',
     'wineries',
     'wines',
     'payments',
     'programs',
     'reviews',
     'orders',
-    # 'service',
+    'service',
     'bases',
 
 ]
