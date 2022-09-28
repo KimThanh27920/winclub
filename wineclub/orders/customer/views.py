@@ -1,3 +1,4 @@
+from locale import currency
 from rest_framework_simplejwt import authentication
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
@@ -8,6 +9,11 @@ from accounts.models import Account
 from wineries.models import Winery
 from carts.models import CartDetail, Cart
 from orders.models import Order
+
+import stripe
+from django.conf import settings
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class OrderAPIView(generics.ListCreateAPIView):
@@ -28,6 +34,8 @@ class OrderAPIView(generics.ListCreateAPIView):
         order_details = CartDetail.objects.filter(cart=order_detail_id)
 
         winery = Winery.objects.get(id=cart.winery_id)
+
+        account = Account.objects.get(id=self.request.user.id)
 
         if serializer.is_valid():
             self.instance = serializer.save(created_by=self.request.user, updated_by=self.request.user, winery=winery)
@@ -54,7 +62,6 @@ class OrderAPIView(generics.ListCreateAPIView):
                     serializer.save()
             
             if self.instance.used_points == True:
-                account = Account.objects.get(id=self.request.user.id)
                 instance_price -= account.points
                 account.points = 0
                 account.save()
@@ -64,6 +71,18 @@ class OrderAPIView(generics.ListCreateAPIView):
                 self.instance.save()
 
                 serializer = serializers.OrderSerializer(self.instance)
+
+                stripe.PaymentIntent.create(
+                    customer = account.stripe_account,
+                    amount = int(instance_price)*100,
+                    currency = "aud",
+                    payment_method_types = ["card"],
+                    metadata = {
+                        'order_id': self.instance.id
+                    },
+                    confirm = True,
+                    payment_method = self.request.data.get('payment_method')
+                )
 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             except Exception as e:
