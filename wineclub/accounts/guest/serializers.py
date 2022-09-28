@@ -7,6 +7,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from wineries.models import Winery
+from coupons.models import CouponOwner
 from bases.services.stripe.stripe import stripe_created_connect
 from .. import models
 
@@ -60,6 +61,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs.lower()
 
     def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)  
+        CouponOwner.objects.create(account=user)         #Toan cus
+              
         user = User.objects.create_user(**validated_data)
         return user
 
