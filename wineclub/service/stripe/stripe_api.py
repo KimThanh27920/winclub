@@ -46,6 +46,7 @@ class StripeAPI:
                 "status": subscription["status"]
             }
         except stripe.error.InvalidRequestError:
-            return False
+            data = {"status": "Failed"}
+            return data
         return data
         
