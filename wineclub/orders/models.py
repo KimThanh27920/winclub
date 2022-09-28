@@ -1,4 +1,5 @@
 #django import
+from email.policy import default
 from hashlib import md5
 from pyexpat import model
 from django.db import models
@@ -23,7 +24,7 @@ STATUS_CHOICES = [
 PAYMENT_CHOICES = [
     ("charged","charged"),
     ("refund","refunded"),
-    (None, None)
+    ("incomplete", "incomplete")
 ]
 # Order model class
 class Order(BasicLogModel):    
@@ -31,10 +32,10 @@ class Order(BasicLogModel):
     shipping_service = models.ForeignKey(ShippingUnit, on_delete=models.CASCADE, related_name="shipping_service")
     coupons = models.ManyToManyField(Coupon, related_name="coupons_apply")
     note = models.TextField(null=True, blank=True)
-    used_points = models.IntegerField(default=0)
+    used_points = models.BooleanField(default=False)
     total = models.FloatField(default=0)
     status = models.CharField(max_length= 255, default="processing", choices=STATUS_CHOICES)
-    payment = models.CharField(default=None,max_length=255,choices=PAYMENT_CHOICES)
+    payment = models.CharField(default="incomplete",max_length=255,choices=PAYMENT_CHOICES)
     address = models.TextField()
     full_name = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
@@ -49,11 +50,11 @@ class Order(BasicLogModel):
 
 #Order detail models class
 class OrderDetail(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_id")
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_detail")
     price = models.FloatField()
     sale = models.FloatField(default = 0, blank = True)    
     wine = models.ForeignKey(Wine, on_delete=models.CASCADE, related_name="wine_order")
-    quatity = models.IntegerField(default=1)
+    quantity = models.IntegerField(default=1)
 
     def __str__(self) -> str:
         return self.wine
