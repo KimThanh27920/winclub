@@ -17,6 +17,6 @@ class StipeWebhookAPI(APIView):
         event = stripe_webhook(request)
         if(type(event).__name__ == "SignatureVerificationError"):
             return response_exception(event)
-        update_account(user_email=event.data.object.email,
-                       stripe_account=event.data.object.id)
+        if event.type == 'invoice.payment_succeeded':
+            print(event)
         return Response()
