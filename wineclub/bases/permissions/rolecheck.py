@@ -34,7 +34,9 @@ class IsOwnerByAccount(permissions.BasePermission):
     #     return request.user and request.user.is_authenticated()
     
     def has_object_permission(self, request, view, obj):
-        print(request.user.is_authenticated)
+        # print(obj.account)
+        # print(request.user)
+        # print(obj.account == request.user)
         return obj.account == request.user
 
 
