@@ -1,6 +1,27 @@
 from rest_framework import serializers
 from ..models import  Cart, CartDetail
 from wineries.models import Winery
+from wines.models import Wine
+
+
+class WineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wine
+        fields = [
+            "id",
+            "wine",
+            "price",
+            "sale"
+        ]
+
+
+class WinerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Winery
+        fields = [
+            "id",
+            "name",            
+        ]
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -42,11 +63,11 @@ class CartDetailUpdateSerializer(serializers.ModelSerializer):
         
         else:
             return quantity
-    # Serializer for list Cart ==================================================
-# class WinerySerializer(serializers.ModelSerializer):
+# Serializer for list Cart ==================================================
 
     
 class CartDetailOnlyReadSerializer(serializers.ModelSerializer):
+    wine = WinerySerializer(read_only=True)
     class Meta:
         model = CartDetail
         fields = [
@@ -60,8 +81,10 @@ class CartDetailOnlyReadSerializer(serializers.ModelSerializer):
             "quantity"
         ]
         
+        
 class ListCartSerializer(serializers.ModelSerializer):
     cart_detail = CartDetailOnlyReadSerializer(many=True)
+    winery = WinerySerializer(read_only=True)
     class Meta:
         model = Cart
         fields = [

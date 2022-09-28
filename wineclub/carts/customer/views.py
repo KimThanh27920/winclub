@@ -14,6 +14,7 @@ class CartListCreate(generics.ListCreateAPIView):
     authentication_classes = [authentication.JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]      
     serializer_class = ListCartSerializer
+    pagination_class = None
     # queryset = Cart.objects.all()
     
     def get_queryset(self):
