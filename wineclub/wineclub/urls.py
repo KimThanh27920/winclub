@@ -60,7 +60,7 @@ urlpatterns = [
     #Shipping Unit
     path('administrator/shipping/', include('shipping.administrator.urls')),
     path('shippings/', include('shipping.guest.urls')),
-    # path('wineries/shippings/', include('shipping.business.urls')),
+    path('wineries/shippings/', include('shipping.business.urls')),
 
     #device FCM
     path('customer/notifications/', include('notifications.customer.urls')),
