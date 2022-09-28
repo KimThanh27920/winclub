@@ -35,18 +35,15 @@ class Subscription(APIView):
         price_id = subs_pk.price_id
         
         subscription = StripeAPI.subscription_checkout(stripe_account,price_id )
-        
-        # print(subscription)
-        
-        # if subscription == False :
-        #     error = {
-        #         "message": "Can't checkout! Because you don't have payment method",
-        #         "status" : False
-        #     }
-        #     return Response(data=error, status=status.HTTP_400_BAD_REQUEST)
+     
+        if subscription["status"] == "Failed" :
+            error = {
+                "message": "Can't checkout! Because you don't have payment method",
+                "status" : False
+            }
+            return Response(data=error, status=status.HTTP_400_BAD_REQUEST)
         
         if subscription["status"] == "active" :
-            
             Winery.objects.filter(account=self.request.user.id).update(is_active=True)
        
         return Response(data=subscription, status=status.HTTP_200_OK)

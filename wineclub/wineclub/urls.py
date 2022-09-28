@@ -30,7 +30,8 @@ urlpatterns = [
     path('admin/categories/', include('categories.administrator.urls')),
     #Subscription Packages
     path('admin/subscription-package/', include('subscriptions.administrator.urls')),
-    path('business/subscriptions/', include('subscriptions.business.urls')),
+    path('subscription-package/', include('subscriptions.guest.urls')),
+    path('business/subscription-package/', include('subscriptions.business.urls')),
     
     # winery
     path('wineries/', include('wineries.guest.urls')),
@@ -60,15 +61,22 @@ urlpatterns = [
     #Shipping Unit
     path('administrator/shipping/', include('shipping.administrator.urls')),
     path('shippings/', include('shipping.guest.urls')),
-    # path('wineries/shippings/', include('shipping.business.urls')),
+    path('wineries/shippings/', include('shipping.business.urls')),
 
-    #device FCM
+    #notification and add device FCM
     path('customer/notifications/', include('notifications.customer.urls')),
+    
     #Payments
     path('customer/payments/', include('payments.customer.urls')),
 
     #Webhook Stripe
-    path('webhook/', include('payments.urls'))
+    path('webhook/', include('payments.urls')),
+
+    #transaction
+    path('admin/transactions/', include('transactions.administrator.urls')),
+
+    #business connect account
+    path('business/connect-account/', include('accounts.business.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

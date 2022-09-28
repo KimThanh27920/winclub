@@ -23,7 +23,7 @@ class IsOwnerByCreatedByOrAdmin(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         print(obj.created_by)
         return obj.created_by == request.user or request.user.is_staff
-    
+
     
 class IsOwnerByAccount(permissions.BasePermission):
     """

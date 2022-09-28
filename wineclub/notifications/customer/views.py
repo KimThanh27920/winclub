@@ -38,3 +38,21 @@ class TestSendNotifyAPI(views.APIView):
         device = get_device_user(self.request.user.id)
         send_notify_message(device, "hello", "body")
         return Response()
+
+class ListNotificationAPI(generics.ListAPIView):
+    pagination_class = None
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.JWTAuthentication]
+    serializer_class = serializers.NotificationSerializer
+    
+    def get_queryset(self):
+        return models.Notification.objects.filter(account = self.request.user)
+
+class UpdateNotificationAPI(generics.UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.JWTAuthentication]
+    serializer_class = serializers.NotificationSerializer
+    lookup_url_kwarg = "notification_id"
+    
+    def get_queryset(self):
+        return models.Notification.objects.filter(account = self.request.user, is_check = False)

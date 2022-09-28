@@ -9,6 +9,7 @@ load_dotenv()
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+
 def stripe_customer_create(user):  # function created stripe customer
     try:
         customer = stripe.Customer.create(
@@ -77,7 +78,7 @@ def stripe_webhook(request):
     endpoint_secret = settings.STRIPE_WEBHOOK_SECRET_KEY
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
-    #Check valid payload with signature
+    # Check valid payload with signature
     try:
         event = stripe.Webhook.construct_event(
             payload=payload,
@@ -149,3 +150,27 @@ def stripe_transaction(txn):  # call Transaction Stripe
     except Exception as e:
         return e
     return transaction
+
+
+def stripe_created_connect(business_email):
+    try:
+        connect_account = stripe.Account.create(
+            type="express",
+        )
+    except Exception as e:
+        pass
+
+    return connect_account
+
+def stripe_created_account_link(account_connect):
+    YOUR_DOMAIN = 'http://127.0.0.1:8000/'
+    try:
+        link = stripe.AccountLink.create(
+            account=account_connect,
+            refresh_url=YOUR_DOMAIN + 'success/',
+            return_url=YOUR_DOMAIN + 'cancel/',
+            type="account_onboarding",
+        )
+    except Exception as e:
+        print(e)
+    return link

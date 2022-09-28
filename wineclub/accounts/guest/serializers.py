@@ -8,6 +8,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from wineries.models import Winery
 from coupons.models import CouponOwner
+from bases.services.stripe.stripe import stripe_created_connect
 from .. import models
 
 User = get_user_model()
@@ -35,9 +36,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # ...
         return token
 
-    def to_representation(self, instance):
-        return super().to_representation(instance)
-
 
 class RegisterSerializer(serializers.ModelSerializer):
 
@@ -58,6 +56,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             return value
         except:
             raise serializers.ValidationError("phone number is not available")
+
     def validate_email(self, attrs):
         return attrs.lower()
 
@@ -65,7 +64,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)  
         CouponOwner.objects.create(account=user)         #Toan cus
               
+        user = User.objects.create_user(**validated_data)
         return user
+
 
 class BusinessRegisterSerializer(serializers.ModelSerializer):
 
@@ -79,20 +80,30 @@ class BusinessRegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "password": {"write_only": True}
         }
+
     def validate_phone(self, value):
         try:
             int(value)
             return value
         except:
             raise serializers.ValidationError("phone number is not available")
+
     def validate_email(self, attrs):
         return attrs.lower()
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
-        Winery.objects.create(account=user)             #Toan cus
-        
+        """
+        when business register
+        create customer account stripe and
+        connect account stripe for this user
+        """
+        stripe_connect = stripe_created_connect(user.email)
+        Winery.objects.create(
+            account=user, account_connect=stripe_connect.id)  # Toan cus
+
         return user
+
 
 class PinSerializer(serializers.ModelSerializer):
     class Meta:
@@ -104,6 +115,7 @@ class ChangePasswordWithPinSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     pin = serializers.IntegerField(required=True)
     new_password = serializers.CharField(required=True)
+
 
 class ForgotPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
