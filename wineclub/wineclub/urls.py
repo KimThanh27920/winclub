@@ -33,15 +33,15 @@ urlpatterns = [
     path('business/subscriptions/', include('subscriptions.business.urls')),
     
     # winery
-    path('', include('wineries.guest.urls')),
+    path('wineries/', include('wineries.guest.urls')),
     path('business/wineries/', include('wineries.business.urls')),
     # winery
     
     # Coupon
     path('admin/coupons/', include('coupons.administrator.urls')),
     path('business/coupons/', include('coupons.business.urls')),
-    # path('', include('wineries.guest.urls')),
-    # path('', include('wineries.guest.urls')),
+    path('customer/coupons/', include('coupons.customer.urls')),
+    path('coupons/', include('coupons.guest.urls')),
     # Coupon
     # cart
     path('customer/carts/', include('carts.customer.urls')),

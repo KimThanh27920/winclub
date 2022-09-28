@@ -47,11 +47,11 @@ class Coupon(BasicLogModel):
 
 #Coupons Owner model class
 class CouponOwner(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="coupon_owner")
+    account = models.OneToOneField(User, on_delete=models.CASCADE, related_name="coupon_owner", unique=True)
     coupons = models.ManyToManyField(Coupon, related_name="coupons_owner_list")
 
     def  __str__(self) -> str:
-        return self.user
+        return str(self.account)
     
     class Meta:
         db_table = "owner_coupons"
