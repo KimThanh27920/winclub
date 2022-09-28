@@ -21,6 +21,7 @@ class Transaction(models.Model):
     net = models.BigIntegerField()
     fee = models.BigIntegerField()
     unit = models.IntegerField(default=100)
+    description = models.TextField(null=True)
     sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name="money_sender")
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="money_receiver")
     

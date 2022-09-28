@@ -70,7 +70,10 @@ urlpatterns = [
     path('customer/payments/', include('payments.customer.urls')),
 
     #Webhook Stripe
-    path('webhook/', include('payments.urls'))
+    path('webhook/', include('payments.urls')),
+
+    #transaction
+    path('admin/transactions/', include('transactions.administrator.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
