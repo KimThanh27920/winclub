@@ -20,12 +20,7 @@ class BaseGuestViewset(ModelViewSet):
        pass
 
     def list(self, request, *args, **kwargs):
-        is_paginate = bool(request.query_params.get("paginate",False) == 'true')
-        if is_paginate:
-            return super().list(request, *args, **kwargs)
-        instances = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(instances, many=True)
-        return Response(serializer.data)
+        return super().list(request, *args, **kwargs)
 
     def perform_update(self, serializer):
         pass

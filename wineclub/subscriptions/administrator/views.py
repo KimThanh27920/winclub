@@ -18,6 +18,7 @@ class SubscriptionsPackageAdminAPIView(BaseAdminViewset):
     queryset = SubscriptionPackage.objects.select_related('created_by','updated_by')
     search_fields = ['name','interval']
     filterset_fields = ['is_active','interval_count']
+    ordering_fields = ['name','interval_count','price','created_at','updated_at']
 
     def perform_create(self, serializer):
         data = self.request.data
