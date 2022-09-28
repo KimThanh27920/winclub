@@ -16,8 +16,8 @@ class TransactionAdminView(BaseAdminViewset):
     }
     
     queryset = Transaction.objects.select_related('sender','receiver')
-    search_fields = ['sender__full_name','receiver__full_name','sender__email','receiver__email']
-    filterset_fields = ['type','sender__email','receiver__email']
+    search_fields = ['sender','receiver']
+    filterset_fields = ['type','sender','receiver']
     ordering_fields = ['timestamp','amount','net','fee','unit']
 
     def get_queryset(self):

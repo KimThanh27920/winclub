@@ -1,6 +1,4 @@
 #django import
-from locale import currency
-from operator import mod
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -22,8 +20,8 @@ class Transaction(models.Model):
     fee = models.BigIntegerField()
     unit = models.IntegerField(default=100)
     description = models.TextField(null=True)
-    sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name="money_sender")
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="money_receiver")
+    sender = models.CharField(max_length=255)
+    receiver = models.CharField(max_length=255)
     
     def __str__(self) -> str:
         return self.timestamp
