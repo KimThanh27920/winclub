@@ -5,7 +5,28 @@ from rest_framework import status
 #app imports
 from wines.models import Wine 
 from subscriptions.models import SubscriptionPackage
+from wineries.models import Winery
+from accounts.models import Account
 
+
+#check error of business
+class BusinessErrors:
+    def exists(winery_id):
+        if  not (Winery.objects.exclude(deleted_at__isnull=False).filter(id=winery_id).exists()) :
+            data={
+                "success":False,
+                "message": "Winery don't exist! "}
+            return Response(data,status= status.HTTP_400_BAD_REQUEST)
+
+
+#check Account error
+class AccountErrors:
+    def exists(user_id):
+        if not (Account.objects.filter(is_business=False).filter(id=user_id).exists()):
+            data={
+                "success":False,
+                "message": "Account don't exist! "}
+            return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
 # check error of Wine
 class CategoriesErrors:
