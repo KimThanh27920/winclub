@@ -2,9 +2,15 @@
 from bases.administrator.views import BaseAdminViewset
 from accounts.models import Account
 from wineries.models import Winery
+from wines.models import Wine
+from coupons.models import Coupon
+from reviews.models import Review
 from .serializers import CustomerSerializer, BlockCustomerSerializer, BusinessRetrieveSerializer, BusinessSerializer, BlockBusinessSerializer
+from bases.errors.errors import BusinessErrors, AccountErrors
 # rest_fremawork imports
 from rest_framework.response import Response
+#django import
+from django.utils import timezone
 
 
 #Manage Customer Viewset
@@ -29,16 +35,22 @@ class ManageCustomer(BaseAdminViewset):
     def update(self, request, *args, **kwargs):
         kwargs["partial"] = True
         instance = self.get_object()
+        error = AccountErrors.exists(instance.id)
+        if error is not None:
+            return error
         acc = Account.objects.get(id=instance.id)
     
         if acc.is_active == True:
             data = {
                 "is_active": False
             }
+            Review.objects.filter(created_by=instance.id).update(deleted_at=timezone.now(), deleted_by = self.request.user)
         else:
             data = {
                 "is_active": True
             }
+            Review.objects.filter(created_by=instance.id).update(deleted_at=None, deleted_by = None)
+            
         #just update is_active fields
         serializer = BlockCustomerSerializer(instance, data=data)
         serializer.is_valid(raise_exception=True)
@@ -78,16 +90,38 @@ class ManageBusiness(BaseAdminViewset):
     def update(self, request, *args, **kwargs):
         kwargs["partial"] = True
         instance = self.get_object()
-        winery = Winery.objects.get(id=instance.id)
+        error = BusinessErrors.exists(instance.id)
+     
+        if error is not None:
+            return error
+        winery = Winery.objects.filter(id=instance.id).first()
+        
+        acc = Account.objects.filter(id=winery.account_id)
        
         if winery.is_active == True:
             data = {
                 "is_active": False
             }
+            acc.update(is_business=False)
+            
+            # block wine of winery
+            Wine.objects.filter(winery=instance.id).update(is_active=False)
+            
+            #block coupon of winery
+            Coupon.objects.filter(created_by=instance.id).update(is_active=False)
+            
         else:
             data = {
                 "is_active": True
             }
+            acc.update(is_business=True)
+
+            # active wine of winery
+            Wine.objects.filter(winery=instance.id).update(is_active=True)
+            
+            #active coupon of winery
+            Coupon.objects.filter(created_by=instance.id).update(is_active=True)
+            
         #just update is_active fields
         serializer = BlockBusinessSerializer(instance, data=data)
         serializer.is_valid(raise_exception=True)
@@ -99,7 +133,7 @@ class ManageBusiness(BaseAdminViewset):
             instance._prefetched_objects_cache = {}
 
         return Response(serializer.data)
-      
+             
 
     def perform_destroy(self, instance):
         pass
