@@ -12,7 +12,7 @@ stripe.api_key=settings.STRIPE_SECRET_KEY
 class StripeAPI:
 
     # create price subscription package 
-    def create_price(name, price, currency, interval,interval_count):
+    def create_price(name, price, currency, interval,interval_count,subpk):
         product_id = stripe.Product.create(name=name)
         price_id = stripe.Price.create(
             unit_amount= price, 
@@ -22,6 +22,7 @@ class StripeAPI:
                 "interval_count": interval_count
                 },
             product=product_id,
+            metadata={"subscription_package": subpk},
             )
         return price_id.id
 
