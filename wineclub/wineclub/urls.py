@@ -34,15 +34,15 @@ urlpatterns = [
     path('business/subscription-package/', include('subscriptions.business.urls')),
     
     # winery
-    path('', include('wineries.guest.urls')),
+    path('wineries/', include('wineries.guest.urls')),
     path('business/wineries/', include('wineries.business.urls')),
     # winery
     
     # Coupon
     path('admin/coupons/', include('coupons.administrator.urls')),
     path('business/coupons/', include('coupons.business.urls')),
-    # path('', include('wineries.guest.urls')),
-    # path('', include('wineries.guest.urls')),
+    path('customer/coupons/', include('coupons.customer.urls')),
+    path('coupons/', include('coupons.guest.urls')),
     # Coupon
     # cart
     path('customer/carts/', include('carts.customer.urls')),
@@ -78,6 +78,11 @@ urlpatterns = [
     #statistical
     path('wineries/statistical/', include('statistical.business.urls')),
     path('admin/statistical/', include('statistical.administrator.urls')),
+    #business connect account
+    path('business/connect-account/', include('accounts.business.urls')),
+
+    #Order
+    path('customer/orders/', include('orders.customer.urls'))
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

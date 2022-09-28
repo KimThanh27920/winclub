@@ -3,6 +3,6 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.ListCounponView.as_view(), name='coupon_list'),
+    path('', views.ListCouponView.as_view(), name='coupon_list'),
     path('<int:coupon_id>/', views.UpdateCouponView.as_view(), name='coupon_update_active'),
 ]

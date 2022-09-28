@@ -10,7 +10,7 @@ from bases.models import BasicLogModel
 Account = get_user_model()
 
 class Winery(BasicLogModel):
-    account = models.OneToOneField(Account, on_delete=models.CASCADE)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE, related_name = 'wineries')
     name = models.CharField(max_length=255)
     rating_average = models.FloatField(default=0.0)
     reviewer = models.IntegerField(default=0)
@@ -28,4 +28,4 @@ class Winery(BasicLogModel):
     created_by = None 
 
     def __str__(self):
-        return self.name
+        return str(self.account)
