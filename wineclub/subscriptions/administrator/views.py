@@ -23,14 +23,17 @@ class SubscriptionsPackageAdminAPIView(BaseAdminViewset):
     def perform_create(self, serializer):
         data = self.request.data
         price = int(data["price"]*100)
-       
+        
+        subpk = serializer.save(
+                     updated_by=self.request.user,
+                        created_by=self.request.user)
         price_id = StripeAPI.create_price(
             name = data["name"],
             price=price,
             currency=data["currency"],
             interval=data["interval"],
-            interval_count=data["interval_count"])
-
-        serializer.save(price_id=price_id,
-                     updated_by=self.request.user,
-                        created_by=self.request.user)
+            interval_count=data["interval_count"],
+            subpk=subpk.id
+            )
+            
+        serializer.save(price_id=price_id)
