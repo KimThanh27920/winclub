@@ -29,6 +29,7 @@ class TypeAdminAPIView(BaseAdminViewset):
     queryset = Type.objects.select_related('created_by','updated_by')
     search_fields = ['type']
     filterset_fields = ['is_active']
+    ordering_fields = ['type','created_at','updated_at']
 
     def perform_destroy(self, instance):
 
@@ -52,6 +53,7 @@ class StyleAdminAPIView(BaseAdminViewset):
     queryset = Style.objects.select_related('created_by','updated_by')
     search_fields = ['style']
     filterset_fields = ['is_active']
+    ordering_fields = ['style','created_at','updated_at']
 
     def perform_destroy(self, instance):
         error = CategoriesErrors.style_has_child(instance)
@@ -76,6 +78,7 @@ class GrapeAdminAPIView(BaseAdminViewset):
 
     search_fields = ['grape']
     filterset_fields = ['is_active']
+    ordering_fields = ['grape','created_at','updated_at']
 
     def perform_destroy(self, instance):
         error = CategoriesErrors.grape_has_child(instance)
@@ -99,6 +102,7 @@ class FoodAdminAPIView(BaseAdminViewset):
     queryset = Food.objects.select_related('created_by','updated_by')
     search_fields = ['food']
     filterset_fields = ['is_active']
+    ordering_fields = ['food','created_at','updated_at']
 
     def perform_destroy(self, instance):
         error = CategoriesErrors.food_has_child(instance)
@@ -122,6 +126,7 @@ class RegionAdminAPIView(BaseAdminViewset):
     queryset = Region.objects.select_related('created_by','updated_by')
     search_fields = ['region']
     filterset_fields = ['is_active']
+    ordering_fields = ['region','created_at','updated_at']
 
     def perform_destroy(self, instance):
         error = CategoriesErrors.region_has_child(instance)
@@ -145,6 +150,7 @@ class CountryAdminAPIView(BaseAdminViewset):
     queryset = Country.objects.select_related('created_by','updated_by')
     search_fields = ['country']
     filterset_fields = ['is_active']
+    ordering_fields = ['country','created_at','updated_at']
 
     def perform_destroy(self, instance):
         error = CategoriesErrors.country_has_child(instance)
