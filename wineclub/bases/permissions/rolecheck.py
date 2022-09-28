@@ -25,7 +25,7 @@ class IsOwnerOrAdmin(permissions.BasePermission):
         #     return True
         print(obj.created_by)
         return obj.created_by == request.user or request.user.is_staff
-    
+
     
 # class IsBusinessAndOwnerOrAdmin(permissions.BasePermission):
 #     def has_permission(self, request, view):

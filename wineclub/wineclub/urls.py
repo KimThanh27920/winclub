@@ -63,8 +63,9 @@ urlpatterns = [
     path('shippings/', include('shipping.guest.urls')),
     path('wineries/shippings/', include('shipping.business.urls')),
 
-    #device FCM
+    #notification and add device FCM
     path('customer/notifications/', include('notifications.customer.urls')),
+    
     #Payments
     path('customer/payments/', include('payments.customer.urls')),
 
