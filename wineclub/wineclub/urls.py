@@ -38,6 +38,12 @@ urlpatterns = [
     path('business/wineries/', include('wineries.business.urls')),
     # winery
     
+    # Coupon
+    path('admin/coupons/', include('coupons.administrator.urls')),
+    path('business/coupons/', include('coupons.business.urls')),
+    # path('', include('wineries.guest.urls')),
+    # path('', include('wineries.guest.urls')),
+    # Coupon
     # cart
     path('customer/carts/', include('carts.customer.urls')),
     # cart
@@ -55,7 +61,7 @@ urlpatterns = [
     #Shipping Unit
     path('administrator/shipping/', include('shipping.administrator.urls')),
     path('shippings/', include('shipping.guest.urls')),
-    # path('wineries/shippings/', include('shipping.business.urls')),
+    path('wineries/shippings/', include('shipping.business.urls')),
 
     #device FCM
     path('customer/notifications/', include('notifications.customer.urls')),
