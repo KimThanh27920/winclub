@@ -18,7 +18,7 @@ class Winery(BasicLogModel):
     postal_code = models.CharField(max_length=5)
     website_url = models.URLField(max_length=255, null=True)
     phone_winery = models.CharField(max_length=20)
-    founded_date = models.DateField(max_length=255)
+    founded_date = models.DateField(max_length=255, null=True)
     image_cover = models.ImageField(null=True, upload_to = "images/profile/")
     is_active = models.BooleanField(default=False)
     account_connect = models.CharField(max_length=255, null= True)
