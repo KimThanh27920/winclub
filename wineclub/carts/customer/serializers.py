@@ -67,7 +67,7 @@ class CartDetailUpdateSerializer(serializers.ModelSerializer):
 
     
 class CartDetailOnlyReadSerializer(serializers.ModelSerializer):
-    wine = WinerySerializer(read_only=True)
+    wine = WineSerializer(read_only=True)
     class Meta:
         model = CartDetail
         fields = [

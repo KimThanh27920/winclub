@@ -12,9 +12,13 @@ class CouponOwnerCreateListView(generics.ListCreateAPIView):
     serializer_class = CouponListSerializer
     queryset = CouponOwner.objects.all()
     authentication_classes = [authentication.JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsOwnerByAccount]
+    permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
    
+    # def get_queryset(self):
+    #     self.queryset = queryset = CouponOwner.objects.filter(account=self.request.user.id)
+    #     return super().get_queryset()
+    
     def get_serializer_class(self):
         if(self.request.method == "GET"):
             self.serializer_class = CouponOwnerReadSerializer
@@ -22,7 +26,7 @@ class CouponOwnerCreateListView(generics.ListCreateAPIView):
         return super().get_serializer_class()
     
     def get_object(self, queryset=None):
-        obj = CouponOwner.objects.filter()
+        obj = CouponOwner.objects.filter(account=self.request.user.id)
         self.check_object_permissions(self.request, obj[0])
         return obj[0]
     

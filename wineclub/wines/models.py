@@ -43,7 +43,7 @@ class Wine(BasicLogModel):
     
     is_active = models.BooleanField(default= False)
 
-    status = models.CharField(max_length=255, null=True, blank=True)
+    status = models.CharField(max_length=255, blank=True, null=True)
     
     class Meta:
         db_table="wines"

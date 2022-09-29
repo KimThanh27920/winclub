@@ -78,7 +78,7 @@ urlpatterns = [
     #statistical
     # path('wineries/statistical/', include('statistical.business.urls')),
     # path('admin/statistical/', include('statistical.administrator.urls')),
-    # #business connect account
+    #business connect account
     path('business/connect-account/', include('accounts.business.urls')),
 
     #Order
