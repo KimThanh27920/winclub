@@ -82,6 +82,7 @@ class OrderAPIView(generics.ListCreateAPIView):
                     currency="aud",
                     payment_method_types=["card"],
                     metadata={
+                        'customer': self.request.user,
                         'order_id': self.instance.id,
                         'winery': self.instance.winery
                     },
