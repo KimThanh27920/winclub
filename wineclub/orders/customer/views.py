@@ -38,25 +38,25 @@ class OrderAPIView(generics.ListCreateAPIView):
 
             for order_detail in order_detail_arr:
                 wine = Wine.objects.get(id=order_detail.get('wine'))
-                if wine.sale > 0:
-                    price = wine.sale
-                else:
-                    price = wine.price
+                if wine.is_active == True:
+                    if wine.sale > 0:
+                        price = wine.sale
+                    else:
+                        price = wine.price
+                    
+                    instance_price += float(price) * int(order_detail.get('quantity'))
 
-                instance_price += float(price) * \
-                    int(order_detail.get('quantity'))
-
-                data = {
-                    "order": self.instance.id,
-                    "price": price,
-                    "sale": wine.sale,
-                    "wine": order_detail.get('wine'),
-                    "quantity": order_detail.get('quantity')
-                }
-                serializer = serializers.OrderDetailSerializer(data=data)
-                if serializer.is_valid():
-                    serializer.save()
-
+                    data = {
+                        "order": self.instance.id,
+                        "price": price,
+                        "sale": wine.sale,
+                        "wine": order_detail.get('wine'),
+                        "quantity": order_detail.get('quantity')
+                    }
+                    serializer = serializers.OrderDetailSerializer(data=data)
+                    if serializer.is_valid():
+                        serializer.save()
+            
             for coupon in coupons_arr:
                 coupons = Coupon.objects.get(id=coupon.get('id'))
                 if int(coupons.coupon_value) > int(instance_price):
