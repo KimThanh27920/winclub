@@ -15,5 +15,7 @@ class WineShortSerializer(serializers.ModelSerializer):
             "in_stock",
             "is_active",
             "status",
-            "updated_at"
+            "updated_at",
+            "created_at",
+            "created_by"
         ]

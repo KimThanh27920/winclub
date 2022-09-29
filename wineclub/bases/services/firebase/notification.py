@@ -5,7 +5,7 @@ from firebase_admin.messaging import Message, Notification
 def send_notify_message(device, msg_title, msg_body):
     message = Message(
         notification=Notification(
-            title="Test notification", body="Test single notification"
+            title=msg_title, body=msg_body
         )
     )
     device.send_message(message)

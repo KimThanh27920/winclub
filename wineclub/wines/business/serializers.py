@@ -12,6 +12,7 @@ class WineShortSerializer(serializers.ModelSerializer):
             "type",
             "price",
             "sale",
+            "in_stock",
             "average_rating",
             "is_active",
             "status",
@@ -25,7 +26,6 @@ class WineDetailSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "wine",
-            
             "region",
             "country",
             "price",
@@ -48,7 +48,3 @@ class WineDetailSerializer(serializers.ModelSerializer):
             "soft_acidic",
             "is_active"
         ]
-
-        extra_kwargs = {
-            "is_active": {'write_only': True}
-        }
