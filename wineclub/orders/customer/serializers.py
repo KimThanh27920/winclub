@@ -48,7 +48,12 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         }
 
 
-class ReadOnlyCouponApplySerializer(serializers.ModelSerializer):
+class CouponApplySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    coupon_value = serializers.CharField()
+
+
+class ReadOnlyCouponApplySerializer(serializers.Serializer):
 
     class Meta:
         model = Coupon
@@ -59,14 +64,13 @@ class ReadOnlyCouponApplySerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     order_detail = OrderDetailReadOnlySerializer(many = True, read_only = True)
-    coupon_apply = ReadOnlyCouponApplySerializer(many = True, read_only = True)
+    coupons = ReadOnlyCouponApplySerializer(many = True, read_only = True)
     class Meta:
         model = Order
         fields = [
             "id",
             "winery",
             "shipping_service",
-            "coupon_apply",
             "note",
             "used_points",
             "total",
@@ -75,6 +79,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "address",
             "full_name",
             "phone",
+            "coupons",
             "order_detail",
         ]
 

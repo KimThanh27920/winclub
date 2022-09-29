@@ -5,8 +5,6 @@ from rest_framework.response import Response
 from . import serializers
 from wines.models import Wine
 from accounts.models import Account
-from wineries.models import Winery
-from carts.models import CartDetail, Cart
 from orders.models import Order
 from coupons.models import Coupon
 
@@ -28,6 +26,7 @@ class OrderAPIView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = serializers.OrderSerializer(data=request.data.get('order'))
         order_detail_arr = self.request.data.get('order_details')
+        coupons_arr = self.request.data.get('coupons')
 
         account = Account.objects.get(id=self.request.user.id)
 
@@ -55,15 +54,17 @@ class OrderAPIView(generics.ListCreateAPIView):
                 if serializer.is_valid():
                     serializer.save()
             
-            # if int(coupon.coupon_value) > int(instance_price):
-            #     instance_price = 1
-            # else:
-            #     instance_price -= coupon.coupon_value
+            for coupon in coupons_arr:
+                coupons = Coupon.objects.get(id=coupon.get('id'))
+                if int(coupons.coupon_value) > int(instance_price):
+                    instance_price = 1
+                else:
+                    instance_price -= coupons.coupon_value
 
-            if instance_price >= 1: 
+            if instance_price > 1: 
                 if self.instance.used_points == True:
                     instance_price -= account.points
-                    account.points = 0
+                    account.points = abs(instance_price)
                     account.save()
             
             try:
@@ -75,7 +76,7 @@ class OrderAPIView(generics.ListCreateAPIView):
                 stripe.PaymentIntent.create(
                     customer = account.stripe_account,
                     amount = int(instance_price)*100,
-                    currency = "aud",
+                    currency = "usd",
                     payment_method_types = ["card"],
                     metadata = {
                         'order_id': self.instance.id
