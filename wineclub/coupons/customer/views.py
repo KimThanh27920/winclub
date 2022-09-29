@@ -4,9 +4,10 @@ from rest_framework.response import Response
 
 from bases.permissions.rolecheck import IsOwnerByAccount
 from .serializers import CouponOwnerReadSerializer, CouponListSerializer, CouponDetailSerializer
-from ..models import CouponOwner
+from ..models import Coupon, CouponOwner
 
-
+from django.shortcuts import get_object_or_404
+ 
 
 class CouponOwnerCreateListView(generics.ListCreateAPIView):
     serializer_class = CouponListSerializer
@@ -14,10 +15,6 @@ class CouponOwnerCreateListView(generics.ListCreateAPIView):
     authentication_classes = [authentication.JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
-   
-    # def get_queryset(self):
-    #     self.queryset = queryset = CouponOwner.objects.filter(account=self.request.user.id)
-    #     return super().get_queryset()
     
     def get_serializer_class(self):
         if(self.request.method == "GET"):
@@ -26,9 +23,9 @@ class CouponOwnerCreateListView(generics.ListCreateAPIView):
         return super().get_serializer_class()
     
     def get_object(self, queryset=None):
-        obj = CouponOwner.objects.filter(account=self.request.user.id)
-        self.check_object_permissions(self.request, obj[0])
-        return obj[0]
+        obj = get_object_or_404(CouponOwner, account=self.request.user.id)
+        self.check_object_permissions(self.request, obj)
+        return obj
     
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -37,6 +34,7 @@ class CouponOwnerCreateListView(generics.ListCreateAPIView):
     
     def create(self, request, *args, **kwargs):
         instance = self.get_object()
+        get_object_or_404(Coupon, id=self.request.data.get("coupon_id"))
         obj_coupon = instance.coupons.filter(id=self.request.data.get("coupon_id"))
         if (obj_coupon.exists()):
             return Response(data={"message": "You have been added this coupon"}, status=status.HTTP_400_BAD_REQUEST)

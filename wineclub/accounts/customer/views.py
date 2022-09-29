@@ -26,7 +26,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         if serializer.is_valid():
             if serializer.data.get("new_password") != serializer.data.get("confirm_password"):
                 ob_return = {
-                    "field": "confirm_password",
+                    "error": "confirm_password",
                     "message": "New password and confirm password don't match"
                 }
                 return response.Response(data=ob_return, status=status.HTTP_400_BAD_REQUEST)
@@ -34,7 +34,7 @@ class ChangePasswordView(generics.UpdateAPIView):
             # Check old password
             if not self.object.check_password(serializer.data.get("old_password")):
                 ob_return = {
-                    "field": "old_password",
+                    "error": "old_password",
                     "message": "Wrong password."
                 }
                 return response.Response(data=ob_return, status=status.HTTP_400_BAD_REQUEST)
@@ -56,13 +56,13 @@ class ProfileUpdateRetrieveAPIView(generics.RetrieveUpdateAPIView):
         if(self.request.method == "GET"):
             self.serializer_class = serializers.ProfileSerializer
         else:
-            self.serializer_class = serializers.ProfileSerializer          
+            self.serializer_class = serializers.ProfileUpdateSerializer        
         return super().get_serializer_class()
     
     def get_object(self, queryset=None):
         obj = get_object_or_404(User,id=self.request.user.id)
         return obj    
-
+    
 
 class UploadImageAPIView(generics.UpdateAPIView):
     authentication_classes = [authentication.JWTAuthentication]

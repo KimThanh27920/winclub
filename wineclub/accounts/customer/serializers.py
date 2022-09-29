@@ -48,6 +48,39 @@ class ProfileSerializer(serializers.ModelSerializer):
         
         except:
             raise serializers.ValidationError("Invalid phone number: Don't include characters")
+
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "phone",
+            "full_name",
+            "birthday",
+            "gender",
+            "image",
+        ]
+        
+    def validate_birthday(self, bd): #bd = birthday
+        today = date.today()
+        age = today.year - bd.year        
+        if (not(0 < age < 150)):
+            raise serializers.ValidationError("Invalid date of birth")
+        
+        return bd
+    
+    def validate_email(self, email):
+        return email.lower()
+    
+    def validate_phone(self, attrs):
+        try:             
+            if not(len(attrs) == 10):
+                raise serializers.ValidationError("Invalid phone number: Phone number have to include ten number")
+            
+            return attrs
+        
+        except:
+            raise serializers.ValidationError("Invalid phone number: Don't include characters")
     
         
 class ChangePasswordSerializer(serializers.ModelSerializer):

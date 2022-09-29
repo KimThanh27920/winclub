@@ -24,14 +24,16 @@ class OrderAPIView(generics.ListCreateAPIView):
         return order_list
 
     def post(self, request, *args, **kwargs):
-        serializer = serializers.OrderSerializer(data=request.data.get('order'))
+        serializer = serializers.OrderSerializer(
+            data=request.data.get('order'))
         order_detail_arr = self.request.data.get('order_details')
         coupons_arr = self.request.data.get('coupons')
 
         account = Account.objects.get(id=self.request.user.id)
 
         if serializer.is_valid():
-            self.instance = serializer.save(created_by=self.request.user, updated_by=self.request.user)
+            self.instance = serializer.save(
+                created_by=self.request.user, updated_by=self.request.user)
             instance_price = 0
 
             for order_detail in order_detail_arr:
@@ -62,29 +64,33 @@ class OrderAPIView(generics.ListCreateAPIView):
                 else:
                     instance_price -= coupons.coupon_value
 
-            if instance_price > 1: 
+            if instance_price > 1:
                 if self.instance.used_points == True:
                     instance_price -= account.points
                     account.points = abs(instance_price)
                     account.save()
-            
+
             try:
                 self.instance.total = instance_price
                 self.instance.save()
 
                 serializer = serializers.OrderSerializer(self.instance)
-
+                
                 stripe.PaymentIntent.create(
-                    customer = account.stripe_account,
-                    amount = int(instance_price)*100,
-                    currency = "usd",
-                    payment_method_types = ["card"],
-                    metadata = {
+                    customer=account.stripe_account,
+                    amount=int(instance_price)*100,
+                    currency="aud",
+                    payment_method_types=["card"],
+                    metadata={
+                        'customer': self.request.user,
                         'order_id': self.instance.id,
                         'winery': self.instance.winery
                     },
-                    confirm = True,
-                    payment_method = self.request.data.get('payment_method')
+                    transfer_data = {
+                        'destination': self.instance.winery.account_connect,
+                    },
+                    confirm=True,
+                    payment_method=self.request.data.get('payment_method')
                 )
 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -92,14 +98,14 @@ class OrderAPIView(generics.ListCreateAPIView):
                 return Response({"error": str(e)},
                                 status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RetrieveUpdateOrderAPIView(generics.RetrieveUpdateAPIView):
     authentication_classes = [authentication.JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
-    lookup_url_kwarg = 'order_id' 
-    
+    lookup_url_kwarg = 'order_id'
+
     def get_serializer_class(self):
         if self.request.method == 'PUT':
             return serializers.UpdateOrderStatusSerializer
