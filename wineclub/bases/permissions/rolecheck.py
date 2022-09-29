@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+
 class IsOwnerByCreatedBy(permissions.BasePermission):    
     def has_object_permission(self, request, view, obj):
         print(obj.created_by)

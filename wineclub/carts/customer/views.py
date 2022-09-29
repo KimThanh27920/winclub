@@ -25,35 +25,39 @@ class CartListCreate(generics.ListCreateAPIView):
         if(self.request.method == "POST"):
             self.serializer_class = CartSerializer                      
         return super().get_serializer_class()
-              
+                                          
     def create(self, request, *args, **kwargs): # error when first create cart_detail will none
-        user = request.user.id        
-        for cart_detail in request.data:            
-            wine = cart_detail.get("wine")
+        user = request.user.id    
+        data_return = []    
+        for cart_detail in request.data:
+            # cart_temp = []
+            # cart_detail = []            
+            wine_id = cart_detail.get("wine")
             quantity = cart_detail.get("quantity")
             if(quantity < 1):                 
                 return response.Response(data={"quantity": ["Invalid quantity"]}, status=status.HTTP_400_BAD_REQUEST)
             
-            data = Wine.objects.get(id = wine)
-            winery = data.winery.id
+            data = Wine.objects.get(id = wine_id)
+            winery_id = data.winery.id
             # Check Cart exist, create or get  
-            cart = Cart.objects.filter(winery=winery, account=user)    
-                    
+            cart = Cart.objects.filter(winery=winery_id, account=user)    
             if not (cart.exists()):
                 cart_data = {
-                    "winery": winery,
+                    "winery": winery_id,
                     "account": user
                 }
                 serializer = self.get_serializer(data=cart_data)
                 serializer.is_valid(raise_exception=True)
-                serializer.save()    
-                cart_id = serializer.data.get("id")         
+                instance_cart = serializer.save() 
+                cart_id = instance_cart.id  
                     
             else:
-                cart_id=cart[0].id   
+                instance_cart = cart[0]
+                cart_id = instance_cart.id   
             
+            # cart_temp.append(instance_cart)
             # Check Cart Detail exist, create or update
-            cart_detail = CartDetail.objects.filter(cart=cart_id, wine=wine)
+            cart_detail = CartDetail.objects.filter(cart=cart_id, wine=wine_id)
             
             if(cart_detail.exists()):
                 quantity = quantity + cart_detail[0].quantity
@@ -69,13 +73,13 @@ class CartListCreate(generics.ListCreateAPIView):
                 ob_cart_detail = {
                     "quantity": quantity,
                     "cart": cart_id,
-                    "wine": wine                    
+                    "wine": wine_id                 
                 }
                 serializer_cart_detail = CartDetailSerializer(data = ob_cart_detail)
-                if serializer_cart_detail.is_valid():
+                if serializer_cart_detail.is_valid(raise_exception=True):
                     serializer_cart_detail.save()  
-        
-        return response.Response( status=status.HTTP_201_CREATED)
+                    
+        return response.Response(status=status.HTTP_200_OK)
     
     
 class CartRetrieve(generics.RetrieveUpdateDestroyAPIView):    
