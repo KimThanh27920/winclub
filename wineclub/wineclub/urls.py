@@ -82,7 +82,9 @@ urlpatterns = [
     path('business/connect-account/', include('accounts.business.urls')),
 
     #Order
-    path('customer/orders/', include('orders.customer.urls'))
+    path('customer/orders/', include('orders.customer.urls')),
+    path('wineries/orders/', include('orders.business.urls')),
+    path('administrator/orders/', include('orders.administrator.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

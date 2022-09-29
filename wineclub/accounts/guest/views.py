@@ -121,4 +121,7 @@ class ChangePasswordWithPINApiView(APIView):
             self.disable_pin()
             return Response(data={"detail": "Change password is success"}, status=status.HTTP_200_OK)
         else:
-            return Response(data={"detail": "Is valid PIN code or expired"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={
+                "error": "PIN",
+                "message": "Invalid PIN code or expired"
+            }, status=status.HTTP_400_BAD_REQUEST)
