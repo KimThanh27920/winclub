@@ -2,7 +2,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt import authentication
 
-from bases.permissions.rolecheck import IsOwnerByCreatedByOrAdmin
+from bases.permissions.rolecheck import IsOwnerByAccount, IsBusinessOrAdmin, IsOwnerByCreatedBy
 from .serializers import CouponWriteSerializer, CouponReadSerializer, CouponWriteUpdateSerializer
 from ..models import Coupon
 
@@ -12,7 +12,7 @@ from datetime import datetime
 
 class CreateListCounponView(generics.ListCreateAPIView):
     authentication_classes = [authentication.JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated] 
+    permission_classes = [permissions.IsAuthenticated, IsOwnerByCreatedBy, IsBusinessOrAdmin] 
     # pagination_class = None
     
     def get_queryset(self):
@@ -37,7 +37,7 @@ class CreateListCounponView(generics.ListCreateAPIView):
 class RetrieveUpdateDestroyCouponView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Coupon.objects.all()
     authentication_classes = [authentication.JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsOwnerByCreatedByOrAdmin]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerByCreatedBy, IsBusinessOrAdmin]
     lookup_url_kwarg = "coupon_id"
     
     def get_queryset(self):
