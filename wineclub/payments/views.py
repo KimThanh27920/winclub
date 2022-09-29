@@ -36,23 +36,24 @@ def create_charge_success_transaction(event):
     """
     Create transactions
     """
-    data = {
-        "timestamp": event.created,
-        "type": "charge",
-        "amount": event.data.object.amount_paid,
-        "currency": event.data.object.currency,
-        "net": event.data.object.amount_paid,
-        "fee": 0,
-        "unit": 100,
-        "description": "Charge subscription " + event.data.object.lines.data[0].price.id,
-        "sender": event.data.object.customer_email,
-        "receiver": "Platform",
-    }
+    # data = {
+    #     "timestamp": event.created,
+    #     "type": "charge",
+    #     "amount": event.data.object.amount,
+    #     "currency": event.data.object.currency,
+    #     "net": 0,
+    #     "fee": 0,
+    #     "unit": 100,
+    #     "description": "Charge for order ",
+    #     "sender": event.data.object.customer_email,
+    #     "receiver": "Platform",
+    # }
+    print(event)
     txn = stripe_transaction(event.data.object.balance_transaction)
     print(txn)
-    serializer = TransactionSerializer(data=data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
+    # serializer = TransactionSerializer(data=data)
+    # serializer.is_valid(raise_exception=True)
+    # serializer.save()
 
 
 class StipeWebhookAPI(APIView):
