@@ -79,7 +79,8 @@ class OrderAPIView(generics.ListCreateAPIView):
                     currency = "usd",
                     payment_method_types = ["card"],
                     metadata = {
-                        'order_id': self.instance.id
+                        'order_id': self.instance.id,
+                        'winery': self.instance.winery
                     },
                     confirm = True,
                     payment_method = self.request.data.get('payment_method')
