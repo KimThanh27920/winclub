@@ -27,9 +27,6 @@ class OrderDetailReadOnlySerializer(serializers.ModelSerializer):
             "wine",
             "quantity" 
         ]
-        extra_kwargs = {
-            'order': {'write_only': True},
-        }
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):
