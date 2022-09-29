@@ -39,6 +39,6 @@ class ListWineAPI(generics.ListAPIView):
         'country__country'
     ]
     queryset = models.Wine.objects.filter(
-        is_active = True, deleted_at = None)
+        is_active = True, deleted_at = None, is_block = False)
     
     

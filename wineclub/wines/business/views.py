@@ -47,9 +47,15 @@ class RetrieveUpdateDestroyWineAPI(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = "wine_id"
     
     def get_queryset(self):
+        if(self.request.method == "PUT" or self.request.method == "PATCH"):
+            return models.Wine.objects.filter(
+            deleted_by=None, winery__account=self.request.user, status = None)
         return models.Wine.objects.filter(
             deleted_by=None, winery__account=self.request.user)
     
+    def perform_update(self, serializer):
+        serializer.save(updated_by = self.request.user)
+
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)
         instance = self.get_object()

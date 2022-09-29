@@ -15,7 +15,7 @@ class WineShortSerializer(serializers.ModelSerializer):
             "in_stock",
             "average_rating",
             "is_active",
-            "status",
+            "is_block",
             "thumbnail",
         ]
     
@@ -46,5 +46,6 @@ class WineDetailSerializer(serializers.ModelSerializer):
             "smooth_tannic",
             "dry_sweet",
             "soft_acidic",
-            "is_active"
+            "is_active",
+            "is_block"
         ]

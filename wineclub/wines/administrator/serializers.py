@@ -4,6 +4,8 @@ from ..models import Wine
 
 class WineShortSerializer(serializers.ModelSerializer):
     type = serializers.StringRelatedField()
+    created_by = serializers.StringRelatedField()
+    updated_by = serializers.StringRelatedField()
     class Meta:
         model = Wine
         fields = [
@@ -14,8 +16,10 @@ class WineShortSerializer(serializers.ModelSerializer):
             "thumbnail",
             "in_stock",
             "is_active",
-            "status",
+            "is_block",
             "updated_at",
             "created_at",
-            "created_by"
+            "updated_by",
+            "created_by",
+
         ]

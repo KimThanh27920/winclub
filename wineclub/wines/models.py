@@ -9,7 +9,10 @@ from bases.models import BasicLogModel
 
 User = get_user_model()
 
-
+WINE_STATUS = [
+    (None,None),
+    ("Block","Block"),
+]
 # Style model class
 class Wine(BasicLogModel):
     wine = models.CharField(max_length=255, unique=True)
@@ -42,6 +45,7 @@ class Wine(BasicLogModel):
     reviewers = models.IntegerField
     
     is_active = models.BooleanField(default= False)
+    is_block = models.BooleanField(default= False)
 
     status = models.CharField(max_length=255, blank=True, null=True)
     
