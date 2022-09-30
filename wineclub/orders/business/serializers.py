@@ -46,11 +46,33 @@ class DetailOrderSerializer(serializers.ModelSerializer):
 
 
 class UpdateOrderStatusSerializer(serializers.ModelSerializer):
-
+    order_detail = ReadOnlyOrderDetailSerializer(many=True, read_only=True)
     class Meta:
         model = Order
         fields = [
-            "status"
+            "id",
+            "winery",
+            "shipping_service",
+            "total",
+            "status",
+            "payment",
+            "address",
+            "full_name",
+            "phone",
+            "order_detail",
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+        ]
+        read_only_fields = [
+            "winery",
+            "shipping_service",
+            "address",
+            "full_name",
+            "phone",
+            'created_by',
+            'updated_by',
         ]
 
 class ReadWineSerializer(serializers.ModelSerializer):
