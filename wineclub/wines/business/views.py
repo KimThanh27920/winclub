@@ -50,6 +50,9 @@ class RetrieveUpdateDestroyWineAPI(generics.RetrieveUpdateDestroyAPIView):
         return models.Wine.objects.filter(
             deleted_by=None, winery__account=self.request.user)
     
+    def perform_update(self, serializer):
+        serializer.save(updated_by = self.request.user)
+
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)
         instance = self.get_object()

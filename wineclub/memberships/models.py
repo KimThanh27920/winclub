@@ -1,9 +1,7 @@
-from pyexpat import model
 from django.db import models
 
 from wineries.models import Winery
 from django.contrib.auth import get_user_model
-from bases.models import BasicLogModel
 # Create your models here.
 
 Account = get_user_model()

@@ -82,6 +82,7 @@ class OrderAPIView(generics.ListCreateAPIView):
                     },
                     confirm = True,
                     payment_method = self.request.data.get('payment_method')
+
                 )
 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)

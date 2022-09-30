@@ -23,6 +23,7 @@ class CustomerSerializer(serializers.ModelSerializer):
             'stripe_account',
             'points',
             'is_active',
+            'is_business',
             'last_login',
         ]
         extra_kwargs = {
