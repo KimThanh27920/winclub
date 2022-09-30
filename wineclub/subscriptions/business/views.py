@@ -8,7 +8,7 @@ from bases.permissions.business import IsBusiness
 from rest_framework.permissions import IsAuthenticated
 from bases.errors.errors import SubscriptionPackageErrors
 from subscriptions.models import SubscriptionPackage
-from service.stripe.stripe_api import  StripeAPI
+from bases.services.stripe.stripe import  StripeAPI
 from accounts.models import Account
 from wineries.models import Winery
 
@@ -21,9 +21,12 @@ class Subscription(APIView):
     def post(self, request, *args, **kwargs):
         subs_pk_id = request.data["subscription_package"]
         user = Account.objects.get(id = self.request.user.id)
-        
+       
         stripe_account = user.stripe_account
-        
+        error = SubscriptionPackageErrors.check_winery_active(self.request.user.id)
+        if error is not None:
+            return error
+            
         error1 = SubscriptionPackageErrors.stripe_account_exist(stripe_account)
         if error1 is not None:
             return error1
@@ -34,7 +37,7 @@ class Subscription(APIView):
         subs_pk = SubscriptionPackage.objects.get(id=subs_pk_id)
         price_id = subs_pk.price_id
         
-        subscription = StripeAPI.subscription_checkout(stripe_account,price_id )
+        subscription = StripeAPI.subscription_checkout(stripe_account,price_id, self.request.user.id )
      
         if subscription["status"] == "Failed" :
             error = {
@@ -45,5 +48,34 @@ class Subscription(APIView):
         
         if subscription["status"] == "active" :
             Winery.objects.filter(account=self.request.user.id).update(is_active=True)
+       
+        return Response(data=subscription, status=status.HTTP_200_OK)
+
+
+#Subcsription cancel
+class SubscriptionCancel(APIView):
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated,IsBusiness]
+    
+    def post(self, request, *args, **kwargs):
+        user = Account.objects.get(id = self.request.user.id)
+       
+        stripe_account = user.stripe_account
+        error = SubscriptionPackageErrors.check_subscription_exists(self.request.user.id)
+        if error is not None:
+            return error
+        
+        subscription = StripeAPI.cancel(self.request.user.id)
+        
+        if subscription["status"] == "Failed" :
+            error = {
+                "message": "Can't cancel! You may or may not have canceled! If you didn't cancel before, please repeat in a few minutes!",
+                "status" : False
+            }
+            return Response(data=error, status=status.HTTP_400_BAD_REQUEST)
+
+        if subscription["status"] == "canceled" :
+            Winery.objects.filter(account=self.request.user.id).update(is_active=False)
        
         return Response(data=subscription, status=status.HTTP_200_OK)

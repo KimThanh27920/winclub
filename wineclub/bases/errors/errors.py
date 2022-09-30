@@ -7,6 +7,11 @@ from wines.models import Wine
 from subscriptions.models import SubscriptionPackage
 from wineries.models import Winery
 from accounts.models import Account
+from bases.services.stripe.stripe import StripeAPI
+
+#Python imports
+from datetime import datetime, timedelta
+from operator import itemgetter
 
 
 #check error of business
@@ -97,4 +102,47 @@ class SubscriptionPackageErrors:
                 "success":False,
                 "message": "You don't have payment method"
             }
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+    
+    def check_winery_active(account_id):
+        data = StripeAPI.subscription_search(account_id)
+        if data == []:
+            return None
+        print(data)
+        sorts = sorted(data,key=itemgetter('created'), reverse=True)
+        if sorts[0]["status"] == "canceled":
+            return None
+        now = datetime.now() + timedelta(days=3)
+        timestamp = datetime.timestamp(now) 
+        
+        due_date = sorts[0]["current_period_end"]
+        print(timestamp,due_date )
+        if timestamp < due_date :
+            data ={
+                "success":False,
+                "message": "You have already subcription"
+            } 
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def check_subscription_exists(account_id):
+        data = StripeAPI.subscription_search(account_id)
+        if data == []:
+            data ={
+                "success":False,
+                "message": "You have been subcription yet "
+            }
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+      
+        sorts = sorted(data,key=itemgetter('created'), reverse=True)
+      
+        now = datetime.now()
+        timestamp = datetime.timestamp(now) 
+        due_date = sorts[0]["current_period_end"]
+        
+        if timestamp >= due_date :
+            data ={
+                "success":False,
+                "message": "Your subscription will expire soon!"
+            } 
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)

@@ -61,7 +61,7 @@ class AdminStatistical(APIView):
         
         winery_revenues_serializer = TopWineryRevenueSerializer(revenues, many=True)
         
-        best_winery_trans = []
+        # best_winery_trans = []
         # for winery in wineries :
         #     transaction = Transaction.objects.filter(receiver=winery.id).count()
         #     data = {
@@ -82,7 +82,7 @@ class AdminStatistical(APIView):
             "order_success_rate": order_rate,
             # "top_trans_winery":winery_trans_serializer.data,
             "top_products_winery": winery_products_serializer.data,
-            "top_revenue_winery": winery_revenues_serializer.data
+            "top_revenue_winery": winery_revenues_serializer.data   
 
 
         }
