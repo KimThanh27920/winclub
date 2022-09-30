@@ -39,7 +39,7 @@ class StripeAPI:
             data = {
                 "id": subscription["id"],
                 "created": datetime.fromtimestamp(subscription["created"]),
-                "unit_amount": subscription["items"]["data"][0]["price"]["unit_amount"],
+                "unit_amount": float(subscription["items"]["data"][0]["price"]["unit_amount"])/100,
                 "currency":subscription["currency"],
                 "interval": subscription["items"]["data"][0]["price"]["recurring"]["interval"],
                 "interval_amount": subscription["items"]["data"][0]["price"]["recurring"]["interval_count"],
