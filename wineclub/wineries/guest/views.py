@@ -19,6 +19,23 @@ class ListWineryOfPositionView(generics.ListAPIView):
     serializer_class = WineryListSerializer
     queryset = Winery.objects.all()
     
+    # def get_queryset(self):
+    #     # assert self.queryset is not None, (
+    #     #     "'%s' should either include a `queryset` attribute, "
+    #     #     "or override the `get_queryset()` method."
+    #     #     % self.__class__.__name__
+    #     # )
+
+    #     # queryset = self.queryset
+    #     # if isinstance(queryset, QuerySet):
+    #     #     # Ensure queryset is re-evaluated on each request.
+    #     #     queryset = queryset.all()
+    #     # return queryset
+    #     queryset = Winery.objects.all()
+    #     return queryset
+    def get_object(self):
+        return super().get_object()
+    
     def get_queryset(self):
         coords_1 = (52.2296756, 21.0122287)
         coords_2 = (52.406374, 16.9251681)
