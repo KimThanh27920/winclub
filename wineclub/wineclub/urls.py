@@ -75,6 +75,9 @@ urlpatterns = [
     #transaction
     path('admin/transactions/', include('transactions.administrator.urls')),
 
+    #business transaction
+    path('business/transactions/', include('transactions.business.urls')),
+
     #statistical
     # path('wineries/statistical/', include('statistical.business.urls')),
     # path('admin/statistical/', include('statistical.administrator.urls')),

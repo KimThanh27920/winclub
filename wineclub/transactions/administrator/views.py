@@ -21,7 +21,7 @@ class TransactionAdminView(BaseAdminViewset):
     ordering_fields = ['timestamp','amount','net','fee','unit']
 
     def get_queryset(self):
-        return super().get_queryset().order_by('-timestamp')
+        return Transaction.objects.all()
     
     def perform_update(self, serializer):
         pass

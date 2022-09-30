@@ -4,28 +4,8 @@ from rest_framework import serializers
 from transactions.models import Transaction
 from accounts.models import Account
 
-#Account Serializer in Transaction
-class AccountTransSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Account
-        fields =[ 
-            'id',
-            'full_name',
-            'email',
-            'stripe_account',
-        ]
-        extra_kwargs = {
-            'id': {'read_only': True},
-            'full_name': {'read_only': True},
-            'email': {'read_only': True},
-            'stripe_account': {'read_only': True},
-        }
-
 #Transaction serialzer for Admin
 class TransactionSerializer(serializers.ModelSerializer):
-    sender = AccountTransSerializer(read_only=True)
-    receiver = AccountTransSerializer(read_only=True)
 
 
     class Meta:
