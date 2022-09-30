@@ -1,15 +1,31 @@
-from re import I
 from rest_framework import serializers
 
-from django.contrib.auth import get_user_model
+from addresses.models import Address
 from ..models import Winery
+
+from django.contrib.auth import get_user_model
+
 
 User = get_user_model()
 
 
 
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = [
+            "id",
+            "is_default",
+            "street",
+            "ward",
+            "district",
+            "city",
+            "country"
+        ]
+
+
 class AccountSerializer(serializers.ModelSerializer):
-    addresses = serializers.StringRelatedField()
+    addresses = AddressSerializer(many=True,read_only=True)
     class Meta:
         model = User
         fields = [
@@ -68,14 +84,15 @@ class WineryProfileSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Phone number is not available")
         
     def validate_postal_code(self, value):
-        print(not(len(value) == 5))
-        if not(len(value) == 5):
-            raise serializers.ValidationError("PostalCode number don't enough five number") 
+        # print(not(len(value) == 5))
+        # if not(len(value) == 5):
+        #     raise serializers.ValidationError("PostalCode number don't enough five number") 
         try:             
             int(value)
             return value
         except:
             raise serializers.ValidationError("PostalCode number is not available")
+
 
 class WineryUploadImageCoverSerializer(serializers.ModelSerializer):
     class Meta:

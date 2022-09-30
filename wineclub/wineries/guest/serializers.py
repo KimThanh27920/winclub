@@ -1,18 +1,45 @@
-from re import I
 from rest_framework import serializers
 
-from django.contrib.auth import get_user_model
+from addresses.models import Address
 from ..models import Winery
+
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = [
+            "id",
+            "is_default",
+            "street",
+            "ward",
+            "district",
+            "city",
+            "country"
+        ]      
+       
+ 
+class AccountSerializer(serializers.ModelSerializer):
+    addresses = AddressSerializer(many=True,read_only=True)
+    class Meta:
+        model = User
+        fields = [
+            "image",
+            "email",
+            "addresses"    
+        ]       
+       
        
 class WineryDetailSerializer(serializers.ModelSerializer):
-    addresses = serializers.StringRelatedField()
+    account = AccountSerializer(read_only=True)
     class Meta:
         model = Winery
         fields = [
+            "account",
             "name",
             "rating_average",
             "reviewer",
@@ -22,7 +49,6 @@ class WineryDetailSerializer(serializers.ModelSerializer):
             "phone_winery",
             "founded_date",
             "image_cover",
-            "addresses",
         ]
         read_only_fields = [
             "name",
@@ -34,22 +60,21 @@ class WineryDetailSerializer(serializers.ModelSerializer):
             "phone_winery",
             "founded_date",
             "image_cover",
-            "addresses",
         ]
         
         
 class WineryListSerializer(serializers.ModelSerializer):
-    addresses = serializers.StringRelatedField()
+    account = AccountSerializer(read_only=True)
     class Meta:
         model = Winery
         fields = [
             "id",
+            "account",
             "name",
             "rating_average",
             "reviewer",
             "description",
             "founded_date",
-            "addresses",
         ]
         read_only_fields = [
             "name",
@@ -57,7 +82,6 @@ class WineryListSerializer(serializers.ModelSerializer):
             "reviewer",
             "description",
             "founded_date",
-            "addresses",
         ]
     
     def to_representation(self, instance):

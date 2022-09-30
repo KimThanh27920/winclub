@@ -45,6 +45,7 @@ class ListWineryOfPositionView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 class ListWineryView(generics.ListAPIView):
     serializer_class = WineryListSerializer
     queryset = Winery.objects.all()
@@ -57,6 +58,7 @@ class ListWineryView(generics.ListAPIView):
         coords_2 = (52.406374, 16.9251681)
         print(geodesic(coords_1, coords_2).km) 
         return super().get_queryset()
+
 
 class DetailWineryView(generics.RetrieveAPIView):
     serializer_class = WineryDetailSerializer
