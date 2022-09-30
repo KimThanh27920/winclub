@@ -12,7 +12,7 @@ TYPE_TRANS = [
 # Transaction model class
 class Transaction(models.Model):
 
-    timestamp = models.CharField(max_length=20)
+    timestamp = models.BigIntegerField()
     type = models.CharField(max_length=255,default="charge", choices=TYPE_TRANS)
     amount = models.BigIntegerField()
     currency = models.CharField(max_length=255, default="usd")
