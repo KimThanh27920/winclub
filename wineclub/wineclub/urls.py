@@ -79,8 +79,8 @@ urlpatterns = [
     path('business/transactions/', include('transactions.business.urls')),
 
     #statistical
-    # path('wineries/statistical/', include('statistical.business.urls')),
-    # path('admin/statistical/', include('statistical.administrator.urls')),
+    path('wineries/statistical/', include('statistical.business.urls')),
+    path('admin/statistical/', include('statistical.administrator.urls')),
     #business connect account
     path('business/connect-account/', include('accounts.business.urls')),
 
@@ -88,6 +88,9 @@ urlpatterns = [
     path('customer/orders/', include('orders.customer.urls')),
     path('wineries/orders/', include('orders.business.urls')),
     path('administrator/orders/', include('orders.administrator.urls')),
+    
+    #Membership
+    path('business/memberships/', include('memberships.business.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
