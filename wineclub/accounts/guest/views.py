@@ -13,6 +13,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from accounts.tasks import send_background_mail
+
 from .serializers import PinSerializer
 from .serializers import RegisterSerializer
 from .serializers import ForgotPasswordSerializer
@@ -84,14 +86,8 @@ class ForgotPasswordApiView(APIView):
         user = get_object_or_404(User, email=request.data["email"].lower())
         pin_code = self.create_pin(user)
         html_content = render_to_string(
-            "index.html", {'fullname': "USER", 'pin': pin_code})
-        send_mail(
-            subject='WineClub - Forgot Password',
-            message='PIN',
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[request.data["email"]],
-            html_message=html_content
-        )
+            "index.html", {'pin': pin_code})
+        send_background_mail.delay(request.data["email"], html_content)
         return Response({"message": "Send email completed"}, status=status.HTTP_200_OK)
 
 
