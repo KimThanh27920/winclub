@@ -9,7 +9,10 @@ from bases.models import BasicLogModel
 
 User = get_user_model()
 
-
+WINE_STATUS = [
+    (None,None),
+    ("Block","Block"),
+]
 # Style model class
 class Wine(BasicLogModel):
     wine = models.CharField(max_length=255, unique=True)
@@ -22,7 +25,7 @@ class Wine(BasicLogModel):
     food = models.ForeignKey(Food, on_delete=models.CASCADE, related_name="food_pairing")
     region = models.ForeignKey(Region,on_delete=models.CASCADE, related_name="region_wine")
     country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name="country_wine")
-    thumbnail = models.CharField(max_length=255)
+    thumbnail = models.ImageField(null=True, upload_to = "images/wine/thumbnails/")
     year = models.IntegerField()
     descriptions = models.TextField()
     alcohol = models.FloatField()
@@ -32,16 +35,17 @@ class Wine(BasicLogModel):
     in_stock = models.IntegerField()
     
     #taste of wine
-    light_bold = models.FloatField()
-    smooth_tannic = models.FloatField()
-    dry_sweet = models.FloatField()
-    soft_acidic = models.FloatField()
+    light_bold = models.IntegerField()
+    smooth_tannic = models.IntegerField()
+    dry_sweet = models.IntegerField()
+    soft_acidic = models.IntegerField()
 
     #rating of wine
     average_rating = models.FloatField(default=0)
     reviewers = models.IntegerField
     
     is_active = models.BooleanField(default= False)
+    is_block = models.BooleanField(default= False)
 
     status = models.CharField(max_length=255, blank=True, null=True)
     

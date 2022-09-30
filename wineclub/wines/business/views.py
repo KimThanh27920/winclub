@@ -19,7 +19,8 @@ class ListCreateWineAPI(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsBusiness]
     authentication_classes = [authentication.JWTAuthentication]
     serializer_class = serializers.WineShortSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend,
+                       filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['is_active']
     ordering_fields = ["created_at"]
     search_fields = ["wine", "type__type"]
@@ -34,29 +35,33 @@ class ListCreateWineAPI(generics.ListCreateAPIView):
             deleted_by=None, winery__account=self.request.user)
 
     def perform_create(self, serializer):
-        winery_instance = models.Winery.objects.get(account = self.request.user)
+        winery_instance = models.Winery.objects.get(account=self.request.user)
         serializer.save(
-            created_by = self.request.user,
-            updated_by = self.request.user,
-            winery = winery_instance)
+            created_by=self.request.user,
+            updated_by=self.request.user,
+            winery=winery_instance)
+
 
 class RetrieveUpdateDestroyWineAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, IsBusiness]
     authentication_classes = [authentication.JWTAuthentication]
     serializer_class = serializers.WineDetailSerializer
     lookup_url_kwarg = "wine_id"
-    
+
     def get_queryset(self):
         return models.Wine.objects.filter(
             deleted_by=None, winery__account=self.request.user)
-    
+
     def perform_update(self, serializer):
-        serializer.save(updated_by = self.request.user)
+        serializer.save(updated_by=self.request.user)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        if(instance.is_block):
+                request.data['is_active'] = False
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
@@ -72,5 +77,3 @@ class RetrieveUpdateDestroyWineAPI(generics.RetrieveUpdateDestroyAPIView):
         instance.is_active = False
         instance.deleted_at = timezone.now()
         instance.save()
-
-    

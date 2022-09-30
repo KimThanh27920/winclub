@@ -3,42 +3,22 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-# def check_role_business(self, request):
-#     user = User.objects.get(id = request.user.id)
-#     return user.is_business
 
 
-class IsOwnerByCreatedByOrAdmin(permissions.BasePermission):
-    """
-    Custom permission to only allow owners of an object to edit it.
-    """
-    # def has_permission(self, request, view):
-    #     print(request.user and request.user.is_authenticated())
-    #     return request.user and request.user.is_authenticated()
-
-    # def has_object_permission(self, request, view, obj):
-    #     print(obj.user == request.user)
-    #     return (obj.user == request.user) or (obj.created_by == request.user)
-    
+class IsOwnerByCreatedBy(permissions.BasePermission):    
     def has_object_permission(self, request, view, obj):
         print(obj.created_by)
-        return obj.created_by == request.user or request.user.is_staff
+        return obj.created_by == request.user
 
     
-class IsOwnerByAccount(permissions.BasePermission):
-    """
-    Custom permission to only allow owners of an object to edit it.
-    """
-    # def has_permission(self, request, view):
-    #     print(request.user and request.user.is_authenticated())
-    #     return request.user and request.user.is_authenticated()
-    
+class IsOwnerByAccount(permissions.BasePermission):    
     def has_object_permission(self, request, view, obj):
-        # print(obj.account)
-        # print(request.user)
-        # print(obj.account == request.user)
         return obj.account == request.user
 
+
+class IsBusinessOrAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return bool(request.user and (request.user.is_business or request.user.is_staff))
 
 # class IsBusinessAndOwnerOrAdmin(permissions.BasePermission):
 #     def has_permission(self, request, view):

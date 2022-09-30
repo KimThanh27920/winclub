@@ -1,5 +1,6 @@
 from rest_framework import generics, permissions, filters
 from rest_framework_simplejwt import authentication
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import CouponReadSerializer, CouponWriteUpdateSerializer
 from ..models import Coupon
@@ -10,7 +11,8 @@ class ListCouponView(generics.ListAPIView):
     authentication_classes = [authentication.JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
     serializer_class = CouponReadSerializer
-    filter_backends = [filters.OrderingFilter]
+    filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
+    filterset_fields = ['created_by__email', 'is_public', 'is_active', 'type']
     ordering_fields = ['time_start', 'time_end', 'created_at']
         
     def get_queryset(self):

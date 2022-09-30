@@ -31,6 +31,7 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
+            "id",
             "wineries",
             "email",
             "image",        

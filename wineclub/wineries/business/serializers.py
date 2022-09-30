@@ -60,6 +60,22 @@ class WineryProfileSerializer(serializers.ModelSerializer):
             "reviewer",
         ]
     
+    def validate_phone_winery(self, value):
+        try:      
+            int(value)
+            return value
+        except:
+            raise serializers.ValidationError("Phone number is not available")
+        
+    def validate_postal_code(self, value):
+        print(not(len(value) == 5))
+        if not(len(value) == 5):
+            raise serializers.ValidationError("PostalCode number don't enough five number") 
+        try:             
+            int(value)
+            return value
+        except:
+            raise serializers.ValidationError("PostalCode number is not available")
 
 class WineryUploadImageCoverSerializer(serializers.ModelSerializer):
     class Meta:
