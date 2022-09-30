@@ -27,7 +27,7 @@ class ManageCustomer(BaseAdminViewset):
     ordering_fields = ['email', 'full_name', 'points','birthday', 'last_login']
 
     def get_queryset(self):
-        return Account.objects.filter(is_business = False).filter(is_superuser = False)
+        return Account.objects.filter(is_business = False).filter(is_superuser = False).order_by("-updated_at")
 
     def perform_create(self, serializer):
         pass
@@ -82,7 +82,7 @@ class ManageBusiness(BaseAdminViewset):
     ordering_fields = ['name', 'rating_average', 'reviewer', 'founded_date','created_at']
 
     def get_queryset(self):
-        return Winery.objects.exclude(deleted_at__isnull=False).order_by('updated_at').select_related('account')
+        return Winery.objects.exclude(deleted_at__isnull=False).order_by('-updated_at').select_related('account')
 
     def perform_create(self, serializer):
         pass
@@ -95,33 +95,62 @@ class ManageBusiness(BaseAdminViewset):
         if error is not None:
             return error
         winery = Winery.objects.filter(id=instance.id).first()
-        
-        acc = Account.objects.filter(id=winery.account_id)
-       
+    
+        acc = Account.objects.get(id=winery.account_id)
+        print(acc.id)
         if winery.is_active == True:
             data = {
                 "is_active": False
             }
-            acc.update(is_business=False)
+            acc.is_business= False
+            acc.save()
             
             # block wine of winery
-            Wine.objects.filter(winery=instance.id).update(is_active=False)
-            
+            wines = Wine.objects.filter(winery=instance.id)
+            for wine in wines:
+                if wine.is_active == True:
+                    wine.is_active = False
+                    wine.updated_by = self.request.user
+                    wine.updated_at=timezone.now()
+                    wine.save( )
+           
             #block coupon of winery
-            Coupon.objects.filter(created_by=instance.id).update(is_active=False)
-            
+            coupons = Coupon.objects.filter(created_by=instance.id)
+            for coupon in coupons:
+                if coupon.is_active == True:
+                    coupon.is_active = False
+                    coupon.updated_by = self.request.user
+                    coupon.updated_at=timezone.now()
+                    coupons.save( )
         else:
             data = {
                 "is_active": True
             }
-            acc.update(is_business=True)
+            acc.is_business= True
+            acc.save()
 
             # active wine of winery
-            Wine.objects.filter(winery=instance.id).update(is_active=True)
-            
+            wines = Wine.objects.filter(winery=instance.id)
+            for wine in wines:
+                if wine.is_active == False and wine.updated_by.id == acc.id :
+                   pass
+                else:
+                    wine.is_active = True
+                    wine.updated_by = self.request.user
+                    wine.updated_at=timezone.now()
+                    wine.save()
+                   
             #active coupon of winery
-            Coupon.objects.filter(created_by=instance.id).update(is_active=True)
-            
+            coupons = Coupon.objects.filter(created_by=instance.id)
+            for coupon in coupons:
+                if coupon.is_active == False and coupon.updated_by.id == acc.id :
+                   pass
+                else:
+                    coupon.is_active = True
+                    coupon.updated_by = self.request.user
+                    coupon.updated_at=timezone.now()
+                    coupon.save()
+
         #just update is_active fields
         serializer = BlockBusinessSerializer(instance, data=data)
         serializer.is_valid(raise_exception=True)

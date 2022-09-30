@@ -22,7 +22,7 @@ class BaseAdminViewset(ModelViewSet):
         return self.serializer_class[self.action]
 
     def get_queryset(self):
-        return super().get_queryset().exclude(deleted_at__isnull=False).order_by('updated_at')
+        return super().get_queryset().exclude(deleted_at__isnull=False).order_by('-updated_at')
 
     def perform_create(self, serializer):
         serializer.save(updated_by=self.request.user,
@@ -45,3 +45,4 @@ class BaseAdminViewset(ModelViewSet):
         instance.is_active = False
         instance.deleted_at = timezone.now()
         instance.save()
+    
