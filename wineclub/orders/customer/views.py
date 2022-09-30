@@ -86,17 +86,11 @@ class OrderAPIView(generics.ListCreateAPIView):
                         'order_id': self.instance.id,
                         'winery': self.instance.winery
                     },
-<<<<<<< HEAD
-                    confirm = True,
-                    payment_method = self.request.data.get('payment_method')
-
-=======
                     transfer_data = {
                         'destination': self.instance.winery.account_connect,
                     },
                     confirm=True,
                     payment_method=self.request.data.get('payment_method')
->>>>>>> 8507f40a0e0723d0a5d50cb635da57eef69eed3b
                 )
 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
