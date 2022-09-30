@@ -85,6 +85,9 @@ urlpatterns = [
     path('customer/orders/', include('orders.customer.urls')),
     path('wineries/orders/', include('orders.business.urls')),
     path('administrator/orders/', include('orders.administrator.urls')),
+    
+    #Membership
+    path('business/memberships/', include('memberships.business.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
