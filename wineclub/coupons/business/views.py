@@ -1,12 +1,15 @@
+# From python
+from datetime import datetime
+# From rest_framework
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt import authentication
-
-from bases.permissions.rolecheck import IsOwnerByAccount, IsBusinessOrAdmin, IsOwnerByCreatedBy
+# From app
+from wineries.models import Winery
 from .serializers import CouponWriteSerializer, CouponReadSerializer, CouponWriteUpdateSerializer
 from ..models import Coupon
 
-from datetime import datetime
+from bases.permissions.rolecheck import IsBusinessOrAdmin, IsOwnerByCreatedBy
 
 
 
@@ -32,7 +35,10 @@ class CreateListCounponView(generics.ListCreateAPIView):
             serializer.save(created_by=self.request.user, updated_by=self.request.user, type="business")
         else:
             serializer.save(created_by=self.request.user, updated_by=self.request.user, type="platform")
-
+            
+        instance_winery = Winery.objects.get(account=self.request.user)
+        if not(instance_winery.is_active):
+            serializer.save(is_active=False)
 
 class RetrieveUpdateDestroyCouponView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Coupon.objects.all()
@@ -75,6 +81,9 @@ class RetrieveUpdateDestroyCouponView(generics.RetrieveUpdateDestroyAPIView):
     
     def perform_update(self, serializer):
         serializer.save(updated_by = self.request.user)
+        instance_winery = Winery.objects.get(account=self.request.user)
+        if not(instance_winery.is_active):
+            serializer.save(is_active=False)
         
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
