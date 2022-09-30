@@ -19,17 +19,27 @@ class WinerySerializer(serializers.ModelSerializer):
  
  
 class AccountSerializer(serializers.ModelSerializer):
-    wineries = serializers.StringRelatedField()
+    # wineries = WinerySerializer()
     class Meta:
         model = User
         fields = [
-            "wineries",
+            # "wineries",
             "email",
-            "image",        
+            "image",
+            "full_name"        
         ]
 
 class MembershipSerializer(serializers.ModelSerializer):
     users = AccountSerializer(many=True)
+    class Meta:
+        model = Membership
+        fields = [
+            "users"
+        ]
+        
+        
+class MembershipCreateSerializer(serializers.ModelSerializer):
+    # users = AccountSerializer(many=True)
     class Meta:
         model = Membership
         fields = [

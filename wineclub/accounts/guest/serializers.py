@@ -7,6 +7,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from wineries.models import Winery
+from memberships.models import Membership
 from coupons.models import CouponOwner
 from bases.services.stripe.stripe import stripe_created_connect
 from .. import models
@@ -97,9 +98,13 @@ class BusinessRegisterSerializer(serializers.ModelSerializer):
         connect account stripe for this user
         """
         stripe_connect = stripe_created_connect(user.email)
-        Winery.objects.create(
+        instance = Winery.objects.create(
             account=user, account_connect=stripe_connect.id)  # Toan cus
-
+        
+        Membership.objects.create(
+            winery=instance
+        )
+        
         return user
 
 

@@ -3,8 +3,11 @@ from rest_framework_simplejwt import authentication
 from rest_framework.response import Response
 
 # from bases.permissions.rolecheck import IsOwnerByAccount
-from .serializers import MembershipSerializer
-from ..models import Account, Membership
+from .serializers import MembershipSerializer, MembershipCreateSerializer
+from ..models import Membership
+from wineries.models import Winery
+
+from bases.permissions.business import IsBusiness
 
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
@@ -17,17 +20,18 @@ class MembershipCreateListView(generics.ListCreateAPIView):
     serializer_class = MembershipSerializer
     queryset = Membership.objects.all()
     authentication_classes = [authentication.JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsBusiness]
     pagination_class = None
     
-    # def get_serializer_class(self):
-    #     if(self.request.method == "GET"):
-    #         self.serializer_class = CouponOwnerReadSerializer
+    def get_serializer_class(self):
+        if (self.request.method == "POST"):
+            self.serializer_class = MembershipCreateSerializer
         
-    #     return super().get_serializer_class()
+        return super().get_serializer_class()
     
     def get_object(self, queryset=None):
-        obj = get_object_or_404(Membership, account=self.request.user.id)
+        instance_winery = get_object_or_404(Winery, account=self.request.user.id)
+        obj = get_object_or_404(Membership, winery=instance_winery.id)
         self.check_object_permissions(self.request, obj)
         return obj
     
@@ -38,33 +42,36 @@ class MembershipCreateListView(generics.ListCreateAPIView):
     
     def create(self, request, *args, **kwargs):
         instance = self.get_object()
-        get_object_or_404(User, id=self.request.data.get("account_id"))
-        obj_coupon = instance.coupons.filter(id=self.request.data.get("account_id"))
-        if (obj_coupon.exists()):
+        instance_user = get_object_or_404(User, email=self.request.data.get("email"))
+        obj_user = instance.users.filter(id=instance_user.id)
+        if (obj_user.exists()):
             return Response(data={"message": "You have been added this User"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            instance.coupons.add(self.request.data.get("account_id"))
+            instance.users.add(instance_user.id)
                      
         instance.save()        
-        serializer = self.get_serializer(instance.coupons.last())       
+        serializer = self.get_serializer(instance.users.last())       
            
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     
-# class CouponRemoveView(generics.RetrieveDestroyAPIView):
-#     serializer_class = CouponDetailSerializer
-#     authentication_classes = [authentication.JWTAuthentication]
-#     permission_classes = [permissions.IsAuthenticated]
-#     lookup_url_kwarg = "coupon_id"
+class MembershipRemoveView(generics.RetrieveDestroyAPIView):
+    serializer_class = MembershipCreateSerializer
+    authentication_classes = [authentication.JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated, IsBusiness]
+    lookup_url_kwarg = "email"
     
-#     def get_object(self):
-#         obj = CouponOwner.objects.get(account=self.request.user.id)
-#         return obj
+    def get_object(self, queryset=None):
+        instance_winery = get_object_or_404(Winery, account=self.request.user.id)
+        obj = get_object_or_404(Membership, winery=instance_winery.id)
+        self.check_object_permissions(self.request, obj)
+        return obj
     
-#     def destroy(self, request, *args, **kwargs):
-#         instance = self.get_object()
-#         coupon_id = self.kwargs['coupon_id']
-#         instance.coupons.remove(coupon_id)
-#         instance.save()
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        email = self.kwargs['email']
+        instance_user = get_object_or_404(User, email=email)
+        instance.users.remove(instance_user.id)
+        instance.save()
         
-#         return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
