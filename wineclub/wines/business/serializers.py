@@ -49,3 +49,7 @@ class WineDetailSerializer(serializers.ModelSerializer):
             "is_active",
             "is_block"
         ]
+
+        extra_kwargs={
+            "is_block": {"read_only": True}
+        }

@@ -56,13 +56,16 @@ class OrderAPIView(generics.ListCreateAPIView):
                     serializer = serializers.OrderDetailSerializer(data=data)
                     if serializer.is_valid():
                         serializer.save()
-            
+
             for coupon in coupons_arr:
                 coupons = Coupon.objects.get(id=coupon.get('id'))
-                if int(coupons.coupon_value) > int(instance_price):
-                    instance_price = 1
-                else:
-                    instance_price -= coupons.coupon_value
+                self.instance.coupons.add(coupon.get('id'))
+                self.instance.save()
+                if str(coupons.created_by) == str(self.instance.winery):
+                    if int(coupons.coupon_value) > int(instance_price):
+                        instance_price = 1
+                    else:
+                        instance_price -= coupons.coupon_value
 
             if instance_price > 1:
                 if self.instance.used_points == True:

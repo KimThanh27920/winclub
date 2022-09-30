@@ -21,9 +21,9 @@ class ListOrderBusinessAPIView(generics.ListCreateAPIView):
             return serializers.ListOrderSerializer
 
     def get_queryset(self):
-        winery = Winery.objects.get(id=self.request.user.id)
+        winery = Winery.objects.get(account=self.request.user)
         self.queryset = Order.objects.filter(winery=winery)
-
+        print(winery.id)
         search = self.request.query_params.get('search')
 
         if search:
@@ -81,7 +81,7 @@ class DetailOrderBusinessAPIView(generics.RetrieveUpdateAPIView):
             return serializers.DetailOrderSerializer
 
     def get_queryset(self):
-        winery = Winery.objects.get(id=self.request.user.id)
+        winery = Winery.objects.get(account=self.request.user.id)
         self.queryset = Order.objects.filter(winery=winery)
         return super().get_queryset()
 

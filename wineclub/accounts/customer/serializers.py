@@ -1,13 +1,30 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from addresses.models import Address
 from datetime import date
 
 User = get_user_model()
 
 
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = [
+            "id",
+            "phone",
+            "type",
+            "full_name",
+            "is_default",
+            "street",
+            "ward",
+            "district",
+            "city",
+            "country"
+        ]
+
 
 class ProfileSerializer(serializers.ModelSerializer):
-    addresses = serializers.StringRelatedField()
+    addresses = AddressSerializer(read_only=True, many=True)
     class Meta:
         model = User
         fields = [

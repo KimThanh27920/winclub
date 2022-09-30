@@ -13,6 +13,7 @@ from rest_framework_simplejwt import authentication
 from bases.permissions.business import IsBusiness
 from . import serializers
 from .. import models
+from wineries.models import Winery
 
 
 class ListCreateWineAPI(generics.ListCreateAPIView):
@@ -34,12 +35,17 @@ class ListCreateWineAPI(generics.ListCreateAPIView):
         return models.Wine.objects.filter(
             deleted_by=None, winery__account=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        self.winery_instance = models.Winery.objects.get(account=self.request.user)
+        if(not self.winery_instance.is_active):
+            self.request.data['is_active'] = False
+        return super().create(request, *args, **kwargs)
+
     def perform_create(self, serializer):
-        winery_instance = models.Winery.objects.get(account=self.request.user)
         serializer.save(
             created_by=self.request.user,
             updated_by=self.request.user,
-            winery=winery_instance)
+            winery=self.winery_instance)
 
 
 class RetrieveUpdateDestroyWineAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -58,7 +64,13 @@ class RetrieveUpdateDestroyWineAPI(generics.RetrieveUpdateDestroyAPIView):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)
         instance = self.get_object()
-        if(instance.is_block):
+        winery = Winery.objects.get(account=self.request.user)
+        """
+        if wine is blocked by admin
+        or winery not active
+        then business does not activate the wine 
+        """
+        if(instance.is_block or not winery.is_active):
                 request.data['is_active'] = False
         serializer = self.get_serializer(
             instance, data=request.data, partial=partial)

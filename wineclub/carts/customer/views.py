@@ -1,7 +1,8 @@
+# From rest_framework
 from rest_framework import generics, response, status, permissions
 from rest_framework.response import Response
 from rest_framework_simplejwt import authentication
-
+# From app
 from wines.models import Wine
 from .serializers import CartSerializer, CartDetailSerializer, ListCartSerializer, CartDetailUpdateSerializer
 from ..models import Cart, CartDetail

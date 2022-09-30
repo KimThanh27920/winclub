@@ -1,9 +1,10 @@
-from rest_framework_simplejwt import authentication
-from rest_framework import generics, permissions
-
+# From django
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-
+# From rest_framework
+from rest_framework_simplejwt import authentication
+from rest_framework import generics, permissions
+# From app
 from .serializers import WineryUploadImageCoverSerializer, WineryProfileSerializer
 from ..models import Winery
 

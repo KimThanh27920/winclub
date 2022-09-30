@@ -3,7 +3,7 @@ from rest_framework_simplejwt import authentication
 from rest_framework.response import Response
 
 # from bases.permissions.rolecheck import IsOwnerByAccount
-from .serializers import MembershipSerializer, MembershipCreateSerializer
+from .serializers import MembershipSerializer, MembershipCreateSerializer, AccountSerializer
 from ..models import Membership
 from wineries.models import Winery
 
@@ -25,7 +25,7 @@ class MembershipCreateListView(generics.ListCreateAPIView):
     
     def get_serializer_class(self):
         if (self.request.method == "POST"):
-            self.serializer_class = MembershipCreateSerializer
+            self.serializer_class = AccountSerializer
         
         return super().get_serializer_class()
     
@@ -43,6 +43,8 @@ class MembershipCreateListView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         instance = self.get_object()
         instance_user = get_object_or_404(User, email=self.request.data.get("email"))
+        if(instance_user.is_business or instance_user.is_staff):
+            return Response(data={"message": "User is valid"}, status=status.HTTP_400_BAD_REQUEST)
         obj_user = instance.users.filter(id=instance_user.id)
         if (obj_user.exists()):
             return Response(data={"message": "You have been added this User"}, status=status.HTTP_400_BAD_REQUEST)
