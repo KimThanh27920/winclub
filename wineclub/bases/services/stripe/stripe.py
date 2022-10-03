@@ -6,9 +6,89 @@ from rest_framework.response import Response
 from bases.exception.exceptions import response_exception
 from datetime import datetime
 
+from operator import itemgetter
 load_dotenv()
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+
+class StripeAPI:
+
+    # create price subscription package 
+    def create_price(name, price, currency, interval,interval_count,subpk):
+        product_id = stripe.Product.create(name=name)
+        price_id = stripe.Price.create(
+            unit_amount= price, 
+            currency=currency,
+            recurring={
+                "interval": interval,
+                "interval_count": interval_count
+                },
+            product=product_id,
+            metadata={"subscription_package": subpk},
+            )
+        return price_id.id
+
+    # checkout subscription
+    def subscription_checkout(stripe_account, price_id, user_id):
+        try:
+            subscription = stripe.Subscription.create(
+                customer = stripe_account,
+                items=[
+                    {"price": price_id },
+                ],
+                metadata={
+                    "account": user_id
+                    }
+            )
+            data = {
+                "id": subscription["id"],
+                "created": datetime.fromtimestamp(subscription["created"]),
+                "unit_amount": float(subscription["items"]["data"][0]["price"]["unit_amount"])/100,
+                "currency":subscription["currency"],
+                "interval": subscription["items"]["data"][0]["price"]["recurring"]["interval"],
+                "interval_amount": subscription["items"]["data"][0]["price"]["recurring"]["interval_count"],
+                "next_payment_date": datetime.fromtimestamp(subscription["current_period_end"]),
+                "status": subscription["status"],
+                "metadata": subscription["metadata"]
+            }
+        except stripe.error.InvalidRequestError:
+            data = {"status": "Failed"}
+            return data
+        return data
+
+    def subscription_search(user_id):
+        query = "status:'active' AND metadata['account']:'"+ str(user_id)+"'"
+        search = stripe.Subscription.search(query=query)
+        data = search["data"]
+        return data
+    
+    def cancel(user_id):
+        try :
+            query = "status:'active' AND metadata['account']:'"+ str(user_id)+"'"
+            search = stripe.Subscription.search(query=query)
+            data = search["data"]
+            sorts = sorted(data,key=itemgetter('created'), reverse=True)
+            canceled = stripe.Subscription.delete(
+                    sorts[0]["items"]["data"][0]["subscription"],
+            )
+            data = {
+                    "id": canceled["id"],
+                    "created": datetime.fromtimestamp(canceled["created"]),
+                    "unit_amount": float(canceled["items"]["data"][0]["price"]["unit_amount"])/100,
+                    "currency":canceled["currency"],
+                    "interval": canceled["items"]["data"][0]["price"]["recurring"]["interval"],
+                    "interval_amount": canceled["items"]["data"][0]["price"]["recurring"]["interval_count"],
+                    "next_payment_date": datetime.fromtimestamp(canceled["current_period_end"]),
+                    "status": canceled["status"],
+                    "metadata": canceled["metadata"]
+                }
+
+        except stripe.error.InvalidRequestError:
+            data = {"status": "Failed"}
+            return data
+        return data
 
 
 def stripe_customer_create(user):  # function created stripe customer

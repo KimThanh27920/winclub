@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from ..models import Coupon
+
 from django.contrib.auth import get_user_model
+
+from ..models import Coupon
 
 User = get_user_model()
 

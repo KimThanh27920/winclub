@@ -1,14 +1,16 @@
+# From django
+from django.shortcuts import get_object_or_404
+# From rest_framework
 from rest_framework import generics, status, permissions
 from rest_framework_simplejwt import authentication
 from rest_framework.response import Response
-
-from bases.permissions.rolecheck import IsOwnerByAccount
+# From app
 from .serializers import CouponOwnerReadSerializer, CouponListSerializer, CouponDetailSerializer
 from ..models import Coupon, CouponOwner
 
-from django.shortcuts import get_object_or_404
- 
 
+ 
+ 
 class CouponOwnerCreateListView(generics.ListCreateAPIView):
     serializer_class = CouponListSerializer
     queryset = CouponOwner.objects.all()
@@ -54,7 +56,8 @@ class CouponRemoveView(generics.RetrieveDestroyAPIView):
     lookup_url_kwarg = "coupon_id"
     
     def get_object(self):
-        obj = CouponOwner.objects.get(account=self.request.user.id)
+        # obj = CouponOwner.objects.get(account=self.request.user.id)
+        obj = get_object_or_404(CouponOwner, account=self.request.user.id)
         return obj
     
     def destroy(self, request, *args, **kwargs):

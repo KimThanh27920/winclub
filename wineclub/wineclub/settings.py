@@ -70,7 +70,6 @@ INSTALLED_APPS = [
     'programs',
     'reviews',
     'orders',
-    'service',
     'bases',
 
 ]

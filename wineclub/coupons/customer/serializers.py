@@ -1,9 +1,9 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework import serializers
 
-from ..models import Coupon, CouponOwner
 from wineries.models import Winery
-
-from django.contrib.auth import get_user_model
+from ..models import Coupon, CouponOwner
 
 User = get_user_model()
 

@@ -1,11 +1,8 @@
-from django.urls import path, include
-from rest_framework import routers
+from django.urls import path
 from . import views
 
-router = routers.DefaultRouter()
-router.register("", views.ShippingUnitWineryViewSet, 'shipping_business')
-router.register("add-shipping", views.ManageShippingUnitWineryViewSet, 'add_shipping')
-
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", views.ShippingUnitWineryAPIView.as_view(), name="list_shipping_unit"),
+    path("add-shipping/", views.AddShippingUnitBusinessAPIView.as_view(), name="add_shpping_Unit"),
+    path("remove-shipping/", views.RemoveShippingUnitAPIView.as_view(), name="remove_shipping_unit")
 ]

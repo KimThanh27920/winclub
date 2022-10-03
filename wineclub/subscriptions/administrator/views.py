@@ -2,7 +2,7 @@
 from bases.administrator.views import BaseAdminViewset
 from .serializers import SubscriptionPackageReadSerializer, SubscriptionPackageSerializer
 from subscriptions.models import SubscriptionPackage
-from service.stripe.stripe_api import StripeAPI
+from bases.services.stripe.stripe import StripeAPI
 
 #Type Admin Viewset
 class SubscriptionsPackageAdminAPIView(BaseAdminViewset):
