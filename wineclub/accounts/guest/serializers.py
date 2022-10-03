@@ -98,6 +98,7 @@ class BusinessRegisterSerializer(serializers.ModelSerializer):
         connect account stripe for this user
         """
         stripe_connect = stripe_created_connect(user.email)
+
         instance = Winery.objects.create(
             account=user, account_connect=stripe_connect.id)  # Toan cus
         

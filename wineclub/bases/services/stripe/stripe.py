@@ -4,6 +4,7 @@ from django.conf import settings
 from dotenv import load_dotenv
 from rest_framework.response import Response
 from bases.exception.exceptions import response_exception
+from datetime import datetime
 
 load_dotenv()
 
@@ -155,12 +156,67 @@ def stripe_transaction(txn):  # call Transaction Stripe
 def stripe_created_connect(business_email):
     try:
         connect_account = stripe.Account.create(
-            type="express",
+            type="custom",
+            country="US",
+            email=business_email,
+            business_type="individual",
+            capabilities={
+                "card_payments": {"requested": True},
+                "transfers": {"requested": True},
+            },
+            external_account={
+                "object": "bank_account",
+                "account_holder_name": "Jenny Rosen",
+                "account_holder_type": "individual",
+                "country": "US",
+                "currency": "usd",
+                "routing_number": "110000000",
+                "account_number": "000123456789",
+            },
+            individual={
+                "address": {
+                    "city": "Schenectady",
+                    "country": "US",
+                    "line1": "123",
+                    "line2": "State St",
+                    "postal_code": "12345",
+                    "state": "NY"
+                },
+                "dob": {
+                    "day": 1,
+                    "month": 1,
+                    "year": 1991
+                },
+                "email": business_email,
+                "first_name": "Jennyfer",
+                "last_name": "Rosen",
+                "phone": "8888675309",
+                "ssn_last_4": "0000"
+            },
+            business_profile={
+                "url": "www.google.com",
+                "mcc": "7299",
+            },
+            tos_acceptance={
+                # "service_agreement": "recipient",
+                "date": int(datetime.timestamp(datetime.now())),
+                "ip": "127.0.0.1", #ip get to business
+            },
+
         )
     except Exception as e:
-        pass
+        print(e)
 
     return connect_account
+
+
+def stripe_retrieve_account(acct_id):
+    try:
+        account = stripe.Account.retrieve(acct_id)
+    except Exception as e:
+        pass
+    return account
+
 
 def stripe_created_account_link(account_connect):
     YOUR_DOMAIN = 'http://127.0.0.1:8000/'
