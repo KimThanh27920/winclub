@@ -92,5 +92,10 @@ urlpatterns = [
     #Membership
     path('business/memberships/', include('memberships.business.urls')),
 
+    #Reviews
+    path('customer/reviews/', include('reviews.customer.urls')),
+    path('reviews/', include('reviews.guest.urls')),
+    path('wineries/reviews/', include('reviews.business.urls')),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
