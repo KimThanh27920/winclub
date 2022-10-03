@@ -35,6 +35,15 @@ class CouponWriteSerializer(serializers.ModelSerializer):
         ]
         
     def validate(self, attrs):
+        if not(attrs['coupon_value'] > 0):
+            raise serializers.ValidationError("Invalid coupon_value")
+        
+        if not(attrs['min_order_value'] > 0):
+            raise serializers.ValidationError("Invalid min_order_value")
+        
+        if not(attrs['max_value'] > 0):
+            raise serializers.ValidationError("Invalid max_value")
+        
         if not(attrs['time_start'] < attrs['time_end']):
             raise serializers.ValidationError("Invalid time end before time start")
         
@@ -68,6 +77,15 @@ class CouponWriteUpdateSerializer(serializers.ModelSerializer):
         ]
         
     def validate(self, attrs):
+        if not(attrs['coupon_value'] > 0):
+            raise serializers.ValidationError("Invalid coupon_value")
+        
+        if not(attrs['min_order_value'] > 0):
+            raise serializers.ValidationError("Invalid min_order_value")
+        
+        if not(attrs['max_value'] > 0):
+            raise serializers.ValidationError("Invalid max_value")
+        
         if not(attrs['time_start'] < attrs['time_end']):
             raise serializers.ValidationError("Invalid time end before time start")
         
