@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from .serializers import CouponOwnerReadSerializer, CouponListSerializer, CouponDetailSerializer
 from ..models import Coupon, CouponOwner
 
-
  
  
 class CouponOwnerCreateListView(generics.ListCreateAPIView):
