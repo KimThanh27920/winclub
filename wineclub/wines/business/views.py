@@ -22,13 +22,13 @@ class ListCreateWineAPI(generics.ListCreateAPIView):
     serializer_class = serializers.WineShortSerializer
     filter_backends = [DjangoFilterBackend,
                        filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['is_active']
+    filterset_fields = ['is_active', 'type__type']
     ordering_fields = ["created_at"]
-    search_fields = ["wine", "type__type"]
+    search_fields = ["wine"]
 
     def get_serializer_class(self):
         if(self.request.method == "POST"):
-            return serializers.WineDetailSerializer
+            return serializers.WineWriteSerializer
         return super().get_serializer_class()
 
     def get_queryset(self):
@@ -36,13 +36,19 @@ class ListCreateWineAPI(generics.ListCreateAPIView):
             deleted_by=None, winery__account=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        self.winery_instance = models.Winery.objects.get(account=self.request.user)
+        self.winery_instance = models.Winery.objects.get(
+            account=self.request.user)
         if(not self.winery_instance.is_active):
             self.request.data['is_active'] = False
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        serializer = serializers.WineDetailSerializer(self.instance)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(
+        self.instance = serializer.save(
             created_by=self.request.user,
             updated_by=self.request.user,
             winery=self.winery_instance)
@@ -71,11 +77,13 @@ class RetrieveUpdateDestroyWineAPI(generics.RetrieveUpdateDestroyAPIView):
         then business does not activate the wine 
         """
         if(instance.is_block or not winery.is_active):
-                request.data['is_active'] = False
-        serializer = self.get_serializer(
+            request.data['is_active'] = False
+        serializer = serializers.WineWriteSerializer(
             instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+
+        serializer = self.get_serializer(instance)
 
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
