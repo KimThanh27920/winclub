@@ -1,16 +1,16 @@
 from rest_framework_simplejwt import authentication
-from rest_framework import viewsets, generics, status, permissions
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 
-from .serializers import ShippingUnitSerializer, ShippingUnitDetailSerializer, UpdateShippingUnitBusinessSerializer
+from . import serializers
 from shipping.models import ShippingBusinessService, ShippingUnit
 from wines.models import Winery
 
 
-class ShippingUnitWineryViewSet(viewsets.ViewSet, generics.ListAPIView):
+class ShippingUnitWineryAPIView(generics.ListAPIView):
     authentication_classes = [authentication.JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = ShippingUnitSerializer
+    serializer_class = serializers.ShippingUnitBusinessSerializer
 
     def get_queryset(self):
         winery = Winery.objects.get(account=self.request.user)
@@ -19,42 +19,60 @@ class ShippingUnitWineryViewSet(viewsets.ViewSet, generics.ListAPIView):
         return shipping_business
 
 
-class ManageShippingUnitWineryViewSet(viewsets.ViewSet, generics.CreateAPIView):
+class AddShippingUnitBusinessAPIView(generics.CreateAPIView):
     authentication_classes = [authentication.JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.AddShippingUnitSerializer
 
-
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         try:
-
-            shipping_services_arr = self.request.data.get("shipping_services")
-            arr = []
+            serializer = serializers.AddShippingUnitSerializer(data=request.data)
+            shipping_arr = self.request.data.get('shipping_services')
             winery = Winery.objects.get(account=self.request.user)
-            for shipping_service in shipping_services_arr:
-                s = ShippingUnit.objects.get(id=shipping_service.get('id'))
-                arr.append(s)
+            if serializer.is_valid():
+                self.instance = serializer.save(winery=winery, created_by=self.request.user, updated_by=self.request.user)
 
-            data = {
-                "shipping_services": arr
-            }
-            serializer = ShippingUnitDetailSerializer(data=data)
-            serializer.is_valid()
-            serializer.save(winery= winery,
-                            shipping_services=arr,
-                            created_by=self.request.user,
-                            updated_by=self.request.user)
+                for shipping in shipping_arr:
+                    shipping_unit = ShippingUnit.objects.get(id=shipping.get('id'))
+                    self.instance.shipping_services.add(shipping_unit)
+                    self.instance.save()
 
-            return Response(serializer.data, status=status.HTTP_200_OK)
+                serializer = serializers.AddShippingUnitSerializer(self.instance)
+
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-        # finally:
-        #     winery = Winery.objects.get(account=self.request.user)
-        #     shipping_business = ShippingBusinessService.objects.filter(winery=winery)
-        #     serializer = ShippingUnitDetailSerializer(data=shipping_business)
-        #     serializer.is_valid()
-
-        #     print(shipping_business[0].__dict__)
-
-        #     return Response(serializer.data)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
+        finally:
+            winery = Winery.objects.get(account=self.request.user)
+            shipping_service = ShippingBusinessService.objects.filter(winery=winery)
+            shipping_arr = self.request.data.get('shipping_services')
+
+            for shipping in shipping_arr:
+                shipping_unit = ShippingUnit.objects.get(id=shipping.get('id'))
+                shipping_service[0].shipping_services.add(shipping_unit)
+                shipping_service[0].save()
+            
+            return Response({"Notify":"Add Shipping Unit Is successfuly"},status=status.HTTP_201_CREATED)
+
+
+class RemoveShippingUnitAPIView(generics.CreateAPIView):
+    authentication_classes = [authentication.JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.AddShippingUnitSerializer
+
+    def post(self, request, *args, **kwargs):
+        try:
+            winery = Winery.objects.get(account=self.request.user)
+            shipping_service = ShippingBusinessService.objects.filter(winery=winery)
+            shipping_arr = self.request.data.get('shipping_services')
+
+            for shipping in shipping_arr:
+                shipping_unit = ShippingUnit.objects.get(id=shipping.get('id'))
+                shipping_service[0].shipping_services.remove(shipping_unit)
+                shipping_service[0].save()
+            
+            return Response({"Notify":"Remove Shipping Unit Is successfuly"},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
