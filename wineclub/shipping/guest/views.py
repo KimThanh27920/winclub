@@ -1,6 +1,4 @@
-from rest_framework_simplejwt import authentication
-from rest_framework import viewsets, generics, status, permissions
-from rest_framework.response import Response
+from rest_framework import viewsets, generics
 from .serializers import ShippingUnitSerializer
 from shipping.models import ShippingUnit
 
