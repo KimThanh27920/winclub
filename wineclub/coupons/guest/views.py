@@ -9,7 +9,7 @@ from .serializers import CouponDetailSerializer, CouponListSerializer
 class ListCouponView(generics.ListAPIView):
     serializer_class = CouponListSerializer
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
-    filterset_fields = ['created_by__email', 'is_public', 'is_active', 'type']
+    filterset_fields = ['created_by__email', 'type', 'created_by__email']
     ordering_fields = ['time_start', 'time_end', 'created_at']
     
     def get_queryset(self):

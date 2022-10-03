@@ -23,11 +23,14 @@ urlpatterns = [
     # Accounts
     path('', include('accounts.guest.urls')),
     path('customer/accounts/', include('accounts.customer.urls')),
+    
     # Manage Accounts
     path('administrator/', include('accounts.administrator.urls')),
+    
     # Categories
     path('categories/', include('categories.guest.urls')),
     path('admin/categories/', include('categories.administrator.urls')),
+    
     #Subscription Packages
     path('admin/subscription-package/', include('subscriptions.administrator.urls')),
     path('subscription-package/', include('subscriptions.guest.urls')),
@@ -43,15 +46,15 @@ urlpatterns = [
     path('business/coupons/', include('coupons.business.urls')),
     path('customer/coupons/', include('coupons.customer.urls')),
     path('coupons/', include('coupons.guest.urls')),
-    # Coupon
+    
     # cart
     path('customer/carts/', include('carts.customer.urls')),
-    # cart
     
     # path('customer/addresses/', include('addresses.customer.urls')),
 
     #Addresses
     path('customer/addresses/', include('addresses.customer.urls')),
+    path('business/addresses/', include('addresses.business.urls')),
 
     #Wine
     path('wines/', include('wines.guest.urls')),
@@ -81,6 +84,7 @@ urlpatterns = [
     #statistical
     path('wineries/statistical/', include('statistical.business.urls')),
     path('admin/statistical/', include('statistical.administrator.urls')),
+    
     #business connect account
     path('business/connect-account/', include('accounts.business.urls')),
 
@@ -92,10 +96,15 @@ urlpatterns = [
     #Membership
     path('business/memberships/', include('memberships.business.urls')),
 
+<<<<<<< HEAD
+    # RewardProgam
+    path('business/programs/', include('programs.business.urls')),
+=======
     #Reviews
     # path('customer/reviews/', include('reviews.customer.urls')),
     # path('reviews/', include('reviews.guest.urls')),
     # path('wineries/reviews/', include('reviews.business.urls')),
+>>>>>>> a19d3284852f54398777066be6621af94c35ab8c
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

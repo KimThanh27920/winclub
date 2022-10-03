@@ -8,6 +8,7 @@ from rest_framework import generics, permissions
 from .serializers import WineryUploadImageCoverSerializer, WineryProfileSerializer
 from ..models import Winery
 
+
 User = get_user_model()
 
 
@@ -19,7 +20,6 @@ class BusinessProfileView(generics.RetrieveUpdateAPIView):
     
     def get_object(self, queryset=None):
         obj = get_object_or_404(Winery,account=self.request.user.id)
-        
         return obj    
 
 
@@ -30,5 +30,4 @@ class UploadImageCover(generics.UpdateAPIView):
    
     def get_object(self, queryset=None):
         obj = get_object_or_404(Winery,account=self.request.user.id)
-        
         return obj    

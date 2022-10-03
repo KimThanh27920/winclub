@@ -1,7 +1,8 @@
+# From django
 from django.contrib.auth import get_user_model
-
+# From rest_framework
 from rest_framework import serializers
-
+# From app
 from wineries.models import Winery
 from ..models import Coupon, CouponOwner
 
@@ -19,7 +20,7 @@ class WinerySerializer(serializers.ModelSerializer):
  
  
 class AccountSerializer(serializers.ModelSerializer):
-    wineries = serializers.StringRelatedField()
+    wineries = WinerySerializer(read_only=True)
     class Meta:
         model = User
         fields = [

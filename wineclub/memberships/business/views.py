@@ -1,19 +1,20 @@
+# From django
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+# From rest_framework
 from rest_framework import generics, status, permissions
 from rest_framework_simplejwt import authentication
 from rest_framework.response import Response
-
-# from bases.permissions.rolecheck import IsOwnerByAccount
+# From app
+from wineries.models import Winery
+from bases.permissions.business import IsBusiness
+from bases.errors.bases import return_code_400
 from .serializers import MembershipSerializer, MembershipCreateSerializer, AccountSerializer
 from ..models import Membership
-from wineries.models import Winery
-
-from bases.permissions.business import IsBusiness
-
-from django.shortcuts import get_object_or_404
-from django.contrib.auth import get_user_model
 
 
 User = get_user_model()
+
 
 
 class MembershipCreateListView(generics.ListCreateAPIView):
@@ -44,10 +45,14 @@ class MembershipCreateListView(generics.ListCreateAPIView):
         instance = self.get_object()
         instance_user = get_object_or_404(User, email=self.request.data.get("email"))
         if(instance_user.is_business or instance_user.is_staff):
-            return Response(data={"message": "User is valid"}, status=status.HTTP_400_BAD_REQUEST)
+            message = "User is valid"
+            return return_code_400(message)
+        
         obj_user = instance.users.filter(id=instance_user.id)
         if (obj_user.exists()):
-            return Response(data={"message": "You have been added this User"}, status=status.HTTP_400_BAD_REQUEST)
+            message = "You have been added this User"
+            return return_code_400(message)
+        
         else:
             instance.users.add(instance_user.id)
                      

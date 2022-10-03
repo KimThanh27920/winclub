@@ -5,11 +5,10 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt import authentication
 # From app
+from bases.permissions.rolecheck import IsBusinessOrAdmin, IsOwnerByCreatedBy
 from wineries.models import Winery
 from .serializers import CouponWriteSerializer, CouponReadSerializer, CouponWriteUpdateSerializer
 from ..models import Coupon
-
-from bases.permissions.rolecheck import IsBusinessOrAdmin, IsOwnerByCreatedBy
 
 
 
@@ -19,7 +18,7 @@ class CreateListCounponView(generics.ListCreateAPIView):
     # pagination_class = None
     
     def get_queryset(self):
-        self.queryset = Coupon.objects.filter(deleted_by = None, created_by = self.request.user)        
+        self.queryset = Coupon.objects.filter(deleted_by=None, created_by=self.request.user)        
         return super().get_queryset()
     
     def get_serializer_class(self):
@@ -35,10 +34,14 @@ class CreateListCounponView(generics.ListCreateAPIView):
             serializer.save(created_by=self.request.user, updated_by=self.request.user, type="business")
         else:
             serializer.save(created_by=self.request.user, updated_by=self.request.user, type="platform")
-            
-        instance_winery = Winery.objects.get(account=self.request.user)
-        if not(instance_winery.is_active):
-            serializer.save(is_active=False)
+        
+        # print(self.request.user.is_staff)
+        if(self.request.user.is_staff == False):    
+            instance_winery = Winery.objects.get(account=self.request.user)
+            print(instance_winery.is_active)
+            if not(instance_winery.is_active):
+                serializer.save(is_active=False)
+
 
 class RetrieveUpdateDestroyCouponView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Coupon.objects.all()
@@ -81,10 +84,11 @@ class RetrieveUpdateDestroyCouponView(generics.RetrieveUpdateDestroyAPIView):
     
     def perform_update(self, serializer):
         serializer.save(updated_by = self.request.user)
-        instance_winery = Winery.objects.get(account=self.request.user)
-        if not(instance_winery.is_active):
-            serializer.save(is_active=False)
-        
+        if(self.request.user.is_staff == False):
+            instance_winery = Winery.objects.get(account=self.request.user)
+            if not(instance_winery.is_active):
+                serializer.save(is_active=False)
+            
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.deleted_by = self.request.user

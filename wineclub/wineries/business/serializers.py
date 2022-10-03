@@ -1,9 +1,10 @@
+# From django
+from django.contrib.auth import get_user_model
+# From rest_framework
 from rest_framework import serializers
-
+# From app
 from addresses.models import Address
 from ..models import Winery
-
-from django.contrib.auth import get_user_model
 
 
 User = get_user_model()
@@ -15,13 +16,15 @@ class AddressSerializer(serializers.ModelSerializer):
         model = Address
         fields = [
             "id",
-            "is_default",
             "street",
             "ward",
             "district",
             "city",
-            "country"
+            "country",
+            "latitude",
+            "longtitude"
         ]
+
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -85,8 +88,8 @@ class WineryProfileSerializer(serializers.ModelSerializer):
         
     def validate_postal_code(self, value):
         # print(not(len(value) == 5))
-        # if not(len(value) == 5):
-        #     raise serializers.ValidationError("PostalCode number don't enough five number") 
+        if not(len(value) == 5):
+            raise serializers.ValidationError("PostalCode number don't enough five number") 
         try:             
             int(value)
             return value

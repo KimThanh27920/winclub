@@ -1,7 +1,8 @@
+# From rest_framework
 from rest_framework import generics, permissions, filters
 from rest_framework_simplejwt import authentication
 from django_filters.rest_framework import DjangoFilterBackend
-
+# From app
 from .serializers import CouponReadSerializer, CouponWriteUpdateSerializer
 from ..models import Coupon
 

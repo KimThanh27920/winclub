@@ -1,9 +1,11 @@
-from rest_framework import serializers
-
-from ..models import Membership
-from wineries.models import Winery
-
+# From django
 from django.contrib.auth import get_user_model
+# From rest_framework
+from rest_framework import serializers
+# From app
+from wineries.models import Winery
+from ..models import Membership
+
 
 User = get_user_model()
 
