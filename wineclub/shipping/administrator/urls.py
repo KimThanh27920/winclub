@@ -1,10 +1,7 @@
-from django.urls import path, include
-from rest_framework import routers
+from django.urls import path
 from . import views
 
-router = routers.DefaultRouter()
-router.register("", views.ShippingUnitViewSet, 'shipping')
-
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", views.ShippingUnitAPIView.as_view(), name="list_create_shippingunit"),
+    path("<int:shippingunit_id>/", views.UpdateDeleteShippingUnitAPIView.as_view(), name="update_delete_shippingunit")
 ]

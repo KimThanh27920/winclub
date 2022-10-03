@@ -21,5 +21,18 @@ class WineShortSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_by",
             "created_by",
-
         ]
+        extra_kwargs = {
+            "id" : {"read_only" : True},
+            "wine" : {"read_only" : True},
+            "type" : {"read_only" : True},
+            "price" : {"read_only" : True},
+            "thumbnail" : {"read_only" : True},
+            "in_stock" : {"read_only" : True},
+            "updated_at" : {"read_only" : True},
+            "created_at" : {"read_only" : True},
+            "created_by" : {"read_only" : True},
+        }
+
+class AdminBlockWineSerializer(serializers.Serializer):
+    is_block = serializers.BooleanField()

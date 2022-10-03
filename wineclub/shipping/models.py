@@ -27,7 +27,7 @@ class ShippingUnit(BasicLogModel):
 
 #Shipping service model class
 class ShippingBusinessService(BasicLogModel):
-    winery = models.ForeignKey(Winery, on_delete= models.CASCADE, related_name="winery_shipping")
+    winery = models.OneToOneField(Winery, on_delete= models.CASCADE, related_name="winery_shipping")
     shipping_services= models.ManyToManyField(ShippingUnit, related_name="shipping_service_list")
     
     def __str__(self) -> str:
