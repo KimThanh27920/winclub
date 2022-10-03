@@ -35,16 +35,22 @@ class UpdateWineAPI(generics.UpdateAPIView):
     queryset = models.Wine.objects.filter(deleted_at=None)
 
     def perform_update(self, serializer):
-        serializer.save(
-            is_block=self.request.data['is_block'],
-            is_active = False,
-            updated_by=self.request.user)
+        if(self.request.data['is_block'] == True):
+            serializer.save(
+                is_block=self.request.data['is_block'],
+                is_active=False,
+                updated_by=self.request.user)
+        else:
+            serializer.save(
+                is_block=self.request.data['is_block'],
+                updated_by=self.request.user)
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', True)
+        serializer = serializers.AdminBlockWineSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         instance = self.get_object()
         serializer = self.get_serializer(
-            instance, data=request.data, partial=partial)
+            instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
