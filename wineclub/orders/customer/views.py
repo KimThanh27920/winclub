@@ -82,7 +82,7 @@ class OrderAPIView(generics.ListCreateAPIView):
                 stripe.PaymentIntent.create(
                     customer=account.stripe_account,
                     amount=int(instance_price)*100,
-                    currency="aud",
+                    currency="usd",
                     payment_method_types=["card"],
                     metadata={
                         'customer': self.request.user,
