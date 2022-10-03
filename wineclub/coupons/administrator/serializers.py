@@ -1,7 +1,8 @@
-from rest_framework import serializers
-
+# From django
 from django.contrib.auth import get_user_model
-
+# From rest_framework
+from rest_framework import serializers
+# From app
 from wineries.models import Winery
 from ..models import Coupon
 

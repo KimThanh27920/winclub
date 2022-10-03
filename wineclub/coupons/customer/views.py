@@ -1,9 +1,10 @@
 # From django
 from django.shortcuts import get_object_or_404
 # From rest_framework
-from rest_framework import generics, status, permissions
+from rest_framework import generics, status, permissions, filters
 from rest_framework_simplejwt import authentication
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 # From app
 from .serializers import CouponOwnerReadSerializer, CouponListSerializer, CouponDetailSerializer
 from ..models import Coupon, CouponOwner
@@ -15,6 +16,9 @@ class CouponOwnerCreateListView(generics.ListCreateAPIView):
     queryset = CouponOwner.objects.all()
     authentication_classes = [authentication.JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
+    filterset_fields = ['type', 'created_by']
+    ordering_fields = ['time_start', 'time_end', 'created_at']
     pagination_class = None
     
     def get_serializer_class(self):
