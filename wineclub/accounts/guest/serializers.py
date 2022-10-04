@@ -62,13 +62,39 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs.lower()
 
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)  
-        CouponOwner.objects.create(account=user)         #Toan cus
+        user = User.objects.create_user(**validated_data)
+        CouponOwner.objects.create(account=user)  # Toan cus
         return user
 
 
-class BusinessRegisterSerializer(serializers.ModelSerializer):
+class AddressSerializer(serializers.Serializer):
+    city = serializers.CharField()
+    country = serializers.CharField()
+    line1 = serializers.CharField()
+    line2 = serializers.CharField()
+    postal_code = serializers.IntegerField()
+    state = serializers.CharField()
 
+
+class IdentityVerifySerializer(serializers.Serializer):
+    first_name = serializers.CharField()
+    first_name = serializers.CharField()
+    ssn_last_4 = serializers.IntegerField()
+
+
+class BusinessProfileSerializer(serializers.Serializer):
+    url = serializers.URLField()
+    mcc = serializers.IntegerField()
+
+
+class BankAccountSerializer(serializers.Serializer):
+    account_holder_name = serializers.CharField()
+    routing_number = serializers.IntegerField()
+    account_number = serializers.IntegerField()
+
+
+
+class BusinessRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
@@ -95,22 +121,14 @@ class BusinessRegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
-        """
-        when business register
-        create customer account stripe and
-        connect account stripe for this user
-        """
-        stripe_connect = stripe_created_connect(user.email)
-
-        instance = Winery.objects.create(
-            account=user, account_connect=stripe_connect.id)  # Toan cus
-        
-        Membership.objects.create(
-            winery=instance
-        )
-        
         return user
 
+class BusinessSerializer(serializers.Serializer):
+    address_business = AddressSerializer()
+    identity_verify = IdentityVerifySerializer()
+    business_profile = BusinessProfileSerializer()
+    bank_account = BankAccountSerializer()
+    account = BusinessRegisterSerializer()
 
 class PinSerializer(serializers.ModelSerializer):
     class Meta:
