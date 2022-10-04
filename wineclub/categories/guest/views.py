@@ -1,6 +1,5 @@
 # Rest import
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 #App import
@@ -11,6 +10,7 @@ from .serializers import (TypeReadSerializer,
                               FoodReadSerializer, 
                                RegionReadSerializer, 
                                 CountryReadSerializer, )
+from bases.guest.views import BaseGuestListViews
 
 
 #Categories Guest View
@@ -40,3 +40,58 @@ class CategoriesAPIView(APIView):
             "countries": countries_serializer.data
         }
         return Response(data=data, status=status.HTTP_200_OK)  
+
+
+
+#Type Admin Viewset
+class TypeGuestAPIView(BaseGuestListViews):
+
+    serializer_class = TypeReadSerializer
+    queryset = Type.objects.select_related('created_by','updated_by')
+    search_fields = ['type']
+    ordering_fields = ['type']
+       
+
+#Style Admin Viewset
+class StyleGuestAPIView(BaseGuestListViews):
+
+    serializer_class = StyleReadSerializer
+    queryset = Style.objects.select_related('created_by','updated_by')
+    search_fields = ['style']
+    ordering_fields = ['style']
+
+
+#Grape Admin Viewset
+class GrapeGuestAPIView(BaseGuestListViews):
+
+    serializer_class = GrapeReadSerializer
+    queryset = Grape.objects.select_related('created_by','updated_by')
+    search_fields = ['grape']
+    ordering_fields = ['grape']  
+
+
+# Food Admin Viewset
+class FoodGuestAPIView(BaseGuestListViews):
+
+    serializer_class = FoodReadSerializer
+    queryset = Food.objects.select_related('created_by','updated_by')
+    search_fields = ['food']
+    ordering_fields = ['food']
+
+
+# Region Admin Viewset
+class RegionGuestAPIView(BaseGuestListViews):
+
+    serializer_class = RegionReadSerializer
+    queryset = Region.objects.select_related('created_by','updated_by')
+    search_fields = ['region']
+    ordering_fields = ['region']
+
+
+# Countries Admin Viewset
+class CountryGuestAPIView(BaseGuestListViews):
+
+    serializer_class = CountryReadSerializer
+    queryset = Country.objects.select_related('created_by','updated_by')
+    search_fields = ['country']
+    ordering_fields = ['country']

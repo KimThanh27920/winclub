@@ -1,7 +1,3 @@
-# rest framework import
-from rest_framework import status
-from rest_framework.response import Response
-
 #App import
 from categories.models import Type, Style, Grape, Region, Food, Country
 from .serializers import (TypeSerializer,TypeReadSerializer,
