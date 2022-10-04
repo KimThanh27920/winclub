@@ -14,7 +14,10 @@ class ShippingUnitSerializer(serializers.ModelSerializer):
                 "expected_date",
                 "is_active",
                 'created_by',
+                "created_at",
                 'updated_by',
+                "updated_at"
+                
                 ]
         read_only_fields =['created_by','updated_by' ]
 

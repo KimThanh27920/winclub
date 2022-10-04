@@ -1,4 +1,5 @@
 #django import
+from enum import unique
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -15,7 +16,7 @@ WINE_STATUS = [
 ]
 # Style model class
 class Wine(BasicLogModel):
-    wine = models.CharField(max_length=255, unique=True)
+    wine = models.CharField(max_length=255)
     price = models.FloatField()
     sale = models.FloatField(null=True, blank=True, default=0)
     winery = models.ForeignKey(Winery, on_delete=models.CASCADE, related_name="origin")
@@ -51,6 +52,8 @@ class Wine(BasicLogModel):
     
     class Meta:
         db_table="wines"
+        unique_together = ['wine', 'created_by']
 
     def __str__(self) -> str:
         return self.wine
+    

@@ -24,7 +24,7 @@ class Transaction(models.Model):
     receiver = models.CharField(max_length=255)
     
     def __str__(self) -> str:
-        return self.timestamp
+        return str(self.timestamp)
     
 
     class Meta:

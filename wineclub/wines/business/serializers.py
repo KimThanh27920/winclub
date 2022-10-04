@@ -1,11 +1,14 @@
 from dataclasses import field
+from logging import raiseExceptions
+from venv import create
 from rest_framework import serializers
 from ..models import Wine
 from categories import models
+from rest_framework.validators import ValidationError
 
 
 class WineShortSerializer(serializers.ModelSerializer):
-    type = serializers.StringRelatedField()  
+    type = serializers.StringRelatedField()
 
     class Meta:
         model = Wine
@@ -147,3 +150,11 @@ class WineWriteSerializer(serializers.ModelSerializer):
             "soft_acidic",
             "is_active"
         ]
+
+    def validate_wine(self, attrs):
+        queryset = Wine.objects.filter(
+            wine=attrs, created_by=self.context['request'].user)
+        if(len(queryset)):
+            raise serializers.ValidationError("wine with this wine already exists.")
+        else:
+            return attrs

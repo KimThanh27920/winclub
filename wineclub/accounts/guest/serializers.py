@@ -90,6 +90,9 @@ class BusinessRegisterSerializer(serializers.ModelSerializer):
     def validate_email(self, attrs):
         return attrs.lower()
 
+    def validate(self, attrs):
+        return super().validate(attrs)
+
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         """

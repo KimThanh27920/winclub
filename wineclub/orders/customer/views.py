@@ -82,13 +82,14 @@ class OrderAPIView(generics.ListCreateAPIView):
                 stripe.PaymentIntent.create(
                     customer=account.stripe_account,
                     amount=int(instance_price)*100,
-                    currency="aud",
+                    currency="usd",
                     payment_method_types=["card"],
                     metadata={
                         'customer': self.request.user,
                         'order_id': self.instance.id,
                         'winery': self.instance.winery
                     },
+                    application_fee_amount= 0,
                     transfer_data = {
                         'destination': self.instance.winery.account_connect,
                     },

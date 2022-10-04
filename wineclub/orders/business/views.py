@@ -2,17 +2,22 @@ from rest_framework_simplejwt import authentication
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 
+from wineries.models import Account
+
 from . import serializers
 from orders.models import Order
 from wineries.models import Winery
 from wines.models import Wine
+from accounts.models import Account
 
 from django.core.mail import send_mail
 from django.conf import settings
 
+from bases.permissions.business import IsBusiness
+
 class ListOrderBusinessAPIView(generics.ListCreateAPIView):
     authentication_classes = [authentication.JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsBusiness]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -71,7 +76,7 @@ class ListOrderBusinessAPIView(generics.ListCreateAPIView):
 
 class DetailOrderBusinessAPIView(generics.RetrieveUpdateAPIView):
     authentication_classes = [authentication.JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsBusiness]
     lookup_url_kwarg = 'order_id'
 
     def get_serializer_class(self):
@@ -93,5 +98,9 @@ class DetailOrderBusinessAPIView(generics.RetrieveUpdateAPIView):
 
         title_mail = 'UPDATE ORDER STATUS, ORDER ID: "'+str(order.id)+'"'
         message = "My Order Status updated is "+ order.status
-        send_mail(title_mail, message, settings.EMAIL_HOST_USER, ['huudang0206@gmail.com'], fail_silently=False)
+
+        account = Account.objects.get(id=order.created_by)
+        to_mail = "huudang0206@gmail.com"
+
+        send_mail(title_mail, message, settings.EMAIL_HOST_USER, [to_mail], fail_silently=False)
         return super().update(request, *args, **kwargs)
