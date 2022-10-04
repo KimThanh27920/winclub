@@ -6,32 +6,29 @@ from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
+from bases.services.stripe.stripe import stripe_created_connect
 
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from wineries.models import Winery
+from memberships.models import Membership
 from accounts.tasks import send_background_mail
 
-from .serializers import PinSerializer
-from .serializers import RegisterSerializer
-from .serializers import ForgotPasswordSerializer
-from .serializers import BusinessRegisterSerializer
-from .serializers import MyTokenObtainPairSerializer
-from .serializers import ChangePasswordWithPinSerializer
+from . import serializers
 from ..models import Pin
 from bases.services.stripe.stripe import stripe_customer_create
 User = get_user_model()
 
 
 class LoginApiView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
+    serializer_class = serializers.MyTokenObtainPairSerializer
 
 
 class RegisterAPI(generics.CreateAPIView):
-    serializer_class = RegisterSerializer
+    serializer_class = serializers.RegisterSerializer
 
     def perform_create(self, serializer):
         instance = serializer.save()
@@ -46,11 +43,19 @@ class RegisterAPI(generics.CreateAPIView):
 
 
 class BusinessRegisterAPI(generics.CreateAPIView):
-    serializer_class = BusinessRegisterSerializer
+    serializer_class = serializers.BusinessRegisterSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = serializers.BusinessSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer = self.get_serializer(data=request.data['account'])
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         instance = serializer.save(is_business=True)
-
         """
         create stripe customer when user register
         maybe put this function on the task in celery
@@ -58,6 +63,21 @@ class BusinessRegisterAPI(generics.CreateAPIView):
         customer_stripe = stripe_customer_create(instance)
         instance.stripe_account = customer_stripe
         instance.save()
+        """
+        create stripe connect account when business register
+        """
+        stripe_connect = stripe_created_connect(
+            instance.email,
+            self.request.data["address_business"],
+            self.request.data["identity_verify"],
+            self.request.data["business_profile"],
+            self.request.data["bank_account"]
+        )
+        instance = Winery.objects.create(
+            account=instance, account_connect=stripe_connect.id)
+        Membership.objects.create(
+            winery=instance
+        )
 
 
 class ForgotPasswordApiView(APIView):
@@ -73,15 +93,16 @@ class ForgotPasswordApiView(APIView):
         }
         pin_user = Pin.objects.filter(user=user.id)
         if(pin_user.exists()):
-            serializer = PinSerializer(instance=pin_user[0], data=data)
+            serializer = serializers.PinSerializer(
+                instance=pin_user[0], data=data)
         else:
-            serializer = PinSerializer(data=data)
+            serializer = serializers.PinSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return pin
 
     def post(self, request):
-        serializer = ForgotPasswordSerializer(data=request.data)
+        serializer = serializers.ForgotPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = get_object_or_404(User, email=request.data["email"].lower())
         pin_code = self.create_pin(user)
@@ -97,7 +118,8 @@ class ChangePasswordWithPINApiView(APIView):
         self.pin.delete()
 
     def post(self, request):
-        serializers = ChangePasswordWithPinSerializer(data=request.data)
+        serializers = serializers.ChangePasswordWithPinSerializer(
+            data=request.data)
         serializers.is_valid(raise_exception=True)
         self.user = get_object_or_404(
             User, email=request.data['email'].lower())

@@ -233,7 +233,7 @@ def stripe_transaction(txn):  # call Transaction Stripe
     return transaction
 
 
-def stripe_created_connect(business_email):
+def stripe_created_connect(business_email, address_business, identity_verify, business_profile, bank_account):
     try:
         connect_account = stripe.Account.create(
             type="custom",
@@ -246,7 +246,7 @@ def stripe_created_connect(business_email):
             },
             external_account={
                 "object": "bank_account",
-                "account_holder_name": "Jenny Rosen",
+                "account_holder_name": bank_account["account_holder_name"],
                 "account_holder_type": "individual",
                 "country": "US",
                 "currency": "usd",
@@ -255,27 +255,27 @@ def stripe_created_connect(business_email):
             },
             individual={
                 "address": {
-                    "city": "Schenectady",
-                    "country": "US",
-                    "line1": "123",
-                    "line2": "State St",
-                    "postal_code": "12345",
-                    "state": "NY"
+                    "city": address_business["city"],
+                    "country": address_business["country"],
+                    "line1": address_business["line1"],
+                    "line2": address_business["line2"],
+                    "postal_code": address_business["postal_code"],
+                    "state": address_business["state"]
                 },
                 "dob": {
                     "day": 1,
                     "month": 1,
-                    "year": 1991
+                    "year": 1980
                 },
                 "email": business_email,
-                "first_name": "Jennyfer",
-                "last_name": "Rosen",
+                "first_name": identity_verify["first_name"],
+                "last_name": identity_verify["last_name"],
                 "phone": "8888675309",
-                "ssn_last_4": "0000"
+                "ssn_last_4": identity_verify["ssn_last_4"]
             },
             business_profile={
-                "url": "www.google.com",
-                "mcc": "7299",
+                "url": business_profile["url"],
+                "mcc": business_profile["mcc"],
             },
             tos_acceptance={
                 # "service_agreement": "recipient",
