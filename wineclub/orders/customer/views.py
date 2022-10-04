@@ -93,6 +93,8 @@ class OrderAPIView(generics.ListCreateAPIView):
                     transfer_data = {
                         'destination': self.instance.winery.account_connect,
                     },
+    
+                    stripe_account=self.instance.winery.account_connect,
                     confirm=True,
                     payment_method=self.request.data.get('payment_method')
                 )

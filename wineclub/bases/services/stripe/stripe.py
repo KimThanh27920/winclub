@@ -212,7 +212,6 @@ def stripe_payment_intent_search(order_id):
     return payment_intent
 
 
-# print(stripe_payment_intent_search(90).charges.data[0].id)
 def stripe_refund(payment_intent):
     try:
         refund = stripe.Refund.create(
