@@ -32,7 +32,7 @@ class AccountSerializer(serializers.ModelSerializer):
         ]
 
 
-class CouponListSerializer(serializers.ModelSerializer):
+class CouponDetailSerializer(serializers.ModelSerializer):
     created_by = AccountSerializer(read_only=True)
     class Meta: 
         model = Coupon
@@ -66,73 +66,34 @@ class CouponListSerializer(serializers.ModelSerializer):
             "time_end",    
             "created_by", 
         ]
+    
 
-
-class RewardProgramWriteSerializer(serializers.ModelSerializer):  
+class RewardProgramReadDetailSerializer(serializers.ModelSerializer):
+    coupons = CouponDetailSerializer(read_only=True, many=True)
+    # created_by = AccountSerializer(read_only=True)
+    message = serializers.CharField(max_length=255)
     class Meta:
         model = RewardProgram
         fields =[
-            "id",
-            'name',  
-            'total_price_require',
+            # 'id', 
+            # 'name',  
+            # 'total_price_require',
+            'message',
             'coupons',
-            'description',
-            'time_start',
-            'time_end',
-            'is_active',
-        ]
-        
-    def validate(self, attrs):
-        if not(attrs['total_price_require'] > 0):
-            raise serializers.ValidationError("Invalid total_price_require")
-        
-        if not(attrs['time_start'] < attrs['time_end']):
-            raise serializers.ValidationError("Invalid time end before time start")
-        
-        return super().validate(attrs)    
-        
-        
-class RewardProgramReadSerializer(serializers.ModelSerializer):
-    coupons = CouponListSerializer(read_only=True, many=True)
-    created_by = AccountSerializer(read_only=True)
-    updated_by = AccountSerializer(read_only=True)
-    class Meta:
-        model = RewardProgram
-        fields =[
-            'id', 
-            'name',  
-            'total_price_require',
-            'coupons',
-            'description',
-            'time_start',
-            'time_end',
-            'is_active',
-            'created_at',
-            "created_by",
-            "updated_at",
-            "updated_by"
+            # 'description',
+            # 'time_start',
+            # 'time_end',
+            # 'created_by',
         ]
         
         read_only_fields = [
-            'id', 
-            'name',  
-            'total_price_require',
+            # 'id', 
+            # 'name',  
+            # 'total_price_require',
+            'message',
             'coupons',
-            'description',
-            'time_start',
-            'time_end',
-            'is_active',
-            'created_at',
-            "created_by",
-            "updated_at",
-            "updated_by"
+            # 'description',
+            # 'time_start',
+            # 'time_end',
+            # 'created_by',
         ]
-        
-    def to_representation(self, instance):
-        limit_content = instance.description
-        if len(limit_content) > 100:
-            limit_content = limit_content[:100]
-            instance.description = limit_content
-            instance.description += "..."
-    
-        return super().to_representation(instance)

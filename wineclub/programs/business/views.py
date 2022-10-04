@@ -38,9 +38,9 @@ class ProgramListCreateView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         for coupon in serializer.validated_data['coupons']:
-            instance_coupon = Coupon.objects.filter(code=coupon, created_by=self.request.user) 
+            instance_coupon = Coupon.objects.filter(code=coupon, created_by=self.request.user, is_active=True, is_public=False) 
             if not(instance_coupon.exists()):
-                message = "You don't own this coupon"
+                message = "You don't own this coupon Or Coupons are not private"
                 return return_code_400(message)
                 
         self.perform_create(serializer)
@@ -71,9 +71,9 @@ class RemoveUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         for coupon in serializer.validated_data['coupons']:
-            instance_coupon = Coupon.objects.filter(code=coupon, created_by=self.request.user) 
+            instance_coupon = Coupon.objects.filter(code=coupon, created_by=self.request.user, is_active=True, is_public=False) 
             if not(instance_coupon.exists()):
-                message = "You don't own this coupon"
+                message = "You don't own this coupon Or Coupons are not private"
                 return return_code_400(message)
             
         self.perform_update(serializer)
