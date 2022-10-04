@@ -12,6 +12,11 @@ class ReviewSerializer(serializers.ModelSerializer):
             "rating",
             "wine",
         ]
+    
+    def validate_rating(self, attrs):
+        if not(0 < attrs < 6 ):
+            raise serializers.ValidationError("rating from 1 to 5")
+        return attrs
 
 
 class ListReviewsSerializer(serializers.ModelSerializer):

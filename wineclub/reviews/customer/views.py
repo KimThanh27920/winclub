@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from . import serializers
 from reviews.models import Review
 
+from wines.utils import decrease_in_stock_wine, update_reviews
+
 
 class CreateReviewAPIView(generics.ListCreateAPIView):
     authentication_classes = [authentication.JWTAuthentication]
@@ -25,7 +27,7 @@ class CreateReviewAPIView(generics.ListCreateAPIView):
             serializer = serializers.ReviewSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save(created_by=self.request.user, updated_by=self.request.user)
-
+                update_reviews(request.data['wine'], request.data['rating'])
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
