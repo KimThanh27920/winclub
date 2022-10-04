@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from . import serializers
 from shipping.models import ShippingUnit
 
+from django.utils import timezone
+
 
 class ShippingUnitAPIView(generics.ListCreateAPIView):
     authentication_classes = [authentication.JWTAuthentication]
@@ -47,3 +49,12 @@ class UpdateDeleteShippingUnitAPIView(generics.RetrieveUpdateDestroyAPIView):
         shipping_unit.is_active = not shipping_unit.is_active
         shipping_unit.save()
         return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        shipping_unit = self.get_object()
+        shipping_unit.is_active = False
+        shipping_unit.deleted_by = self.request.user
+        shipping_unit.deleted_at = timezone.now()
+        shipping_unit.save()
+
+        return Response(data={"success":True}, status=status.HTTP_204_NO_CONTENT)
