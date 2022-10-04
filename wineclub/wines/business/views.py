@@ -71,10 +71,18 @@ class RetrieveUpdateDestroyWineAPI(generics.RetrieveUpdateDestroyAPIView):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)
         instance = self.get_object()
-        queryset = models.Wine.objects.filter(
-            wine=request.data['wine'], created_by=self.request.user)
-        if(len(queryset)):
-            return return_code_400("wine with this wine already exists.")
+        """
+        If the request has a wine field, 
+        it needs to check wine name exists or not
+        """
+        try:
+            check_wine = models.Wine.objects.get(
+                wine=request.data['wine'], created_by=self.request.user)
+            if(instance.id != check_wine.id):
+                return return_code_400("wine with this wine already exists.")
+        except:
+            pass
+
         winery = Winery.objects.get(account=self.request.user)
         """
         if wine is blocked by admin
