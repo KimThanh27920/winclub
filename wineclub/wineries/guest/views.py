@@ -47,7 +47,12 @@ class ListWineryOfPositionView(generics.ListAPIView):
                     winery_position[i]['distance'] = winery_position[j]['distance']
                     winery_position[j]['distance'] = tmp
         
-        return Response(winery_position)    
+        data_return = {
+            "count": lenth,
+            "results": winery_position
+        }
+        
+        return Response(data_return)    
     
 
 class ListWineryView(generics.ListAPIView):

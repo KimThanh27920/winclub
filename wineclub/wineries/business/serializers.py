@@ -6,7 +6,6 @@ from rest_framework import serializers
 from addresses.models import Address
 from ..models import Winery
 
-
 User = get_user_model()
 
 
@@ -24,7 +23,6 @@ class AddressSerializer(serializers.ModelSerializer):
             "latitude",
             "longtitude"
         ]
-
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -87,7 +85,6 @@ class WineryProfileSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Phone number is not available")
         
     def validate_postal_code(self, value):
-        # print(not(len(value) == 5))
         if not(len(value) == 5):
             raise serializers.ValidationError("PostalCode number don't enough five number") 
         try:             

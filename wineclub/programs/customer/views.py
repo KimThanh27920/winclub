@@ -1,5 +1,3 @@
-# From django
-from django.shortcuts import get_object_or_404
 # From rest_framework
 from rest_framework import generics, permissions
 from rest_framework.response import Response
@@ -32,6 +30,7 @@ class RetrieveAPIView(generics.RetrieveAPIView):
             data = {
                 "message": "You are not eligible to receive the coupon"
             }
+            
             return Response(data=data)
         
         else:
