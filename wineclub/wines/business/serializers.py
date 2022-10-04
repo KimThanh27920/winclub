@@ -158,3 +158,32 @@ class WineWriteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("wine with this wine already exists.")
         else:
             return attrs
+
+class WineUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wine
+        fields = [
+            "id",
+            "wine",
+            "region",
+            "country",
+            "price",
+            "sale",
+            "alcohol",
+            "type",
+            "style",
+            "grape",
+            "food",
+            "serving_temperature",
+            "in_stock",
+            "net",
+            "year",
+            "bottle_per_case",
+            "descriptions",
+            "thumbnail",
+            "light_bold",
+            "smooth_tannic",
+            "dry_sweet",
+            "soft_acidic",
+            "is_active"
+        ]

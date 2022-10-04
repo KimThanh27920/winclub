@@ -14,6 +14,7 @@ from bases.permissions.business import IsBusiness
 from . import serializers
 from .. import models
 from wineries.models import Winery
+from bases.errors.bases import return_code_400
 
 
 class ListCreateWineAPI(generics.ListCreateAPIView):
@@ -70,6 +71,10 @@ class RetrieveUpdateDestroyWineAPI(generics.RetrieveUpdateDestroyAPIView):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)
         instance = self.get_object()
+        queryset = models.Wine.objects.filter(
+            wine=request.data['wine'], created_by=self.request.user)
+        if(len(queryset)):
+            return return_code_400("wine with this wine already exists.")
         winery = Winery.objects.get(account=self.request.user)
         """
         if wine is blocked by admin
@@ -78,7 +83,7 @@ class RetrieveUpdateDestroyWineAPI(generics.RetrieveUpdateDestroyAPIView):
         """
         if(instance.is_block or not winery.is_active):
             request.data['is_active'] = False
-        serializer = serializers.WineWriteSerializer(
+        serializer = serializers.WineUpdateSerializer(
             instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
