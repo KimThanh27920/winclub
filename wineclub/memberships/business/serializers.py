@@ -31,6 +31,7 @@ class AccountSerializer(serializers.ModelSerializer):
             "full_name"        
         ]
 
+
 class MembershipSerializer(serializers.ModelSerializer):
     users = AccountSerializer(many=True)
     class Meta:
