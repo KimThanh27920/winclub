@@ -43,7 +43,7 @@ class Wine(BasicLogModel):
 
     #rating of wine
     average_rating = models.FloatField(default=0)
-    reviewers = models.IntegerField
+    reviewers = models.IntegerField(default=0)
     
     is_active = models.BooleanField(default= False)
     is_block = models.BooleanField(default= False)
