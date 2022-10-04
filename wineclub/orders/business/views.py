@@ -96,10 +96,13 @@ class DetailOrderBusinessAPIView(generics.RetrieveUpdateAPIView):
         order.status = status_update
         order.save()
 
+        account = Account.objects.get(id=order.created_by.id)
+        if order.status == "completed" and order.total >= 100:
+            account.points += (order.total//100)*1
+            account.save()
+
         title_mail = 'UPDATE ORDER STATUS, ORDER ID: "'+str(order.id)+'"'
         message = "My Order Status updated is "+ order.status
-
-        account = Account.objects.get(id=order.created_by.id)
         to_mail = str(account.email)
 
         send_mail(title_mail, message, settings.EMAIL_HOST_USER, [to_mail], fail_silently=False)
