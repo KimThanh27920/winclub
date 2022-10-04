@@ -3,6 +3,6 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.ProgramListCreateView.as_view(), name='program_list_create'),
-    path('<int:program_id>/', views.RemoveUpdateAPIView.as_view(), name='program_update_remove'),
+    path('', views.ProgramListView.as_view(), name='program_list'),
+    path('<int:program_id>/', views.RetrieveAPIView.as_view(), name='program_retrieve'),
 ]
