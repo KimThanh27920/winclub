@@ -43,6 +43,7 @@ class CouponListSerializer(serializers.ModelSerializer):
             "max_value",
             "min_order_value",
             "currency",
+            "description",
             "image",
             "title",
             "time_start",
@@ -58,6 +59,7 @@ class CouponListSerializer(serializers.ModelSerializer):
             "max_value",
             "min_order_value",
             "currency",
+            "description",
             "image",
             "title",
             "time_start",
@@ -65,6 +67,14 @@ class CouponListSerializer(serializers.ModelSerializer):
             "created_by", 
         ]
     
+    def to_representation(self, instance):
+        limit_content = instance.description
+        if len(limit_content) > 100:
+            limit_content = limit_content[:100]
+            instance.description = limit_content
+            instance.description += "..."
+    
+        return super().to_representation(instance)
     
 class CouponDetailSerializer(serializers.ModelSerializer):
     created_by = AccountSerializer(read_only=True)

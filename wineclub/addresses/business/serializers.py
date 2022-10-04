@@ -1,5 +1,6 @@
-from dataclasses import field
+# From rest_framework
 from rest_framework import serializers
+# From app
 from ..models import Address
 
 

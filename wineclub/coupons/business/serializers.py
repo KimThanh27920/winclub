@@ -9,7 +9,18 @@ User = get_user_model()
 
 
 
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "email",
+            "is_staff"            
+        ]
+
+
 class CouponWriteSerializer(serializers.ModelSerializer):
+    created_by = AccountSerializer(read_only=True)
+    updated_by = AccountSerializer(read_only=True)
     class Meta: 
         model = Coupon
         fields = [
@@ -28,10 +39,18 @@ class CouponWriteSerializer(serializers.ModelSerializer):
             "time_start",
             "time_end",
             "is_public",
-            "is_active",         
+            "is_active",
+            "created_at",
+            "created_by",
+            "updated_at",           
+            "updated_by",              
         ]
         read_only_fields = [
-            'type'    
+            'type',
+            "created_at",
+            "created_by",
+            "updated_at",           
+            "updated_by",     
         ]
         
     def validate(self, attrs):
@@ -56,10 +75,13 @@ class CouponWriteSerializer(serializers.ModelSerializer):
         return amount
     
 class CouponWriteUpdateSerializer(serializers.ModelSerializer):
+    created_by = AccountSerializer(read_only=True)
+    updated_by = AccountSerializer(read_only=True)
     class Meta: 
         model = Coupon
         fields = [
             "id",
+            "type",
             "type_reduce",
             "coupon_value",
             "max_value",
@@ -73,7 +95,19 @@ class CouponWriteUpdateSerializer(serializers.ModelSerializer):
             "time_start",
             "time_end",
             "is_public",
-            "is_active",         
+            "is_active",  
+            "created_at",
+            "created_by",
+            "updated_at",           
+            "updated_by",        
+        ]
+        
+        read_only_fields = [
+            "type",
+            "created_at",
+            "created_by",
+            "updated_at",           
+            "updated_by",    
         ]
         
     def validate(self, attrs):
@@ -96,14 +130,6 @@ class CouponWriteUpdateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Invalid amount")
         
         return amount
- 
-class AccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = [
-            "email",
-            "is_staff"            
-        ]
  
     
 class CouponReadSerializer(serializers.ModelSerializer):
@@ -156,3 +182,12 @@ class CouponReadSerializer(serializers.ModelSerializer):
             "updated_at",          
             "updated_by", 
         ]
+    
+    def to_representation(self, instance):
+        limit_content = instance.description
+        if len(limit_content) > 100:
+            limit_content = limit_content[:100]
+            instance.description = limit_content
+            instance.description += "..."
+    
+        return super().to_representation(instance)

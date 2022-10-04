@@ -69,9 +69,6 @@ class CouponListSerializer(serializers.ModelSerializer):
 
 
 class RewardProgramWriteSerializer(serializers.ModelSerializer):  
-    # created_by = AccountSerializer(read_only=True)
-    # updated_by = AccountSerializer(read_only=True)  
-    # coupons = CouponListSerializer(many=True)
     class Meta:
         model = RewardProgram
         fields =[
@@ -83,16 +80,6 @@ class RewardProgramWriteSerializer(serializers.ModelSerializer):
             'time_start',
             'time_end',
             'is_active',
-            'created_at',
-            "created_by",
-            "updated_at",
-            "updated_by"
-        ]
-        read_only_fields = [
-            'created_at',
-            "created_by",
-            "updated_at",
-            "updated_by"
         ]
         
     def validate(self, attrs):
@@ -140,3 +127,12 @@ class RewardProgramReadSerializer(serializers.ModelSerializer):
             "updated_at",
             "updated_by"
         ]
+        
+    def to_representation(self, instance):
+        limit_content = instance.description
+        if len(limit_content) > 100:
+            limit_content = limit_content[:100]
+            instance.description = limit_content
+            instance.description += "..."
+    
+        return super().to_representation(instance)
