@@ -89,3 +89,12 @@ class CouponReadSerializer(serializers.ModelSerializer):
             "updated_at",          
             "updated_by",   
         ]
+        
+    def to_representation(self, instance):
+        limit_content = instance.description
+        if len(limit_content) > 100:
+            limit_content = limit_content[:100]
+            instance.description = limit_content
+            instance.description += "..."
+    
+        return super().to_representation(instance)   

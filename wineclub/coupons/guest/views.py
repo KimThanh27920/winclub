@@ -1,6 +1,7 @@
+# From rest_framework
 from rest_framework import generics, filters
 from django_filters.rest_framework import DjangoFilterBackend
-
+# From app
 from ..models import Coupon
 from .serializers import CouponDetailSerializer, CouponListSerializer
 
@@ -9,7 +10,8 @@ from .serializers import CouponDetailSerializer, CouponListSerializer
 class ListCouponView(generics.ListAPIView):
     serializer_class = CouponListSerializer
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
-    filterset_fields = ['created_by__email', 'type', 'created_by__email']
+    # filterset_fields = ['created_by__email', 'type', 'created_by__email']
+    filterset_fields = ['created_by__wineries__name', 'created_by__wineries__id', 'created_by__email', 'type']
     ordering_fields = ['time_start', 'time_end', 'created_at']
     
     def get_queryset(self):

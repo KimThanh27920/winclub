@@ -1,5 +1,5 @@
-# From python
-from datetime import datetime
+# From django
+from django.utils import timezone
 # From rest_framework
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -83,7 +83,7 @@ class RetrieveUpdateDestroyCouponView(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.data)
     
     def perform_update(self, serializer):
-        serializer.save(updated_by = self.request.user)
+        serializer.save(updated_by=self.request.user)
         if(self.request.user.is_staff == False):
             instance_winery = Winery.objects.get(account=self.request.user)
             if not(instance_winery.is_active):
@@ -92,7 +92,7 @@ class RetrieveUpdateDestroyCouponView(generics.RetrieveUpdateDestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.deleted_by = self.request.user
-        instance.deleted_at = datetime.now()
+        instance.deleted_at = timezone.now()
         instance.save()
         
         return Response(status=status.HTTP_204_NO_CONTENT)

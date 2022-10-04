@@ -98,6 +98,9 @@ urlpatterns = [
 
     # RewardProgam
     path('business/programs/', include('programs.business.urls')),
+    path('customer/programs/', include('programs.customer.urls')),
+    path('programs/', include('programs.guest.urls')),
+    
     #Reviews
     # path('customer/reviews/', include('reviews.customer.urls')),
     # path('reviews/', include('reviews.guest.urls')),
