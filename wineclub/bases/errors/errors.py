@@ -33,6 +33,7 @@ class AccountErrors:
                 "message": "Account don't exist! "}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
+
 # check error of Wine
 class CategoriesErrors:
 
