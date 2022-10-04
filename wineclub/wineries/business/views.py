@@ -7,6 +7,7 @@ from rest_framework import generics, permissions
 # From app
 from .serializers import WineryUploadImageCoverSerializer, WineryProfileSerializer
 from ..models import Winery
+from ..utils import update_rating_average
 
 User = get_user_model()
 
@@ -18,6 +19,7 @@ class BusinessProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def get_object(self, queryset=None):
+        update_rating_average(4)
         obj = get_object_or_404(Winery,account=self.request.user.id)
         return obj    
 

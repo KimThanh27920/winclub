@@ -1,4 +1,5 @@
 #django import
+from email.policy import default
 from enum import unique
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -43,7 +44,7 @@ class Wine(BasicLogModel):
 
     #rating of wine
     average_rating = models.FloatField(default=0)
-    reviewers = models.IntegerField
+    reviewers = models.IntegerField(default=0)
     
     is_active = models.BooleanField(default= False)
     is_block = models.BooleanField(default= False)
