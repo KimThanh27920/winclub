@@ -6,10 +6,12 @@ from reviews.models import Review
 from wines.models import Wine
 from wineries.models import Winery
 
+from bases.permissions.business import IsBusiness
+
 
 class ListReviewsAPIView(generics.ListAPIView):
     authentication_classes = [authentication.JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsBusiness]
     serializer_class = serializers.ReviewSerializer
 
     def get_queryset(self):

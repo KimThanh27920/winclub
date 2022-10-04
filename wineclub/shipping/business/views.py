@@ -6,10 +6,11 @@ from . import serializers
 from shipping.models import ShippingBusinessService, ShippingUnit
 from wines.models import Winery
 
+from bases.permissions.business import IsBusiness
 
 class ShippingUnitWineryAPIView(generics.ListAPIView):
     authentication_classes = [authentication.JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsBusiness]
     serializer_class = serializers.ShippingUnitBusinessSerializer
 
     def get_queryset(self):
