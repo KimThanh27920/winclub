@@ -89,6 +89,7 @@ class OrderAPIView(generics.ListCreateAPIView):
                         'order_id': self.instance.id,
                         'winery': self.instance.winery
                     },
+                    application_fee_amount= 0,
                     transfer_data = {
                         'destination': self.instance.winery.account_connect,
                     },
