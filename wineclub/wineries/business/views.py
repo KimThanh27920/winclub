@@ -8,7 +8,6 @@ from rest_framework import generics, permissions
 from .serializers import WineryUploadImageCoverSerializer, WineryProfileSerializer
 from ..models import Winery
 
-
 User = get_user_model()
 
 

@@ -7,7 +7,6 @@ from programs.models import RewardProgram
 from coupons.models import Coupon
 from wineries.models import Winery
 
-
 User = get_user_model()
 
 

@@ -7,7 +7,6 @@ from programs.models import RewardProgram
 from coupons.models import Coupon
 from wineries.models import Winery
 
-
 User = get_user_model()
 
 
@@ -70,30 +69,15 @@ class CouponDetailSerializer(serializers.ModelSerializer):
 
 class RewardProgramReadDetailSerializer(serializers.ModelSerializer):
     coupons = CouponDetailSerializer(read_only=True, many=True)
-    # created_by = AccountSerializer(read_only=True)
     message = serializers.CharField(max_length=255)
     class Meta:
         model = RewardProgram
         fields =[
-            # 'id', 
-            # 'name',  
-            # 'total_price_require',
             'message',
             'coupons',
-            # 'description',
-            # 'time_start',
-            # 'time_end',
-            # 'created_by',
         ]
         
         read_only_fields = [
-            # 'id', 
-            # 'name',  
-            # 'total_price_require',
             'message',
             'coupons',
-            # 'description',
-            # 'time_start',
-            # 'time_end',
-            # 'created_by',
         ]
