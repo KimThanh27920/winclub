@@ -40,5 +40,10 @@ class ListWineAPI(generics.ListAPIView):
     ]
     queryset = models.Wine.objects.filter(
         is_active = True, deleted_at = None)
-    
+
+class RetrieveWineAPI(generics.RetrieveAPIView):
+    serializer_class = serializers.WineDetailSerializer
+    queryset = models.Wine.objects.filter(
+        is_active = True, deleted_at = None)
+    lookup_url_kwarg = 'wine_id'
     
