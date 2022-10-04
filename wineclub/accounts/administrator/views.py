@@ -27,7 +27,7 @@ class ManageCustomer(BaseAdminViewset):
     ordering_fields = ['email', 'full_name', 'points','birthday', 'last_login']
 
     def get_queryset(self):
-        return Account.objects.filter(is_business = False).filter(is_superuser = False).order_by("-updated_at")
+        return Account.objects.filter(is_business = False).filter(is_superuser = False).order_by("-last_login")
 
     def perform_create(self, serializer):
         pass

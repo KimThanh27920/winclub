@@ -6,10 +6,11 @@ from . import serializers
 from shipping.models import ShippingBusinessService, ShippingUnit
 from wines.models import Winery
 
+from bases.permissions.business import IsBusiness
 
 class ShippingUnitWineryAPIView(generics.ListAPIView):
     authentication_classes = [authentication.JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsBusiness]
     serializer_class = serializers.ShippingUnitBusinessSerializer
 
     def get_queryset(self):
@@ -45,16 +46,19 @@ class AddShippingUnitBusinessAPIView(generics.CreateAPIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
         finally:
-            winery = Winery.objects.get(account=self.request.user)
-            shipping_service = ShippingBusinessService.objects.filter(winery=winery)
-            shipping_arr = self.request.data.get('shipping_services')
+            try:
+                winery = Winery.objects.get(account=self.request.user)
+                shipping_service = ShippingBusinessService.objects.filter(winery=winery)
+                shipping_arr = self.request.data.get('shipping_services')
 
-            for shipping in shipping_arr:
-                shipping_unit = ShippingUnit.objects.get(id=shipping.get('id'))
-                shipping_service[0].shipping_services.add(shipping_unit)
-                shipping_service[0].save()
-            
-            return Response({"Notify":"Add Shipping Unit Is successfuly"},status=status.HTTP_201_CREATED)
+                for shipping in shipping_arr:
+                    shipping_unit = ShippingUnit.objects.get(id=shipping.get('id'))
+                    shipping_service[0].shipping_services.add(shipping_unit)
+                    shipping_service[0].save()
+                
+                return Response({"Notify":"Add Shipping Unit Is successfuly"},status=status.HTTP_201_CREATED)
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RemoveShippingUnitAPIView(generics.CreateAPIView):

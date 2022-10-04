@@ -15,6 +15,7 @@ class CouponWriteSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "code",
+            "type",
             "type_reduce",
             "coupon_value",
             "max_value",
@@ -29,8 +30,23 @@ class CouponWriteSerializer(serializers.ModelSerializer):
             "is_public",
             "is_active",         
         ]
+        read_only_fields = [
+            'type'    
+        ]
+        
     def validate(self, attrs):
-        print(attrs['time_start'])
+        if not(attrs['coupon_value'] > 0):
+            raise serializers.ValidationError("Invalid coupon_value")
+        
+        if not(attrs['min_order_value'] > 0):
+            raise serializers.ValidationError("Invalid min_order_value")
+        
+        if not(attrs['max_value'] > 0):
+            raise serializers.ValidationError("Invalid max_value")
+        
+        if not(attrs['time_start'] < attrs['time_end']):
+            raise serializers.ValidationError("Invalid time end before time start")
+        
         return super().validate(attrs)
         
     def validate_coupon_amount(self, amount): #bd = birthday      
@@ -59,6 +75,21 @@ class CouponWriteUpdateSerializer(serializers.ModelSerializer):
             "is_public",
             "is_active",         
         ]
+        
+    def validate(self, attrs):
+        if not(attrs['coupon_value'] > 0):
+            raise serializers.ValidationError("Invalid coupon_value")
+        
+        if not(attrs['min_order_value'] > 0):
+            raise serializers.ValidationError("Invalid min_order_value")
+        
+        if not(attrs['max_value'] > 0):
+            raise serializers.ValidationError("Invalid max_value")
+        
+        if not(attrs['time_start'] < attrs['time_end']):
+            raise serializers.ValidationError("Invalid time end before time start")
+        
+        return super().validate(attrs)
     
     def validate_coupon_amount(self, amount): #bd = birthday      
         if (not(0 < amount < 1000)):
