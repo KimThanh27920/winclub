@@ -30,13 +30,18 @@ class AddShippingUnitBusinessAPIView(generics.CreateAPIView):
             serializer = serializers.AddShippingUnitSerializer(data=request.data)
             shipping_arr = self.request.data.get('shipping_services')
             winery = Winery.objects.get(account=self.request.user)
+
+
             if serializer.is_valid():
                 self.instance = serializer.save(winery=winery, created_by=self.request.user, updated_by=self.request.user)
 
                 for shipping in shipping_arr:
                     shipping_unit = ShippingUnit.objects.get(id=shipping.get('id'))
-                    self.instance.shipping_services.add(shipping_unit)
-                    self.instance.save()
+                    if shipping_unit.is_active == True:
+                        self.instance.shipping_services.add(shipping_unit)
+                        self.instance.save()
+                    else:
+                        return Response({"error": "Shipping Unit id:%d not active" %(shipping_unit.id)}, status=status.HTTP_400_BAD_REQUEST)
 
                 serializer = serializers.AddShippingUnitSerializer(self.instance)
 
@@ -53,9 +58,12 @@ class AddShippingUnitBusinessAPIView(generics.CreateAPIView):
 
                 for shipping in shipping_arr:
                     shipping_unit = ShippingUnit.objects.get(id=shipping.get('id'))
-                    shipping_service[0].shipping_services.add(shipping_unit)
-                    shipping_service[0].save()
-                
+                    if shipping_unit.is_active == True:
+                        shipping_service[0].shipping_services.add(shipping_unit)
+                        shipping_service[0].save()
+                    else:
+                        return Response({"error": "Shipping Unit id:%d not active" %(shipping_unit.id)}, status=status.HTTP_400_BAD_REQUEST)
+                    
                 return Response({"Notify":"Add Shipping Unit Is successfuly"},status=status.HTTP_201_CREATED)
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
