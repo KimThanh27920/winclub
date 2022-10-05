@@ -13,6 +13,8 @@ from accounts.models import Account
 from django.core.mail import send_mail
 from django.conf import settings
 
+from ..tasks import send_background_email_notify
+
 from bases.permissions.business import IsBusiness
 
 class ListOrderBusinessAPIView(generics.ListCreateAPIView):
@@ -104,6 +106,5 @@ class DetailOrderBusinessAPIView(generics.RetrieveUpdateAPIView):
         title_mail = 'UPDATE ORDER STATUS, ORDER ID: "'+str(order.id)+'"'
         message = "My Order Status updated is "+ order.status
         to_mail = str(account.email)
-
-        send_mail(title_mail, message, settings.EMAIL_HOST_USER, [to_mail], fail_silently=False)
+        send_background_email_notify.delay(title_mail, message, to_mail)
         return super().update(request, *args, **kwargs)
