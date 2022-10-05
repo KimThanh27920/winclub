@@ -4,4 +4,7 @@ env
 *.pyc
 *__pycache__
 wineclub/.env
+wineclub/media/images/coupons/
+wineclub/media/images/profile/
+wineclub/media/images/wine/thumbnails/
 *migrations
