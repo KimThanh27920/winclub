@@ -155,9 +155,31 @@ class WineWriteSerializer(serializers.ModelSerializer):
         queryset = Wine.objects.filter(
             wine=attrs, created_by=self.context['request'].user)
         if(len(queryset)):
-            raise serializers.ValidationError("wine with this wine already exists.")
+            raise serializers.ValidationError(
+                "wine with this wine already exists.")
         else:
             return attrs
+
+    def validate_light_bold(self, attrs):
+        if not(0 < attrs < 11):
+            raise serializers.ValidationError("value from 1 to 10")
+        return attrs
+
+    def validate_smooth_tannic(self, attrs):
+        if not(0 < attrs < 11):
+            raise serializers.ValidationError("value from 1 to 10")
+        return attrs
+
+    def validate_dry_sweet(self, attrs):
+        if not(0 < attrs < 11):
+            raise serializers.ValidationError("value from 1 to 10")
+        return attrs
+
+    def validate_soft_acidic(self, attrs):
+        if not(0 < attrs < 11):
+            raise serializers.ValidationError("value from 1 to 10")
+        return attrs
+
 
 class WineUpdateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -187,3 +209,23 @@ class WineUpdateSerializer(serializers.ModelSerializer):
             "soft_acidic",
             "is_active"
         ]
+
+    def validate_light_bold(self, attrs):
+        if not(0 < attrs < 11):
+            raise serializers.ValidationError("value from 1 to 10")
+        return attrs
+
+    def validate_smooth_tannic(self, attrs):
+        if not(0 < attrs < 11):
+            raise serializers.ValidationError("value from 1 to 10")
+        return attrs
+
+    def validate_dry_sweet(self, attrs):
+        if not(0 < attrs < 11):
+            raise serializers.ValidationError("value from 1 to 10")
+        return attrs
+
+    def validate_soft_acidic(self, attrs):
+        if not(0 < attrs < 11):
+            raise serializers.ValidationError("value from 1 to 10")
+        return attrs
