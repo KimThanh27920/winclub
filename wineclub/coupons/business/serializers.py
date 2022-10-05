@@ -81,6 +81,7 @@ class CouponWriteUpdateSerializer(serializers.ModelSerializer):
         model = Coupon
         fields = [
             "id",
+            "code",
             "type",
             "type_reduce",
             "coupon_value",
@@ -103,6 +104,7 @@ class CouponWriteUpdateSerializer(serializers.ModelSerializer):
         ]
         
         read_only_fields = [
+            "code",
             "type",
             "created_at",
             "created_by",
@@ -131,6 +133,14 @@ class CouponWriteUpdateSerializer(serializers.ModelSerializer):
         
         return amount
  
+    
+class CouponUpdateImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coupon
+        fields = [
+            "image"
+        ]    
+    
     
 class CouponReadSerializer(serializers.ModelSerializer):
     created_by = AccountSerializer(read_only=True)

@@ -7,7 +7,7 @@ User = get_user_model()
 
 class IsOwnerByCreatedBy(permissions.BasePermission):    
     def has_object_permission(self, request, view, obj):
-        print(obj.created_by)
+        # print(obj.created_by)
         return obj.created_by == request.user
 
     

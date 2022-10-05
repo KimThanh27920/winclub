@@ -12,7 +12,6 @@ from bases.errors.bases import return_code_400
 from .serializers import MembershipSerializer, MembershipCreateSerializer, AccountSerializer
 from ..models import Membership
 
-
 User = get_user_model()
 
 
