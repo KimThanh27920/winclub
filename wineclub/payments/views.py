@@ -66,8 +66,11 @@ class StipeWebhookAPI(APIView):
         if event.type == 'invoice.payment_succeeded':
             create_subscription_transaction(event)
         if event.type == 'charge.succeeded':
-            print(event.data.object.balance_transaction)
-            create_charge_success_transaction(event)
+            print(event.data.object.destination)
+            if(event.data.object.destination):
+                create_charge_success_transaction(event)
+            else:
+                pass
         if event.type == 'payment_intent.succeeded':
             pass
         return Response()
