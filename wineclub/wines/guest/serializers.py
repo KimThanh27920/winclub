@@ -18,11 +18,19 @@ class WineShortSerializer(serializers.ModelSerializer):
     
 
 class WineDetailSerializer(serializers.ModelSerializer):
+    region = serializers.StringRelatedField()
+    country = serializers.StringRelatedField()
+    type = serializers.StringRelatedField()
+    style = serializers.StringRelatedField()
+    grape = serializers.StringRelatedField()
+    food = serializers.StringRelatedField()
     class Meta:
         model = Wine
         fields = [
             "id",
             "wine",
+            "average_rating",
+            "reviewers",
             "region",
             "country",
             "price",

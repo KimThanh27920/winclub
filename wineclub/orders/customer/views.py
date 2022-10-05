@@ -10,9 +10,10 @@ from shipping.models import ShippingBusinessService, ShippingUnit
 
 from wines.utils import decrease_in_stock_wine
 from coupons.utils import check_coupon
-
+from bases.services.firebase import notification
 import stripe
 from django.conf import settings
+from ..tasks import send_background_notification
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -27,7 +28,8 @@ class OrderAPIView(generics.ListCreateAPIView):
         return order_list
 
     def post(self, request, *args, **kwargs):
-        serializer = serializers.OrderSerializer(data=request.data.get('order'))
+        serializer = serializers.OrderSerializer(
+            data=request.data.get('order'))
         order_detail_arr = self.request.data.get('order_details')
         coupons_arr = self.request.data.get('coupons')
 
@@ -54,10 +56,12 @@ class OrderAPIView(generics.ListCreateAPIView):
                                     price = wine.sale
                                 else:
                                     price = wine.price
-                                
-                                instance_price += float(price) * int(order_detail.get('quantity'))
 
-                                decrease_in_stock_wine(wine.id, order_detail.get('quantity'))
+                                instance_price += float(price) * \
+                                    int(order_detail.get('quantity'))
+
+                                decrease_in_stock_wine(
+                                    wine.id, order_detail.get('quantity'))
 
                                 data = {
                                     "order": self.instance.id,
@@ -66,19 +70,21 @@ class OrderAPIView(generics.ListCreateAPIView):
                                     "wine": order_detail.get('wine'),
                                     "quantity": order_detail.get('quantity')
                                 }
-                                serializer = serializers.OrderDetailSerializer(data=data)
+                                serializer = serializers.OrderDetailSerializer(
+                                    data=data)
                                 if serializer.is_valid():
                                     serializer.save()
                             else:
                                 return Response({"error": "The order quantity is greater than the wine product in stock"},
-                                            status=status.HTTP_400_BAD_REQUEST)
+                                                status=status.HTTP_400_BAD_REQUEST)
                         else:
                             return Response({"error": "Wine product not active"},
                                             status=status.HTTP_400_BAD_REQUEST)
 
                     # Check coupon used
-                    instance_price = check_coupon(coupons_arr, self.instance, instance_price)
-                    
+                    instance_price = check_coupon(
+                        coupons_arr, self.instance, instance_price)
+
                     # Check used point in order
                     if instance_price > 1:
                         if self.instance.used_points == True:
@@ -91,7 +97,7 @@ class OrderAPIView(generics.ListCreateAPIView):
                         self.instance.save()
 
                         serializer = serializers.OrderSerializer(self.instance)
-                        
+
                         # Stripe
                         stripe.PaymentIntent.create(
                             customer=account.stripe_account,
@@ -103,14 +109,16 @@ class OrderAPIView(generics.ListCreateAPIView):
                                 'order_id': self.instance.id,
                                 'winery': self.instance.winery
                             },
-                            application_fee_amount= 0,
-                            transfer_data = {
+                            application_fee_amount=0,
+                            transfer_data={
                                 'destination': self.instance.winery.account_connect,
                             },
                             confirm=True,
-                            payment_method=self.request.data.get('payment_method')
+                            payment_method=self.request.data.get(
+                                'payment_method')
                         )
-
+                        send_background_notification.delay(
+                            self.instance.winery.account.id, "New order", "You have 1 order")
                         return Response(serializer.data, status=status.HTTP_201_CREATED)
                     except Exception as e:
                         return Response({"error": str(e)},
