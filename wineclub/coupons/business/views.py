@@ -7,7 +7,7 @@ from rest_framework_simplejwt import authentication
 # From app
 from bases.permissions.rolecheck import IsBusinessOrAdmin, IsOwnerByCreatedBy
 from wineries.models import Winery
-from .serializers import CouponWriteSerializer, CouponReadSerializer, CouponWriteUpdateSerializer
+from .serializers import CouponWriteSerializer, CouponReadSerializer, CouponWriteUpdateSerializer, CouponUpdateImageSerializer
 from ..models import Coupon
 
 
@@ -38,23 +38,22 @@ class CreateListCounponView(generics.ListCreateAPIView):
         # print(self.request.user.is_staff)
         if(self.request.user.is_staff == False):    
             instance_winery = Winery.objects.get(account=self.request.user)
-            print(instance_winery.is_active)
+            # print(instance_winery.is_active)
             if not(instance_winery.is_active):
                 serializer.save(is_active=False)
 
 
 class RetrieveUpdateDestroyCouponView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Coupon.objects.all()
     authentication_classes = [authentication.JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated, IsOwnerByCreatedBy, IsBusinessOrAdmin]
     lookup_url_kwarg = "coupon_id"
     
-    def get_queryset(self):
-        
+    def get_queryset(self):        
         if(self.request.method == "PUT"):
             self.queryset = Coupon.objects.filter(deleted_by = None, created_by = self.request.user)
         else:
             self.queryset = Coupon.objects.filter(deleted_by = None)
+            
         return super().get_queryset()
     
     def get_serializer_class(self):
@@ -63,7 +62,11 @@ class RetrieveUpdateDestroyCouponView(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.serializer_class = CouponWriteUpdateSerializer
         
-        return super().get_serializer_class()
+        if(self.request.method == "PATCH"):
+            self.serializer_class = CouponUpdateImageSerializer
+               
+        return self.serializer_class
+        # return super().get_serializer_class()
     
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)

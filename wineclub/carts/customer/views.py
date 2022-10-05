@@ -7,8 +7,6 @@ from wines.models import Wine
 from .serializers import CartSerializer, CartDetailSerializer, ListCartSerializer, CartDetailUpdateSerializer
 from ..models import Cart, CartDetail
 
-# from bases.permissions.rolecheck import IsOwner
-
 
 
 class CartListCreate(generics.ListCreateAPIView):    
@@ -16,7 +14,6 @@ class CartListCreate(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]      
     serializer_class = ListCartSerializer
     pagination_class = None
-    # queryset = Cart.objects.all()
     
     def get_queryset(self):
         self.queryset = Cart.objects.filter(account=self.request.user)              
@@ -28,11 +25,8 @@ class CartListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
                                           
     def create(self, request, *args, **kwargs): # error when first create cart_detail will none
-        user = request.user.id    
-        data_return = []    
-        for cart_detail in request.data:
-            # cart_temp = []
-            # cart_detail = []            
+        user = request.user.id       
+        for cart_detail in request.data:         
             wine_id = cart_detail.get("wine")
             quantity = cart_detail.get("quantity")
             if(quantity < 1):                 
@@ -56,7 +50,6 @@ class CartListCreate(generics.ListCreateAPIView):
                 instance_cart = cart[0]
                 cart_id = instance_cart.id   
             
-            # cart_temp.append(instance_cart)
             # Check Cart Detail exist, create or update
             cart_detail = CartDetail.objects.filter(cart=cart_id, wine=wine_id)
             

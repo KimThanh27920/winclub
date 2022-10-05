@@ -19,6 +19,7 @@ def update_rating_average(wine_id):
         instance_winery = Winery.objects.get(id=instance_wine.winery.id)
         instance_winery.rating_average = average    
         instance_winery.save()
+        
         return True
     except:
         return False

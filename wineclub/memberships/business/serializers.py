@@ -6,7 +6,6 @@ from rest_framework import serializers
 from wineries.models import Winery
 from ..models import Membership
 
-
 User = get_user_model()
 
 
