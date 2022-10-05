@@ -70,5 +70,5 @@ class DeletePaymentMethodAPIView(generics.DestroyAPIView):
             return Response({"Notification": "Delete PaymentMethod Succeed"},
                             status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
-            return Response({"error": "Not Found Card Or Card Deleted"},
+            return Response({"error": str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
