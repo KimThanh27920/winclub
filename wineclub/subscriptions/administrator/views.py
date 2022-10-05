@@ -1,6 +1,6 @@
 #App imports
 from bases.administrator.views import BaseAdminViewset
-from .serializers import SubscriptionPackageReadSerializer, SubscriptionPackageSerializer
+from .serializers import SubscriptionPackageReadSerializer, SubscriptionPackageSerializer, SubscriptionPackageRetrieveSerializer
 from subscriptions.models import SubscriptionPackage
 from bases.services.stripe.stripe import StripeAPI
 
@@ -9,7 +9,7 @@ class SubscriptionsPackageAdminAPIView(BaseAdminViewset):
 
     serializer_class = {
         "list": SubscriptionPackageReadSerializer,
-        "retrieve": SubscriptionPackageReadSerializer,
+        "retrieve": SubscriptionPackageRetrieveSerializer,
         "create": SubscriptionPackageSerializer,
         "update": SubscriptionPackageSerializer,
         "delete": SubscriptionPackageSerializer
