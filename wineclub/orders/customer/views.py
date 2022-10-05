@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from . import serializers
 from wines.models import Wine
 from accounts.models import Account
-from orders.models import Order
+from orders.models import Order, OrderDetail
 from shipping.models import ShippingBusinessService, ShippingUnit
 
 from wines.utils import decrease_in_stock_wine
@@ -36,6 +36,9 @@ class OrderAPIView(generics.ListCreateAPIView):
             self.instance = serializer.save(
                 created_by=self.request.user, updated_by=self.request.user)
             instance_price = 0
+
+            if not ShippingBusinessService.objects.filter(winery=self.instance.winery).exists():
+                return Response({"error": "Winery Does not exist ShippingUnit"}, status=status.HTTP_400_BAD_REQUEST)
 
             shipping_business = ShippingBusinessService.objects.filter(winery=self.instance.winery)
             shipping_unit = ShippingUnit.objects.get(id=self.instance.shipping_service.id)
@@ -137,7 +140,18 @@ class RetrieveUpdateOrderAPIView(generics.RetrieveUpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         order = self.get_object()
-        order.status = "canceled"
-        order.save()
+        if order.status == "processing":
+            order.status = "canceled"
+            order.save()
 
-        return super().update(request, *args, **kwargs)
+            if order.status == "canceled":
+                order_details = OrderDetail.objects.filter(order=order.id)
+                for order_detail in order_details:
+                    wine = Wine.objects.get(id=order_detail.wine.id)
+                    wine.in_stock += order_detail.quantity
+                    wine.save()
+            
+            return super().update(request, *args, **kwargs)
+        else:
+            return Response({"error": "Order status is not processing, can not cancel order"},
+                            status=status.HTTP_400_BAD_REQUEST)
