@@ -118,9 +118,9 @@ class ChangePasswordWithPINApiView(APIView):
         self.pin.delete()
 
     def post(self, request):
-        serializers = serializers.ChangePasswordWithPinSerializer(
+        serializer = serializers.ChangePasswordWithPinSerializer(
             data=request.data)
-        serializers.is_valid(raise_exception=True)
+        serializer.is_valid(raise_exception=True)
         self.user = get_object_or_404(
             User, email=request.data['email'].lower())
         self.pin = get_object_or_404(Pin, user=self.user.id)
