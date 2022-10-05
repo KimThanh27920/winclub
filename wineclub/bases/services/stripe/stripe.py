@@ -17,7 +17,7 @@ class StripeAPI:
 
     # create price subscription package 
     def create_price(name, price, currency, interval,interval_count,subpk):
-        product_id = stripe.Product.create(name=name)
+        product_id = stripe.Product.create(name=name,metadata={"subscription_package": subpk})
         price_id = stripe.Price.create(
             unit_amount= price, 
             currency=currency,
@@ -29,6 +29,19 @@ class StripeAPI:
             metadata={"subscription_package": subpk},
             )
         return price_id.id
+
+    # Update price subcription package
+    def delete_price(sub_id):
+        query = "metadata['subscription_package']:'"+ str(sub_id)+"'"
+       
+        search =  stripe.Product.search(query=query )
+        for item in search["data"]:
+            stripe.Product.modify(str(item["id"]),active=False)
+        
+        search_price = stripe.Price.search( query = query)
+        for item in search_price["data"]:
+            stripe.Price.modify(str(item["id"]), active=False)
+ 
 
     # checkout subscription
     def subscription_checkout(stripe_account, price_id, user_id):
