@@ -115,8 +115,6 @@ class OrderAPIView(generics.ListCreateAPIView):
                             payment_method=self.request.data.get(
                                 'payment_method')
                         )
-                        # notification.send_notify_message(
-                        #     self.instance.winery.account.id, "New order", "You have 1 order")
                         send_background_notification.delay(
                             self.instance.winery.account.id, "New order", "You have 1 order")
                         return Response(serializer.data, status=status.HTTP_201_CREATED)
