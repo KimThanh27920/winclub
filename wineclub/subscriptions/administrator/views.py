@@ -37,3 +37,21 @@ class SubscriptionsPackageAdminAPIView(BaseAdminViewset):
             )
             
         serializer.save(price_id=price_id)
+    
+    def perform_update(self, serializer):
+        subs = serializer.save(updated_by=self.request.user)
+        StripeAPI.delete_price(sub_id=subs.id)
+        price = int(subs.price*100)
+        price_id = StripeAPI.create_price(
+            name = subs.name,
+            price=price,
+            currency= subs.currency,
+            interval=subs.interval,
+            interval_count=subs.interval_count,
+            subpk=subs.id
+            )
+        serializer.save(price_id=price_id)
+    
+    def perform_destroy(self, instance):
+        StripeAPI.delete_price(sub_id=instance.id)
+        return super().perform_destroy(instance)
