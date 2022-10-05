@@ -10,7 +10,7 @@ from shipping.models import ShippingBusinessService, ShippingUnit
 
 from wines.utils import decrease_in_stock_wine
 from coupons.utils import check_coupon
-
+from bases.services.firebase import notification
 import stripe
 from django.conf import settings
 
@@ -107,7 +107,8 @@ class OrderAPIView(generics.ListCreateAPIView):
                             confirm=True,
                             payment_method=self.request.data.get('payment_method')
                         )
-
+                        # notification.get_device_user()
+                        print(self.instance.winery.account.id)
                         return Response(serializer.data, status=status.HTTP_201_CREATED)
                     except Exception as e:
                         return Response({"error": str(e)},
