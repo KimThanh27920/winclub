@@ -109,7 +109,6 @@ class SubscriptionPackageErrors:
         data = StripeAPI.subscription_search(account_id)
         if data == []:
             return None
-        print(data)
         sorts = sorted(data,key=itemgetter('created'), reverse=True)
         if sorts[0]["status"] == "canceled":
             return None
