@@ -1,4 +1,5 @@
 import email
+import queue
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -7,6 +8,7 @@ from bases.services.stripe.stripe import stripe_webhook
 from bases.services.stripe.stripe import stripe_transaction
 from bases.services.stripe.webhook import update_account
 from django.contrib.auth import get_user_model
+from orders.models import Order
 
 User = get_user_model()
 # Create your views here.
@@ -35,7 +37,7 @@ def create_subscription_transaction(event):
     serializer.is_valid(raise_exception=True)
     serializer.save()
 
-def create_charge_success_transaction(event):
+def create_charge_order_success_transaction(event):
     """
     Create transactions
     """
@@ -55,6 +57,9 @@ def create_charge_success_transaction(event):
     serializer.is_valid(raise_exception=True)
     txn = stripe_transaction(event.data.object.balance_transaction)
     serializer.save(net=txn.net, fee=txn.fee)
+    order_instance = Order.objects.get(id=event.data.object.metadata.order_id)
+    order_instance.payment = "charged"
+    order_instance.save()
 
 
 class StipeWebhookAPI(APIView):
@@ -68,7 +73,7 @@ class StipeWebhookAPI(APIView):
         if event.type == 'charge.succeeded':
             print(event.data.object.destination)
             if(event.data.object.destination):
-                create_charge_success_transaction(event)
+                create_charge_order_success_transaction(event)
             else:
                 pass
         if event.type == 'payment_intent.succeeded':
