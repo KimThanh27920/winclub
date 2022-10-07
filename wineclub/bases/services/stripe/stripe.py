@@ -62,7 +62,7 @@ class StripeAPI:
                 "currency":subscription["currency"],
                 "interval": subscription["items"]["data"][0]["price"]["recurring"]["interval"],
                 "interval_amount": subscription["items"]["data"][0]["price"]["recurring"]["interval_count"],
-                "next_payment_date": datetime.fromtimestamp(subscription["current_period_end"]),
+                "current_period_end": datetime.fromtimestamp(subscription["current_period_end"]),
                 "status": subscription["status"],
                 "metadata": subscription["metadata"]
             }

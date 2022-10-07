@@ -41,7 +41,7 @@ class Subscription(APIView):
      
         if subscription["status"] == "Failed" :
             error = {
-                "message": "Can't checkout! Because you don't have payment method",
+                "error": "Can't checkout! Because you don't have payment method",
                 "status" : False
             }
             return Response(data=error, status=status.HTTP_400_BAD_REQUEST)
@@ -70,7 +70,7 @@ class SubscriptionCancel(APIView):
         
         if subscription["status"] == "Failed" :
             error = {
-                "message": "Can't cancel! You may or may not have canceled! If you didn't cancel before, please repeat in a few minutes!",
+                "error": "Can't cancel! You may or may not have canceled! If you didn't cancel before, please repeat in a few minutes!",
                 "status" : False
             }
             return Response(data=error, status=status.HTTP_400_BAD_REQUEST)
