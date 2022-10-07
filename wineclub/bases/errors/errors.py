@@ -20,7 +20,7 @@ class BusinessErrors:
         if  not (Winery.objects.exclude(deleted_at__isnull=False).filter(id=winery_id).exists()) :
             data={
                 "success":False,
-                "message": "Winery don't exist! "}
+                "error": "Winery don't exist! "}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
 
@@ -30,7 +30,7 @@ class AccountErrors:
         if not (Account.objects.filter(is_business=False).filter(id=user_id).exists()):
             data={
                 "success":False,
-                "message": "Account don't exist! "}
+                "error": "Account don't exist! "}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
 
@@ -42,7 +42,7 @@ class CategoriesErrors:
         if Wine.objects.filter(type=type_id).exists() :
             data={
                 "success":False,
-                "message": "Type has child data! "}
+                "error": "Type has child data! "}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
     
     #check style already exist
@@ -50,7 +50,7 @@ class CategoriesErrors:
         if Wine.objects.filter(style=style_id).exists() :
             data={
                 "success":False,
-                "message": "Style has child data! "}
+                "error": "Style has child data! "}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
     #check grape already exist
@@ -58,7 +58,7 @@ class CategoriesErrors:
         if Wine.objects.filter(grape=grape).exists() :
             data={
                 "success":False,
-                "message": "Grape has child data! "}
+                "error": "Grape has child data! "}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
     #check food already exist
@@ -66,7 +66,7 @@ class CategoriesErrors:
         if Wine.objects.filter(food=food).exists() :
             data={
                 "success":False,
-                "message": "Food has child data! "}
+                "error": "Food has child data! "}
             return Response(data,status=status.HTTP_400_BAD_REQUEST)
     
      #check region already exist
@@ -74,7 +74,7 @@ class CategoriesErrors:
         if Wine.objects.filter(region=region).exists() :
             data={
                 "success":False,
-                "message": "Region has child data! "}
+                "error": "Region has child data! "}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
     
      #check country already exist
@@ -82,7 +82,7 @@ class CategoriesErrors:
         if Wine.objects.filter(country=country).exists() :
             data={
                 "success":False,
-                "message": "Country has child data! "}
+                "error": "Country has child data! "}
             return Response(data,status= status.HTTP_400_BAD_REQUEST)
 
 
@@ -93,7 +93,7 @@ class SubscriptionPackageErrors:
         if not (SubscriptionPackage.objects.filter(id=subs_pk_id).exists()):
             data ={
                 "success":False,
-                "message": "Subscription Package don't exist or disable"
+                "error": "Subscription Package don't exist or disable"
             }
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
     
@@ -101,7 +101,7 @@ class SubscriptionPackageErrors:
         if stripe_account is None:
             data ={
                 "success":False,
-                "message": "You don't have payment method"
+                "error": "You don't have payment method"
             }
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
     
@@ -120,17 +120,16 @@ class SubscriptionPackageErrors:
         if timestamp < due_date :
             data ={
                 "success":False,
-                "message": "You have already subcription"
+                "error": "You have already subcription"
             } 
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
-
 
     def check_subscription_exists(account_id):
         data = StripeAPI.subscription_search(account_id)
         if data == []:
             data ={
                 "success":False,
-                "message": "You have been subcription yet "
+                "error": "You have been subcription yet "
             }
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
       
@@ -143,6 +142,6 @@ class SubscriptionPackageErrors:
         if timestamp >= due_date :
             data ={
                 "success":False,
-                "message": "Your subscription will expire soon!"
+                "error": "Your subscription will expire soon!"
             } 
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)

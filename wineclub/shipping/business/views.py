@@ -64,7 +64,7 @@ class AddShippingUnitBusinessAPIView(generics.CreateAPIView):
                     else:
                         return Response({"error": "Shipping Unit id:%d not active" %(shipping_unit.id)}, status=status.HTTP_400_BAD_REQUEST)
                     
-                return Response({"Notify":"Add Shipping Unit Is successfuly"},status=status.HTTP_201_CREATED)
+                return Response({"success": True},status=status.HTTP_201_CREATED)
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -85,6 +85,6 @@ class RemoveShippingUnitAPIView(generics.CreateAPIView):
                 shipping_service[0].shipping_services.remove(shipping_unit)
                 shipping_service[0].save()
             
-            return Response({"Notify":"Remove Shipping Unit Is successfuly"},status=status.HTTP_200_OK)
+            return Response({"success": True},status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

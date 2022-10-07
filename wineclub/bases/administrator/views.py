@@ -35,11 +35,6 @@ class BaseAdminViewset(ModelViewSet):
         kwargs["partial"] = True
         return super().update(request, *args, **kwargs)
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(data={"success":True},status=status.HTTP_204_NO_CONTENT)
-
     def perform_destroy(self, instance):
         instance.deleted_by = self.request.user
         instance.is_active = False

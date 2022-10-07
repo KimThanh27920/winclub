@@ -1,5 +1,5 @@
 # Rest framework imports
-from itertools import count
+from datetime import datetime
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -14,11 +14,11 @@ from orders.models import Order
 from wines.models import Wine
 from accounts.models import Account
 from transactions.models import Transaction
-from orders.models import Order, OrderDetail
-from .serializers import TopWineryTransSerializer, TopWineryProductsSerializer, TopWineryRevenueSerializer
+from orders.models import Order
+from .serializers import  TopWineryProductsSerializer, TopWineryRevenueSerializer
 
 
-#Statistical of Business
+#Statistical of Admin
 class AdminStatistical(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated,IsAdminUser]
@@ -46,7 +46,7 @@ class AdminStatistical(APIView):
         total_trans = Transaction.objects.all().count()
 
         #total revenue
-        last_month=timezone.now().month-1
+        now_month=timezone.now().month
 
         #Best business
         wineries = Winery.objects.filter(is_active=True)
@@ -60,20 +60,13 @@ class AdminStatistical(APIView):
             revenues=Sum("winery__total")).order_by("revenues")
         
         winery_revenues_serializer = TopWineryRevenueSerializer(revenues, many=True)
-        
-        # best_winery_trans = []
-        # for winery in wineries :
-        #     transaction = Transaction.objects.filter(receiver=winery.id).count()
-        #     data = {
-        #         "winery":winery.id,
-        #         "transaction": transaction,
-        #         }
-        #     best_winery_trans.append(data)
-        
-        # winery_trans_serializer = TopWineryTransSerializer(best_winery_trans, many=True)
+
+
+        revenue = Transaction.objects.filter(receiver="Platform").filter(type="charge").filter(timestamp__year=now_month).annotate(revenue=Sum("amount"))
 
      
         data = {
+            "revenue": revenue.revenue,
             "wineries": total_wineries,
             "order": total_order,
             "product": total_product,

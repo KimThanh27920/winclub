@@ -5,13 +5,15 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 #Django import
-from django.db.models import Sum, Count
+from django.db.models import Sum
+from django.utils import timezone
 # App imports
 from bases.permissions.business import IsBusiness
 from wineries.models import Winery
 from orders.models import Order, OrderDetail
 from wines.models import Wine
 from memberships.models import Membership
+from transactions.models import Transaction
 from .serializers import TopWineSerializer, TopCustomerSerializer
 
 
@@ -48,8 +50,10 @@ class BusinessStatistical(APIView):
         #latest customer 
         top_customer=  Order.objects.filter(winery=winery_id).values("created_by").annotate(buys=Sum('total')).order_by("-buys")[:10] 
         top_customer_serializer = TopCustomerSerializer(top_customer, many=True)
+        revenue = Transaction.objects.filter(receiver=self.request.user.email).filter(type="charge").filter(timestamp__year=timezone.now().month).annotate(revenue=Sum("amount"))
       
         data = {
+            "revenue": revenue.revenue,
             "order":{
                 "total": total_order,
                 "processing":order_processing,
