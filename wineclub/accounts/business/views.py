@@ -10,6 +10,8 @@ from . import serializers
 from wineries.models import Winery
 from bases.services.stripe.stripe import stripe_created_account_link
 from bases.services.stripe.stripe import stripe_retrieve_account
+from bases.services.stripe.stripe import stripe_created_connect
+from . import serializers
 
 
 class StripeConnectRegistration(views.APIView):
@@ -41,3 +43,24 @@ class RetrieveConnectAPI(views.APIView):
         print(ip)
 
         return response.Response(data=data)
+
+
+class RegisterConnectAccountAPI(views.APIView):
+    authentication_classes = [authentication.JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = serializers.ConnectAccountSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        stripe_connect = stripe_created_connect(
+            self.request.user.email,
+            self.request.data["address_business"],
+            self.request.data["identity_verify"],
+            self.request.data["business_profile"],
+            self.request.data["bank_account"]
+        )
+        return response.Response(
+            data={
+                "message": "create stripe connect account success"
+            }
+        )

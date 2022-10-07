@@ -66,15 +66,8 @@ class BusinessRegisterAPI(generics.CreateAPIView):
         """
         create stripe connect account when business register
         """
-        stripe_connect = stripe_created_connect(
-            instance.email,
-            self.request.data["address_business"],
-            self.request.data["identity_verify"],
-            self.request.data["business_profile"],
-            self.request.data["bank_account"]
-        )
         instance = Winery.objects.create(
-            account=instance, account_connect=stripe_connect.id)
+            account=instance)
         Membership.objects.create(
             winery=instance
         )
