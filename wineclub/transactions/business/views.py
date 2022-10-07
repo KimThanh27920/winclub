@@ -15,7 +15,7 @@ class ListTransactionAPI(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['sender','receiver']
     filterset_fields = ['type','sender','receiver', 'currency']
-    ordering_fields = ['timestamp','amount','net','fee']
+    ordering_fields = ['created','amount','net','fee']
 
     def get_queryset(self):
         return Transaction.objects.filter(

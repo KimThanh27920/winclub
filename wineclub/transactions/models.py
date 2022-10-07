@@ -1,4 +1,5 @@
 #django import
+from enum import auto
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -12,7 +13,7 @@ TYPE_TRANS = [
 # Transaction model class
 class Transaction(models.Model):
 
-    timestamp = models.BigIntegerField()
+    created = models.DateTimeField(auto_now_add=True)
     type = models.CharField(max_length=255,default="charge", choices=TYPE_TRANS)
     amount = models.BigIntegerField()
     currency = models.CharField(max_length=255, default="usd")
@@ -24,7 +25,7 @@ class Transaction(models.Model):
     receiver = models.CharField(max_length=255)
     
     def __str__(self) -> str:
-        return str(self.timestamp)
+        return str(self.created)
     
 
     class Meta:

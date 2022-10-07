@@ -22,7 +22,6 @@ def create_subscription_transaction(event):
     Create transactions
     """
     data = {
-        "timestamp": event.created,
         "type": "charge",
         "amount": event.data.object.amount_paid,
         "currency": event.data.object.currency,
@@ -42,7 +41,6 @@ def create_charge_order_success_transaction(event):
     Create transactions
     """
     data = {
-        "timestamp": event.created,
         "type": "charge",
         "amount": event.data.object.amount,
         "currency": event.data.object.currency,

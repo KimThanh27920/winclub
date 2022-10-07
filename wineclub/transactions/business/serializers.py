@@ -11,7 +11,7 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = [
             'id',
-            'timestamp',
+            'created',
             'type',
             'amount',
             'currency',
@@ -25,7 +25,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
         extra_kwargs = {
             'id': {'read_only': True},
-            'timestamp': {'read_only': True},
+            'created': {'read_only': True},
             'type': {'read_only': True},
             'amount': {'read_only': True},
             'currency': {'read_only': True},
